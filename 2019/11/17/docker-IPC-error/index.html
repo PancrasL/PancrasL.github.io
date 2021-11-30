@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      kubenates 运行任务时出现can&#39;t join IPC of container...non-shareable IPC的错误 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>kubenates 运行任务时出现can't join IPC of container...non-shareable IPC的错误</h2>
+  <p class="post-date">2019-11-17</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2019/11/17/docker-IPC-error/data_docker.jpg" alt="docker" style="zoom: 40%;">
+
+<a id="more"></a>
+
+<h1 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h1><p>最近在k8s的过程中遇到了<code>can&#39;t join IPC of container...non-shareable IPC</code>的错误，用博客记录一下错误的排查和解决过程。</p>
+<p>原因是19.03版本 <code>Docker</code> 的默认 <code>IpcMode</code> 被修改为了 <code>private</code> ，需要修改配置文件将其设置为 <code>shareable</code>.</p>
+<h2 id="应用版本"><a href="#应用版本" class="headerlink" title="应用版本"></a>应用版本</h2><ul>
+<li>系统版本<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@k8s-mst:/# uname -a</span><br><span class="line">Linux k8s-mst 4.15.0-70-generic #79-Ubuntu SMP Tue Nov 12 10:36:11 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<ul>
+<li>kubenate版本<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@k8s-mst:/# kubectl version</span><br><span class="line">Client Version: version.Info&#123;Major:&quot;1&quot;, Minor:&quot;5+&quot;, GitVersion:&quot;v1.5.9-beta.0-dirty&quot;, GitCommit:&quot;f35802d3a00b37a32476451266af05ce9760fec0&quot;, GitTreeState:&quot;dirty&quot;, BuildDate:&quot;2019-11-13T06:51:04Z&quot;, GoVersion:&quot;go1.7.4&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<ul>
+<li>docker版本<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">root@k8s-nod1:/# docker version</span><br><span class="line">Client: Docker Engine - Community</span><br><span class="line"> Version:           19.03.4</span><br><span class="line"> API version:       1.40</span><br><span class="line"> Go version:        go1.12.10</span><br><span class="line"> Git commit:        9013bf583a</span><br><span class="line"> Built:             Fri Oct 18 15:54:09 2019</span><br><span class="line"> OS/Arch:           linux/amd64</span><br><span class="line"> Experimental:      false</span><br><span class="line"></span><br><span class="line">Server: Docker Engine - Community</span><br><span class="line"> Engine:</span><br><span class="line">  Version:          19.03.4</span><br><span class="line">  API version:      1.40 (minimum version 1.12)</span><br><span class="line">  Go version:       go1.12.10</span><br><span class="line">  Git commit:       9013bf583a</span><br><span class="line">  Built:            Fri Oct 18 15:52:40 2019</span><br><span class="line">  OS/Arch:          linux/amd64</span><br><span class="line">  Experimental:     false</span><br><span class="line"> containerd:</span><br><span class="line">  Version:          1.2.10</span><br><span class="line">  GitCommit:        b34a5c8af56e510852c35414db4c1f4fa6172339</span><br><span class="line"> runc:</span><br><span class="line">  Version:          1.0.0-rc8+dev</span><br><span class="line">  GitCommit:        3e425f80a8c931f88e6d94a8c831b9d5aa481657</span><br><span class="line"> docker-init:</span><br><span class="line">  Version:          0.18.0</span><br><span class="line">  GitCommit:        fec3683</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<h1 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h1><ul>
+<li>使用 <code>kubectl get pod</code> 查看pod的运行状态发现异常</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@k8s-mst:~/web_sample# kubectl apply -f nginx-deployment.yaml</span><br><span class="line">deployment &quot;nginx-deployment&quot; created</span><br><span class="line">root@k8s-mst:~/web_sample# kubectl get pod</span><br><span class="line">NAME                                READY     STATUS              RESTARTS   AGE</span><br><span class="line">nginx-deployment-4087004473-4m0br   0/1       RunContainerError   0          7s</span><br><span class="line">nginx-deployment-4087004473-80rqd   0/1       RunContainerError   0          7s</span><br><span class="line">nginx-deployment-4087004473-qfdmw   0/1       RunContainerError   0          7s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>使用 <code>kubectl describe pod</code> 查看详细的错误信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Events:</span><br><span class="line">  FirstSeen     LastSeen        Count   From                    SubObjectPath           Type            Reason          Message</span><br><span class="line">  ---------     --------        -----   ----                    -------------           --------        ------          -------</span><br><span class="line">  34s           34s             1       &#123;default-scheduler &#125;                            Normal          Scheduled       Successfully assigned nginx-deployment-4087004473-qfdmw to k8s-nod2</span><br><span class="line">  31s           31s             1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Normal          Created         Created container with docker id 7fc4f63e0bd6; Security:[seccomp=unconfined]</span><br><span class="line">  30s           30s             1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Warning         Failed          Failed to start container with docker id 7fc4f63e0bd6 with error: Error response from daemon: &#123;&quot;message&quot;:&quot;can&#x27;t join IPC of container 2dfd13510b3f816ed0437ea70a8a57daeaa7a38eec0035972044b25dd102f1cd: non-shareable IPC (hint: use IpcMode:shareable for the donor container)&quot;&#125;</span><br><span class="line">  28s           28s             1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Normal          Created         Created container with docker id 3c61a9aaa6a4; Security:[seccomp=unconfined]</span><br><span class="line">  28s           28s             1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Warning         Failed          Failed to start container with docker id 3c61a9aaa6a4 with error: Error response from daemon: &#123;&quot;message&quot;:&quot;can&#x27;t join IPC of container 2dfd13510b3f816ed0437ea70a8a57daeaa7a38eec0035972044b25dd102f1cd: non-shareable IPC (hint: use IpcMode:shareable for the donor container)&quot;&#125;</span><br><span class="line">  18s           18s             1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Normal          Created         Created container with docker id 42970a39a9b4; Security:[seccomp=unconfined]</span><br><span class="line">  17s           17s             1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Warning         Failed          Failed to start container with docker id 42970a39a9b4 with error: Error response from daemon: &#123;&quot;message&quot;:&quot;can&#x27;t join IPC of container 2dfd13510b3f816ed0437ea70a8a57daeaa7a38eec0035972044b25dd102f1cd: non-shareable IPC (hint: use IpcMode:shareable for the donor container)&quot;&#125;</span><br><span class="line">  32s           3s              4       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Normal          Pulled          Container image &quot;nginx:1.7.9&quot; already present on machine</span><br><span class="line">  30s           2s              4       &#123;kubelet k8s-nod2&#125;                              Warning         FailedSync      Error syncing pod, skipping: failed to &quot;StartContainer&quot; for &quot;nginx&quot; with RunContainerError: &quot;runContainer: Error response from daemon: &#123;\&quot;message\&quot;:\&quot;can&#x27;t join IPC of container 2dfd13510b3f816ed0437ea70a8a57daeaa7a38eec0035972044b25dd102f1cd: non-shareable IPC (hint: use IpcMode:shareable for the donor container)\&quot;&#125;&quot;</span><br><span class="line"></span><br><span class="line">  2s    2s      1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Normal  Created Created container with docker id 20ca9e358257; Security:[seccomp=unconfined]</span><br><span class="line">  2s    2s      1       &#123;kubelet k8s-nod2&#125;      spec.containers&#123;nginx&#125;  Warning Failed  Failed to start container with docker id 20ca9e358257 with error: Error response from daemon: &#123;&quot;message&quot;:&quot;can&#x27;t join IPC of container 2dfd13510b3f816ed0437ea70a8a57daeaa7a38eec0035972044b25dd102f1cd: non-shareable IPC (hint: use IpcMode:shareable for the donor container)&quot;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>根据日志信息，错误是由 <code>IPC mode</code> 导致的，并且提到使用 <code>shareable</code> 模式来解决，接下来需要将<code>IpcMode</code>修改为<code>shareable</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;message&quot;</span>:<span class="string">&quot;can&#x27;t join IPC of container 2dfd13510b3f816ed0437ea70a8a57daeaa7a38eec0035972044b25dd102f1cd: non-shareable IPC (hint: use IpcMode:shareable for the donor container)&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><ul>
+<li>在 <code>Docker</code> 官方文档中用关键字搜索 <code>docker ipc</code> ，在<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">docker run reference</a>中找到修改<code>IpcMode</code>的方式<br><img src="https://img-blog.csdnimg.cn/20191117121207886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4NTkyODE2,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ul>
+<ul>
+<li>在 <code>docker docs </code>中用关键字搜索 <code>docker default ipc</code> 查找修改默认 <code>ipc</code> 模式的方式，<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/release-notes/19.03/">docker 19.03 release note</a>中提到默认的<code>ipc</code>模式被修改为了<code>private</code>，因此我们需要将</li>
+</ul>
+<p><img src="/2019/11/17/docker-IPC-error/private-ipc.png" alt="image-20210528163138562"></p>
+<ul>
+<li>通过链接来到<code>github</code>的<a target="_blank" rel="noopener" href="https://github.com/moby/moby/pull/35621">pr</a>提交记录查找解决方法</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Old (bad, but backward-compatible) behavior (i.e. <span class="string">&quot;shareable&quot;</span> containers by default) can be enabled by either using --default-ipc-mode shareable daemon <span class="built_in">command</span> line option, or by adding a <span class="string">&quot;default-ipc-mode&quot;</span>: shareable<span class="string">&quot; line in docker.json configuration file.</span></span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>根据提示，修改/etc/docker/daemon.json（没有的话新建一个），添加如下内容</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;default-ipc-mode&quot;</span>: <span class="string">&quot;shareable&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>重启docker</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="重新运行"><a href="#重新运行" class="headerlink" title="重新运行"></a>重新运行</h1><ul>
+<li>重新部署deployment，可以看到pod正常运行。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@k8s-mst:~/web_sample<span class="comment"># kubectl apply -f nginx-deployment.yaml</span></span><br><span class="line">deployment <span class="string">&quot;nginx-deployment&quot;</span> created</span><br><span class="line">root@k8s-mst:~/web_sample<span class="comment"># kubectl get pods</span></span><br><span class="line">NAME                                READY     STATUS    RESTARTS   AGE</span><br><span class="line">nginx-deployment-4087004473-9wjbr   1/1       Running   0          29s</span><br><span class="line">nginx-deployment-4087004473-g9qpr   1/1       Running   0          29s</span><br><span class="line">nginx-deployment-4087004473-z6jkm   1/1       Running   0          29s</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>Reference</p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#docker" >
+    <span class="tag-code">docker</span>
+  </a>
+
+  <a href="/tags#kubernetes" >
+    <span class="tag-code">kubernetes</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+    
+      <a class="nav-right" href="/2020/03/21/paper-writing/">
+        
+          论文写作金句
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">背景介绍</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BA%94%E7%94%A8%E7%89%88%E6%9C%AC"><span class="toc-nav-text">应用版本</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5"><span class="toc-nav-text">错误排查</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-nav-text">解决方案</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E9%87%8D%E6%96%B0%E8%BF%90%E8%A1%8C"><span class="toc-nav-text">重新运行</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2019/11/17/docker-IPC-error/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      修改 kubeless python 运行时Http请求大小限制 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>修改 kubeless python 运行时Http请求大小限制</h2>
+  <p class="post-date">2020-10-08</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2020/10/08/kubeless-runtime-modify/kubeless-bg.png" alt="image-20210528183518528" style="zoom: 33%;">
+
+<a id="more"></a>
+
+
+
+<h1 id="1-背景介绍"><a href="#1-背景介绍" class="headerlink" title="1. 背景介绍"></a>1. 背景介绍</h1><ul>
+<li>kubeless-v1.0.7</li>
+<li>kubeless runtime: python3.7</li>
+</ul>
+<p>在向kubeless无服务计算框架发送http请求时，如果http的请求实体过大，kubeless会报’413 Request Entity Too Large’的错误。</p>
+<p>使用的kubeless runtime为python3.7，主要原因runtime是基于bottle web框架进行构建的，而python bottle模块对请求体的大小进行了限制，解决方案也很简单：基于现有的python3.7 runtime进行修改，并重新制作成镜像，替换掉原来的python3.7 runtime.</p>
+<h1 id="2-Python3-7-Runtime修改"><a href="#2-Python3-7-Runtime修改" class="headerlink" title="2. Python3.7 Runtime修改"></a>2. Python3.7 Runtime修改</h1><ul>
+<li>向kubeless python3.7 runtime文件——kubeless.py中添加如下内容：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改请求的大小限制</span></span><br><span class="line">bottle.BaseRequest.MEMFILE_MAX = <span class="number">1024</span> * <span class="number">1024</span> <span class="comment"># (or whatever you want)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="3-制作镜像"><a href="#3-制作镜像" class="headerlink" title="3. 制作镜像"></a>3. 制作镜像</h1><ul>
+<li>Dockerfile的内容</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> bitnami/minideb-runtimes:stretch</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install required system packages and dependencies</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> install_packages build-essential ca-certificates curl git libbz2-1.0 libc6 libffi6 libncurses5 libreadline7 libsqlite3-0 libssl1.1 libtinfo5 pkg-config unzip wget zlib1g</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> wget -nc -P /tmp/bitnami/pkg/cache/ https://downloads.bitnami.com/files/stacksmith/python-3.7.1-0-linux-amd64-debian-9.tar.gz &amp;&amp; \</span></span><br><span class="line"><span class="bash">    <span class="built_in">echo</span> <span class="string">&quot;4f1a47dc398b6942d328662b5a7719358fb7788afc746b0e4935ffb165140596  /tmp/bitnami/pkg/cache/python-3.7.1-0-linux-amd64-debian-9.tar.gz&quot;</span> | sha256sum -c - &amp;&amp; \</span></span><br><span class="line"><span class="bash">    tar -zxf /tmp/bitnami/pkg/cache/python-3.7.1-0-linux-amd64-debian-9.tar.gz -P --transform <span class="string">&#x27;s|^[^/]*/files|/opt/bitnami|&#x27;</span> --wildcards <span class="string">&#x27;*/files&#x27;</span> &amp;&amp; \</span></span><br><span class="line"><span class="bash">    rm -rf /tmp/bitnami/pkg/cache/python-3.7.1-0-linux-amd64-debian-9.tar.gz</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> BITNAMI_APP_NAME=<span class="string">&quot;python&quot;</span> \</span><br><span class="line">    BITNAMI_IMAGE_VERSION=<span class="string">&quot;3.7.1-r0&quot;</span> \</span><br><span class="line">    PATH=<span class="string">&quot;/opt/bitnami/python/bin:$PATH&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> python ./get-pip.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip install bottle==0.12.13 cherrypy==8.9.1 wsgi-request-logger prometheus_client requests</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /</span></span><br><span class="line"><span class="comment"># 修改了kubeless.py的文件内容</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> kubeless.py .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">USER</span> <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> PYTHONUNBUFFERED <span class="number">1</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;python&quot;</span>, <span class="string">&quot;/kubeless.py&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>根据Dockerfile创建镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t mykubeless/python37:debug .</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="4-替换镜像"><a href="#4-替换镜像" class="headerlink" title="4. 替换镜像"></a>4. 替换镜像</h1><p>修改kubeless的安装文件，将python3.7的runtime镜像替换为自己的runtime镜像。文件地址为：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/kubeless/kubeless/releases/download/v1.0.7/kubeless-v1.0.7.yaml">https://github.com/kubeless/kubeless/releases/download/v1.0.7/kubeless-v1.0.7.yaml</a></p>
+<blockquote>
+<p>Reference</p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#docker" >
+    <span class="tag-code">docker</span>
+  </a>
+
+  <a href="/tags#web" >
+    <span class="tag-code">web</span>
+  </a>
+
+  <a href="/tags#kubeless" >
+    <span class="tag-code">kubeless</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/09/22/kubernetes-dashboard-login/">
+        <span class="nav-arrow">← </span>
+        
+          kubernetes dashboard 的登录配置
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2020/10/15/python-garbage-collection/">
+        
+          python垃圾回收
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">1. 背景介绍</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-Python3-7-Runtime%E4%BF%AE%E6%94%B9"><span class="toc-nav-text">2. Python3.7 Runtime修改</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F"><span class="toc-nav-text">3. 制作镜像</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4-%E6%9B%BF%E6%8D%A2%E9%95%9C%E5%83%8F"><span class="toc-nav-text">4. 替换镜像</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2020/10/08/kubeless-runtime-modify/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/11/15/virtual-memory-address-space/">虚拟内存地址</a>
+      </h2>
+      <p class="article-date">2020年11月15日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#os" >
+    <span class="tag-code">os</span>
+  </a>
+
+  <a href="/tags#memory" >
+    <span class="tag-code">memory</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/11/15/virtual-memory-address-space/address-space.png" alt="image-20201115181629849" style="zoom:50%;">
+        
+      </div>
+      <a class="more" href="/2020/11/15/virtual-memory-address-space/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/10/15/python-garbage-collection/">python垃圾回收</a>
+      </h2>
+      <p class="article-date">2020年10月15日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#python" >
+    <span class="tag-code">python</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/10/15/python-garbage-collection/python.png" alt="img" style="zoom: 50%;">
+        
+      </div>
+      <a class="more" href="/2020/10/15/python-garbage-collection/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/10/08/kubeless-runtime-modify/">修改 kubeless python 运行时Http请求大小限制</a>
+      </h2>
+      <p class="article-date">2020年10月8日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#docker" >
+    <span class="tag-code">docker</span>
+  </a>
+
+  <a href="/tags#web" >
+    <span class="tag-code">web</span>
+  </a>
+
+  <a href="/tags#kubeless" >
+    <span class="tag-code">kubeless</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/10/08/kubeless-runtime-modify/kubeless-bg.png" alt="image-20210528183518528" style="zoom: 33%;">
+        
+      </div>
+      <a class="more" href="/2020/10/08/kubeless-runtime-modify/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/09/22/kubernetes-dashboard-login/">kubernetes dashboard 的登录配置</a>
+      </h2>
+      <p class="article-date">2020年9月22日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#kubernetes" >
+    <span class="tag-code">kubernetes</span>
+  </a>
+
+  <a href="/tags#dashboard" >
+    <span class="tag-code">dashboard</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/09/22/kubernetes-dashboard-login/login.png" alt="kubernetes-dashboard-login" style="zoom: 67%;">
+        
+      </div>
+      <a class="more" href="/2020/09/22/kubernetes-dashboard-login/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/09/15/swift-middleware/">OpenStack Swift中间件的原理及编写方式</a>
+      </h2>
+      <p class="article-date">2020年9月15日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#swift" >
+    <span class="tag-code">swift</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/09/15/swift-middleware/middleware01.jpeg" alt="img" style="zoom: 67%;">
+        
+      </div>
+      <a class="more" href="/2020/09/15/swift-middleware/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/08/08/k8s-deploy/">在国内使用Kubespray搭建Kubernetes集群</a>
+      </h2>
+      <p class="article-date">2020年8月8日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#kubernetes" >
+    <span class="tag-code">kubernetes</span>
+  </a>
+
+  <a href="/tags#kubespray" >
+    <span class="tag-code">kubespray</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/08/08/k8s-deploy/k8s.png" alt="image-20210528160938569" style="zoom: 33%;">
+        
+      </div>
+      <a class="more" href="/2020/08/08/k8s-deploy/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/03/21/hexo-blog/">搭建Hexo博客</a>
+      </h2>
+      <p class="article-date">2020年3月21日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#hexo" >
+    <span class="tag-code">hexo</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/03/21/hexo-blog/hexo.png" alt="image-20210519151838056" style="zoom: 50%;">
+        
+      </div>
+      <a class="more" href="/2020/03/21/hexo-blog/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/03/21/mirrors/">apt、docker、maven等镜像源更换</a>
+      </h2>
+      <p class="article-date">2020年3月21日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#linux" >
+    <span class="tag-code">linux</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <p><img src="/2020/03/21/mirrors/ubuntu.png" alt="img"></p>
+        
+      </div>
+      <a class="more" href="/2020/03/21/mirrors/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2020/03/21/paper-writing/">论文写作金句</a>
+      </h2>
+      <p class="article-date">2020年3月21日</p>
+      
+        
+  <a href="/tags#paper" >
+    <span class="tag-code">paper</span>
+  </a>
+
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2020/03/21/paper-writing/bg.jpeg" alt="img" style="zoom:50%;">
+        
+      </div>
+      <a class="more" href="/2020/03/21/paper-writing/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2019/11/17/docker-IPC-error/">kubenates 运行任务时出现can't join IPC of container...non-shareable IPC的错误</a>
+      </h2>
+      <p class="article-date">2019年11月17日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#docker" >
+    <span class="tag-code">docker</span>
+  </a>
+
+  <a href="/tags#kubernetes" >
+    <span class="tag-code">kubernetes</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2019/11/17/docker-IPC-error/data_docker.jpg" alt="docker" style="zoom: 40%;">
+        
+      </div>
+      <a class="more" href="/2019/11/17/docker-IPC-error/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a href="/page/4/"><span class="page-arrow">← </span>Prev</a>
+  
+  
+    <a class="unvisible" href="/">Next <span class="page-arrow">→</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

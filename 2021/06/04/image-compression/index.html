@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用python批量压缩图片 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用python批量压缩图片</h2>
+  <p class="post-date">2021-06-04</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/06/04/image-compression/wallhaven-457wx9.jpg" alt="General 1920x1080 cats blue eyes animals boxes Ben Torode wooden surface mammals carton box indoors looking at viewer" style="zoom: 33%;">
+
+
+
+<a id="more"></a>
+
+
+
+<h1 id="1-依赖安装"><a href="#1-依赖安装" class="headerlink" title="1. 依赖安装"></a>1. 依赖安装</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip3 install pillow</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="2-图片压缩"><a href="#2-图片压缩" class="headerlink" title="2. 图片压缩"></a>2. 图片压缩</h1><h2 id="2-1-PIL库图片插值的四种模式"><a href="#2-1-PIL库图片插值的四种模式" class="headerlink" title="2.1 PIL库图片插值的四种模式"></a>2.1 PIL库图片插值的四种模式</h2><h3 id="Nearest-最近相邻插值算法-最近邻法）"><a href="#Nearest-最近相邻插值算法-最近邻法）" class="headerlink" title="Nearest (最近相邻插值算法/最近邻法）"></a>Nearest (最近相邻插值算法/最近邻法）</h3><ul>
+<li>特点：缺少的像素通过直接使用与之最接近的原有像素的颜色生成，也就是照搬旁边的像素。</li>
+<li>优点：速度快。</li>
+<li>缺点：精度低，有明显的锯齿感。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(filename)</span><br><span class="line">img.thumbnail((w,h), Image.NEAREST)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Bilinear（两次线性插值算法-双线性内插法）"><a href="#Bilinear（两次线性插值算法-双线性内插法）" class="headerlink" title="Bilinear（两次线性插值算法/双线性内插法）"></a>Bilinear（两次线性插值算法/双线性内插法）</h3><ul>
+<li>特点：通过平均周围像素颜色来添加像素的方法。</li>
+<li>优点：消除了锯齿现象，效果中等。</li>
+<li>缺点：效果中等。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(filename)</span><br><span class="line">img.thumbnail((w,h), Image.BILINEAR)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Bicubic（两次立方插值算法-立方卷积法）"><a href="#Bicubic（两次立方插值算法-立方卷积法）" class="headerlink" title="Bicubic（两次立方插值算法/立方卷积法）"></a>Bicubic（两次立方插值算法/立方卷积法）</h3><ul>
+<li>特点：Bilinear的改进版，不仅考虑到四个直接邻点灰度值的影响，还考虑到各邻点间灰度值变化率的影响。</li>
+<li>优点：计算精度很高，处理后图像像质损失较小。</li>
+<li>缺点：速度慢。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(filename)</span><br><span class="line">img.thumbnail((w,h), Image.BICUBIC)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Antialias（Lanczos算法）"><a href="#Antialias（Lanczos算法）" class="headerlink" title="Antialias（Lanczos算法）"></a>Antialias（Lanczos算法）</h3><ul>
+<li>特点：几个简单过滤器中的最佳折中方案。</li>
+<li>优点：<code>Antialias</code>比<code>Bicubic</code>的速度要快。</li>
+<li>缺点：没有<code>Bicubic</code>清晰。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(filename)</span><br><span class="line">img.thumbnail((w,h), Image.LANCZOS)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-2-Image-resize-和-Image-thumbnail"><a href="#2-2-Image-resize-和-Image-thumbnail" class="headerlink" title="2.2 Image.resize() 和 Image.thumbnail()"></a>2.2 <code>Image.resize()</code> 和 <code>Image.thumbnail()</code></h2><ul>
+<li><code>resize()</code>：将图片尺寸修改为<code>size</code>。</li>
+<li><code>thumbnail()</code>：如果图像原尺寸大于<code>size</code>，则在保留宽高比的前提下缩小为<code>size</code>；如果图像原尺寸大于<code>size</code>，则尺寸不变。</li>
+</ul>
+<h2 id="2-3-代码流程图"><a href="#2-3-代码流程图" class="headerlink" title="2.3 代码流程图"></a>2.3 代码流程图</h2><p><img src="/2021/06/04/image-compression/image-20210604203014721.png" alt="image-20210604203014721"></p>
+<h2 id="2-3-压缩代码"><a href="#2-3-压缩代码" class="headerlink" title="2.3 压缩代码"></a>2.3 压缩代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"></span><br><span class="line">dir = <span class="string">&#x27;E:\\Album Test\\test\\&#x27;</span></span><br><span class="line">patterns = [<span class="string">&#x27;*.jpg&#x27;</span>, <span class="string">&quot;*.png&quot;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compressImage</span>():</span></span><br><span class="line">    files = collectFiles(dir, patterns)</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> files:</span><br><span class="line">        img = doCompress(f)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 在同级目录下的compress目录，用于存放压缩后的图片</span></span><br><span class="line">        compress_dir = <span class="string">&quot;%s/compress/&quot;</span> % os.path.dirname(f)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(compress_dir):</span><br><span class="line">            os.makedirs(compress_dir)</span><br><span class="line">        new_fname = os.path.join(compress_dir, os.path.basename(f))</span><br><span class="line">        </span><br><span class="line">        saveImg(img, new_fname)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">collectFiles</span>(<span class="params">dir, patterns</span>):</span></span><br><span class="line">    <span class="comment"># 获取图片文件全路径</span></span><br><span class="line">    files = []</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> patterns:</span><br><span class="line">        files += (glob.glob(<span class="string">&#x27;%s%s%s&#x27;</span> % (dir, <span class="string">&#x27;**\\&#x27;</span>, p), recursive=<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 替换win路径为linux路径</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(files)):</span><br><span class="line">        files[i] = files[i].replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> files</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">doCompress</span>(<span class="params">filename</span>):</span></span><br><span class="line">    sImg = Image.open(filename)</span><br><span class="line">    w, h = sImg.size</span><br><span class="line"></span><br><span class="line">    sImg.thumbnail((w,h), Image.BICUBIC)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sImg</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveImg</span>(<span class="params">img, filename</span>):</span></span><br><span class="line">    img.save(filename)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    compressImage()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-4-压缩代码（通过读取图片旋转信息避免图片压缩后被旋转）"><a href="#2-4-压缩代码（通过读取图片旋转信息避免图片压缩后被旋转）" class="headerlink" title="2.4 压缩代码（通过读取图片旋转信息避免图片压缩后被旋转）"></a>2.4 压缩代码（通过读取图片旋转信息避免图片压缩后被旋转）</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ExifTags</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"></span><br><span class="line">dir = <span class="string">&#x27;E:/Album Test/public/&#x27;</span></span><br><span class="line">patterns = [<span class="string">&#x27;*.jpg&#x27;</span>, <span class="string">&quot;*.png&quot;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compressImage</span>():</span></span><br><span class="line">    files = collectFiles(dir, patterns)</span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> files:</span><br><span class="line">        img = doCompress(f)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># # 将压缩后的图片存放在同级目录下的compress文件夹下</span></span><br><span class="line">        <span class="comment"># compress_dir = &quot;%s/compress/&quot; % os.path.dirname(f)</span></span><br><span class="line">        <span class="comment"># if not os.path.exists(compress_dir):</span></span><br><span class="line">        <span class="comment">#     os.makedirs(compress_dir)</span></span><br><span class="line">        <span class="comment"># new_fname = os.path.join(compress_dir, os.path.basename(f))</span></span><br><span class="line">        saveImg(img, f)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">collectFiles</span>(<span class="params">dir, patterns</span>):</span></span><br><span class="line">    <span class="comment"># 获取图片文件全路径</span></span><br><span class="line">    files = []</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> patterns:</span><br><span class="line">        files += (glob.glob(<span class="string">&#x27;%s%s%s&#x27;</span> % (dir, <span class="string">&#x27;**\\&#x27;</span>, p), recursive=<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 替换win路径为linux路径</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(files)):</span><br><span class="line">        files[i] = files[i].replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> files</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">doCompress</span>(<span class="params">filename</span>):</span></span><br><span class="line">    img = Image.open(filename)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 找到图像旋转信息 exif: Exchangeable image file format</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> ExifTags.TAGS.keys():</span><br><span class="line">        <span class="keyword">if</span>(ExifTags.TAGS[k] == <span class="string">&#x27;Orientation&#x27;</span>):</span><br><span class="line">            <span class="keyword">if</span> hasattr(img, <span class="string">&#x27;_getexif&#x27;</span>) <span class="keyword">and</span> hasattr(img._getexif(), <span class="string">&#x27;items&#x27;</span>):</span><br><span class="line">                exif = dict(img._getexif().items())</span><br><span class="line">                <span class="keyword">if</span> exif[k] == <span class="number">3</span>:</span><br><span class="line">                    img = img.rotate(<span class="number">180</span>, expand=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">elif</span> exif[k] == <span class="number">6</span>:</span><br><span class="line">                    img = img.rotate(<span class="number">270</span>, expand=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">elif</span> exif[k] == <span class="number">8</span>:</span><br><span class="line">                    img = img.rotate(<span class="number">90</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 旋转</span></span><br><span class="line">    w, h = img.size</span><br><span class="line">    <span class="comment">#sImg.thumbnail((w,h), Image.BICUBIC)</span></span><br><span class="line">    img.thumbnail((<span class="number">2000</span>, <span class="number">1500</span>), Image.BICUBIC)</span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">saveImg</span>(<span class="params">img, filename</span>):</span></span><br><span class="line">    img.save(filename)</span><br><span class="line">    print(filename, <span class="string">&quot;压缩成功&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    compressImage()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#python" >
+    <span class="tag-code">python</span>
+  </a>
+
+  <a href="/tags#utils" >
+    <span class="tag-code">utils</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/06/02/java-containers/">
+        <span class="nav-arrow">← </span>
+        
+          Java 容器
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/06/04/frp/">
+        
+          frp内网穿透工具使用指南(完善中)
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-%E4%BE%9D%E8%B5%96%E5%AE%89%E8%A3%85"><span class="toc-nav-text">1. 依赖安装</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9"><span class="toc-nav-text">2. 图片压缩</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-1-PIL%E5%BA%93%E5%9B%BE%E7%89%87%E6%8F%92%E5%80%BC%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="toc-nav-text">2.1 PIL库图片插值的四种模式</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Nearest-%E6%9C%80%E8%BF%91%E7%9B%B8%E9%82%BB%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95-%E6%9C%80%E8%BF%91%E9%82%BB%E6%B3%95%EF%BC%89"><span class="toc-nav-text">Nearest (最近相邻插值算法&#x2F;最近邻法）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Bilinear%EF%BC%88%E4%B8%A4%E6%AC%A1%E7%BA%BF%E6%80%A7%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95-%E5%8F%8C%E7%BA%BF%E6%80%A7%E5%86%85%E6%8F%92%E6%B3%95%EF%BC%89"><span class="toc-nav-text">Bilinear（两次线性插值算法&#x2F;双线性内插法）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Bicubic%EF%BC%88%E4%B8%A4%E6%AC%A1%E7%AB%8B%E6%96%B9%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95-%E7%AB%8B%E6%96%B9%E5%8D%B7%E7%A7%AF%E6%B3%95%EF%BC%89"><span class="toc-nav-text">Bicubic（两次立方插值算法&#x2F;立方卷积法）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Antialias%EF%BC%88Lanczos%E7%AE%97%E6%B3%95%EF%BC%89"><span class="toc-nav-text">Antialias（Lanczos算法）</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-2-Image-resize-%E5%92%8C-Image-thumbnail"><span class="toc-nav-text">2.2 Image.resize() 和 Image.thumbnail()</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-nav-text">2.3 代码流程图</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-%E5%8E%8B%E7%BC%A9%E4%BB%A3%E7%A0%81"><span class="toc-nav-text">2.3 压缩代码</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-4-%E5%8E%8B%E7%BC%A9%E4%BB%A3%E7%A0%81%EF%BC%88%E9%80%9A%E8%BF%87%E8%AF%BB%E5%8F%96%E5%9B%BE%E7%89%87%E6%97%8B%E8%BD%AC%E4%BF%A1%E6%81%AF%E9%81%BF%E5%85%8D%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9%E5%90%8E%E8%A2%AB%E6%97%8B%E8%BD%AC%EF%BC%89"><span class="toc-nav-text">2.4 压缩代码（通过读取图片旋转信息避免图片压缩后被旋转）</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/06/04/image-compression/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      frp内网穿透工具使用指南(完善中) | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>frp内网穿透工具使用指南(完善中)</h2>
+  <p class="post-date">2021-06-04</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/06/04/frp/architecture.png" alt="architecture" style="zoom:80%;">
+
+<a id="more"></a>
+
+
+
+<h1 id="1-frp介绍"><a href="#1-frp介绍" class="headerlink" title="1. frp介绍"></a>1. frp介绍</h1><blockquote>
+<p><em><a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></em></p>
+</blockquote>
+<p>frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。</p>
+<h1 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># linux</span></span><br><span class="line">$ wget https://github.com/fatedier/frp/releases/download/v0.37.0/frp_0.37.0_linux_amd64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># windows</span></span><br><span class="line">$ wget https://github.com/fatedier/frp/releases/download/v0.37.0/frp_0.37.0_windows_amd64.zip</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 解压</span></span><br><span class="line">$ tar -xzf frp_0.37.0_linux_amd64.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="3-使用"><a href="#3-使用" class="headerlink" title="3. 使用"></a>3. 使用</h1><h2 id="3-1-使用TCP暴露内网的服务"><a href="#3-1-使用TCP暴露内网的服务" class="headerlink" title="3.1 使用TCP暴露内网的服务"></a>3.1 使用TCP暴露内网的服务</h2><h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h3><ul>
+<li>一台拥有公网ip的服务器：运行frps，进行流量转发</li>
+<li>一台能访问到服务器的内网机器：运行frpc，提供流量服务</li>
+<li>访问端：访问公网服务器，并由frps将流量转发到frpc端，实现访问内网机器的功能</li>
+</ul>
+<h3 id="服务器端配置-假设ip地址为x-x-x-x"><a href="#服务器端配置-假设ip地址为x-x-x-x" class="headerlink" title="服务器端配置(假设ip地址为x.x.x.x)"></a>服务器端配置(假设<code>ip</code>地址为<code>x.x.x.x</code>)</h3><p>服务器开放7000端口监听来自客户端的连接</p>
+<ul>
+<li>frps.ini</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">bind_port</span> = <span class="number">7000</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./frps -c frps.ini</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="内网机器配置"><a href="#内网机器配置" class="headerlink" title="内网机器配置"></a>内网机器配置</h3><p>客户端连接到服务器的7000端口，然后将本地的4000端口的tcp服务映射到服务器的10010端口上，之后访问<code>服务器ip:10010</code>端口的流量都会被转发到<code>客户端:4000</code>端口上。</p>
+<ul>
+<li>frpc.ini（将本地4000端口的tcp服务映射到远程服务器的10010端口上）</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = x.x.x.x</span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7000</span></span><br><span class="line"></span><br><span class="line"><span class="section">[hexo]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">4000</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="number">10010</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ frpc.exe -c frps.ini</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="访问"><a href="#访问" class="headerlink" title="访问"></a>访问</h3><ul>
+<li>使用浏览器打开  <code>x.x.x.x:10010</code> 即可访问内网 <code>4000</code> 端口的服务。</li>
+</ul>
+<h2 id="3-2-使用frp搭建点到点内网穿透，来访问windows远程桌面"><a href="#3-2-使用frp搭建点到点内网穿透，来访问windows远程桌面" class="headerlink" title="3.2 使用frp搭建点到点内网穿透，来访问windows远程桌面"></a>3.2 使用frp搭建点到点内网穿透，来访问windows远程桌面</h2><p>服务器起桥梁作用，帮助两台内网机器建立连接。</p>
+<p>一旦建立链接，所有的流量只在两台内网机器之间传递（要求两台机器都运行frpc）</p>
+<ul>
+<li>具有公网ip的服务器</li>
+<li>内网机器1：被访问</li>
+<li>内网机器2：执行访问</li>
+</ul>
+<h3 id="服务器（桥梁）"><a href="#服务器（桥梁）" class="headerlink" title="服务器（桥梁）"></a>服务器（桥梁）</h3><ul>
+<li>frps.ini</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">bind_port</span> = <span class="number">7000</span></span><br><span class="line"><span class="attr">bind_udp_port</span> = <span class="number">7001</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./frps -c frps.ini</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="内网机器1（被访问）"><a href="#内网机器1（被访问）" class="headerlink" title="内网机器1（被访问）"></a>内网机器1（被访问）</h3><ul>
+<li>frpc.ini</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = xx.xx.xx.xx</span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7000</span></span><br><span class="line"></span><br><span class="line"><span class="section">[p2p_rdp]</span></span><br><span class="line"><span class="attr">type</span> = xtcp</span><br><span class="line"><span class="comment">#SK跟访问者一致才能连通，可以自己随便设</span></span><br><span class="line"><span class="attr">sk</span> = abcdefg</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">3389</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./frpc.exe -c frpc.ini</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<h3 id="内网机器2（访问）"><a href="#内网机器2（访问）" class="headerlink" title="内网机器2（访问）"></a>内网机器2（访问）</h3><ul>
+<li>frpc.ini</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># frpc.ini</span></span><br><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = x.x.x.x</span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7000</span></span><br><span class="line"></span><br><span class="line"><span class="section">[p2p_rdp_visitor]</span></span><br><span class="line"><span class="attr">type</span> = xtcp</span><br><span class="line"><span class="attr">role</span> = visitor</span><br><span class="line"><span class="comment">#server_name同上面待其他设备访问的客户端中的配置[p2p_rdp]一致，待访问端和访问端中的p2p_rdp名字可以替换成自己想要的</span></span><br><span class="line"><span class="attr">server_name</span> = p2p_rdp</span><br><span class="line"><span class="comment">#SK跟访问者一致才能连通，可以自己随便设</span></span><br><span class="line"><span class="attr">sk</span> = abcdefg</span><br><span class="line"><span class="attr">bind_addr</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">bind_port</span> = <span class="number">89</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./frpc.exe -c frpc.ini</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>访问</li>
+</ul>
+<p>访问127.0.0.1:89，然后127.0.0.1:89会将数据转发到远程服务器的3389端口建立rdp连接</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#network" >
+    <span class="tag-code">network</span>
+  </a>
+
+  <a href="/tags#frp" >
+    <span class="tag-code">frp</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/06/04/image-compression/">
+        <span class="nav-arrow">← </span>
+        
+          使用python批量压缩图片
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/06/05/linux-windows/">
+        
+          linux 和 windows 常用终端命令总结
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-frp%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">1. frp介绍</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-%E5%AE%89%E8%A3%85"><span class="toc-nav-text">2. 安装</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-%E4%BD%BF%E7%94%A8"><span class="toc-nav-text">3. 使用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-1-%E4%BD%BF%E7%94%A8TCP%E6%9A%B4%E9%9C%B2%E5%86%85%E7%BD%91%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-nav-text">3.1 使用TCP暴露内网的服务</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="toc-nav-text">前期准备</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E9%85%8D%E7%BD%AE-%E5%81%87%E8%AE%BEip%E5%9C%B0%E5%9D%80%E4%B8%BAx-x-x-x"><span class="toc-nav-text">服务器端配置(假设ip地址为x.x.x.x)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%86%85%E7%BD%91%E6%9C%BA%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">内网机器配置</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%BF%E9%97%AE"><span class="toc-nav-text">访问</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-2-%E4%BD%BF%E7%94%A8frp%E6%90%AD%E5%BB%BA%E7%82%B9%E5%88%B0%E7%82%B9%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%EF%BC%8C%E6%9D%A5%E8%AE%BF%E9%97%AEwindows%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2"><span class="toc-nav-text">3.2 使用frp搭建点到点内网穿透，来访问windows远程桌面</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%88%E6%A1%A5%E6%A2%81%EF%BC%89"><span class="toc-nav-text">服务器（桥梁）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%86%85%E7%BD%91%E6%9C%BA%E5%99%A81%EF%BC%88%E8%A2%AB%E8%AE%BF%E9%97%AE%EF%BC%89"><span class="toc-nav-text">内网机器1（被访问）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%86%85%E7%BD%91%E6%9C%BA%E5%99%A82%EF%BC%88%E8%AE%BF%E9%97%AE%EF%BC%89"><span class="toc-nav-text">内网机器2（访问）</span></a></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/06/04/frp/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

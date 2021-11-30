@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      单机环境的 Hadoop 平台部署 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>单机环境的 Hadoop 平台部署</h2>
+  <p class="post-date">2021-01-11</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/01/11/hadoop-deploy/hadoop.png" alt="Hadoop" style="zoom: 33%;">
+
+<a id="more"></a>
+
+
+
+<h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><p>高级操作系统课程实验之一是部署单机Hadoop，记录一下搭建过程。</p>
+<h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><ul>
+<li>ubuntu18.04</li>
+<li>以root用户操作</li>
+</ul>
+<h2 id="应用需求"><a href="#应用需求" class="headerlink" title="应用需求"></a>应用需求</h2><ul>
+<li>确保安装了ssh服务</li>
+<li>关闭了ubuntu防火墙（云服务器需要配置安全组，放行端口）</li>
+</ul>
+<h2 id="修改hosts"><a href="#修改hosts" class="headerlink" title="修改hosts"></a>修改hosts</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ hostnamectl <span class="built_in">set</span>-hostname master</span><br><span class="line">$ vi /etc/hosts</span><br><span class="line"><span class="comment">#添加本地dns映射</span></span><br><span class="line">...</span><br><span class="line">你的ip	master</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="安装Java"><a href="#安装Java" class="headerlink" title="安装Java"></a>安装Java</h1><ul>
+<li>安装java</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ apt update</span><br><span class="line">$ apt install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>添加环境变量</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ vi /etc/profile</span><br><span class="line"><span class="comment"># 添加如下内容</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>查看是否安装成功</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_275&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_275-8u275-b01-0ubuntu1~18.04-b01)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.275-b01, mixed mode)</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="安装Hadoop"><a href="#安装Hadoop" class="headerlink" title="安装Hadoop"></a>安装Hadoop</h1><h2 id="准备Hadoop安装包"><a href="#准备Hadoop安装包" class="headerlink" title="准备Hadoop安装包"></a>准备Hadoop安装包</h2><ul>
+<li>下载hadoop2.x压缩包</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~</span><br><span class="line">$ wget https://mirrors.aliyun.com/apache/hadoop/common/hadoop-2.10.1/hadoop-2.10.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>解压缩</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ tar -xzf hadoop-2.10.1.tar.gz</span><br><span class="line">$ ls</span><br><span class="line">hadoop-2.10.1  hadoop-2.10.1.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><ul>
+<li>进入 <code>hadoop-2.10.1/etc/hadoop</code> 文件夹</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /root/hadoop-2.10.1/etc/hadoop</span><br><span class="line">$ ls</span><br><span class="line">capacity-scheduler.xml      httpfs-env.sh            mapred-env.sh</span><br><span class="line">configuration.xsl           httpfs-log4j.properties  mapred-queues.xml.template</span><br><span class="line">container-executor.cfg      httpfs-signature.secret  mapred-site.xml.template</span><br><span class="line">core-site.xml               httpfs-site.xml          slaves</span><br><span class="line">hadoop-env.cmd              kms-acls.xml             ssl-client.xml.example</span><br><span class="line">hadoop-env.sh               kms-env.sh               ssl-server.xml.example</span><br><span class="line">hadoop-metrics2.properties  kms-log4j.properties     yarn-env.cmd</span><br><span class="line">hadoop-metrics.properties   kms-site.xml             yarn-env.sh</span><br><span class="line">hadoop-policy.xml           log4j.properties         yarn-site.xml</span><br><span class="line">hdfs-site.xml               mapred-env.cmd</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>修改hadoop-env.sh</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ vi hadoop-env.sh</span><br><span class="line"><span class="comment"># 修改JAVA_HOME字段</span></span><br><span class="line">...</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>修改core-site.xml</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://master:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/tmp/hadoop<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>修改hdfs-site.xml</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.name.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///data/hadoop/hdfs/nn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.checkpoint.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///data/hadoop/hdfs/snn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.checkpoint.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///data/hadoop/hdfs/snn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.datanode.data.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///data/hadoop/hdfs/dn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>修改mapred-site.xml(从模板创建：cp mapred-site.xml.template mapred-site.xml )</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>修改yarn-site.xml</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 指定resourcemanager的地址 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>master<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 指定reducer获取数据的方式 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.local-dirs<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///data/hadoop/yarn/nm<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>修改slaves</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vi slaves</span><br><span class="line">master</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>创建相关文件夹</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p /tmp/hadoop</span><br><span class="line">$ mkdir -p /data/hadoop/hdfs/nn</span><br><span class="line">$ mkdir -p /data/hadoop/hdfs/dn</span><br><span class="line">$ mkdir -p /data/hadoop/hdfs/snn</span><br><span class="line">$ mkdir -p /data/hadoop/hdfs/nm</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>配置Hadoop环境变量</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ vi /etc/profile</span><br><span class="line"><span class="comment"># 添加如下内容</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/root/hadoop-2.10.1</span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装Hadoop-1"><a href="#安装Hadoop-1" class="headerlink" title="安装Hadoop"></a>安装Hadoop</h2><ul>
+<li>格式化namenode</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hdfs namenode -format</span><br><span class="line">...</span><br><span class="line">21/01/10 14:38:44 INFO common.Storage: Storage directory /data/hadoop/hdfs/nn has been successfully formatted.</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动Hadoop</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ start-dfs.sh</span><br><span class="line">Starting namenodes on [master]</span><br><span class="line">The authenticity of host <span class="string">&#x27;master (172.17.212.17)&#x27;</span> can<span class="string">&#x27;t be established.</span></span><br><span class="line"><span class="string">ECDSA key fingerprint is SHA256:aOcOvEQXhyzfs4i5vOBoM2raFUt7tqCo22B5zCS4Tto.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></span><br><span class="line"><span class="string">master: Warning: Permanently added &#x27;</span>master,172.17.212.17<span class="string">&#x27; (ECDSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">root@master&#x27;</span>s password:</span><br><span class="line">master: starting namenode, logging to /root/hadoop-2.10.1/logs/hadoop-root-namenode-master.out</span><br><span class="line">root@master<span class="string">&#x27;s password:</span></span><br><span class="line"><span class="string">master: starting datanode, logging to /root/hadoop-2.10.1/logs/hadoop-root-datanode-master.out</span></span><br><span class="line"><span class="string">Starting secondary namenodes [0.0.0.0]</span></span><br><span class="line"><span class="string">The authenticity of host &#x27;</span>0.0.0.0 (0.0.0.0)<span class="string">&#x27; can&#x27;</span>t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:aOcOvEQXhyzfs4i5vOBoM2raFUt7tqCo22B5zCS4Tto.</span><br><span class="line">Are you sure you want to <span class="built_in">continue</span> connecting (yes/no)? yes</span><br><span class="line">0.0.0.0: Warning: Permanently added <span class="string">&#x27;0.0.0.0&#x27;</span> (ECDSA) to the list of known hosts.</span><br><span class="line">root@0.0.0.0<span class="string">&#x27;s password:</span></span><br><span class="line"><span class="string">0.0.0.0: starting secondarynamenode, logging to /root/hadoop-2.10.1/logs/hadoop-root-secondarynamenode-master.out</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动Yarn</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ start-yarn.sh</span><br><span class="line">starting yarn daemons</span><br><span class="line">starting resourcemanager, logging to /root/hadoop-2.10.1/logs/yarn-root-resourcemanager-master.out</span><br><span class="line">root@master<span class="string">&#x27;s password:</span></span><br><span class="line"><span class="string">master: starting nodemanager, logging to /root/hadoop-2.10.1/logs/yarn-root-nodemanager-master.out</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>查看是否启动成功</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ jps</span><br><span class="line">20771 NodeManager</span><br><span class="line">21557 Jps</span><br><span class="line">19784 NameNode</span><br><span class="line">20233 SecondaryNameNode</span><br><span class="line">19979 DataNode</span><br><span class="line">20620 ResourceManager</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>访问服务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HDFS：http:&#x2F;&#x2F;ip:50070</span><br><span class="line">YARN：http:&#x2F;&#x2F;ip:8088</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="运行Hadoop程序"><a href="#运行Hadoop程序" class="headerlink" title="运行Hadoop程序"></a>运行Hadoop程序</h1><h2 id="上传文件到Hadoop集群"><a href="#上传文件到Hadoop集群" class="headerlink" title="上传文件到Hadoop集群"></a>上传文件到Hadoop集群</h2><ul>
+<li>上传文件  hadoop-2.10.1.tar.gz 到Hadoop集群</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls</span><br><span class="line">hadoop-2.10.1  hadoop-2.10.1.tar.gz</span><br><span class="line">$ hadoop fs -put hadoop-2.10.1.tar.gz hdfs://master:9000/</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>登录 <a target="_blank" rel="noopener" href="http://ip:50070/">http://ip:50070</a> 查看Datanodes</li>
+</ul>
+<p><img src="/2021/01/11/hadoop-deploy/datanodes.png" alt="image-20210110145747220"></p>
+<ul>
+<li>登录 <a target="_blank" rel="noopener" href="http://ip:50070/explorer.html">http://ip:50070/explorer.html</a> 查看上传的文件</li>
+</ul>
+<p><img src="/2021/01/11/hadoop-deploy/hdfsfiles.png" alt="image-20210110150132629"></p>
+<h2 id="计算圆周率"><a href="#计算圆周率" class="headerlink" title="计算圆周率"></a>计算圆周率</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/hadoop-2.10.1/share/hadoop/mapreduce/</span><br><span class="line">$ hadoop jar hadoop-mapreduce-examples-2.10.1.jar pi 5 5</span><br><span class="line">...</span><br><span class="line">Estimated value of Pi is 3.68000000000000000000</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="单词计数"><a href="#单词计数" class="headerlink" title="单词计数"></a>单词计数</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建源文件并上传到HDFS</span></span><br><span class="line">$ cat &gt;&gt; words.txt &lt;&lt;EOF</span><br><span class="line">hello hello hello</span><br><span class="line">good good</span><br><span class="line">welcome to hadoop, nice to meet you.</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在HDFS中创建文件夹</span></span><br><span class="line">$ hadoop fs -mkdir /wordcount</span><br><span class="line">$ hadoop fs -mkdir /wordcount/input</span><br><span class="line">$ hadoop fs -put words.txt /wordcount/input</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行单词计数程序</span></span><br><span class="line">$ <span class="built_in">cd</span> ~/hadoop-2.10.1/share/hadoop/mapreduce/</span><br><span class="line">$ hadoop jar hadoop-mapreduce-examples-2.10.1.jar wordcount /wordcount/input /wordcount/output</span><br><span class="line"><span class="comment"># 查看结果</span></span><br><span class="line">$ hadoop fs -ls /wordcount/output</span><br><span class="line">Found 2 items</span><br><span class="line">-rw-r--r--   1 root supergroup          0 2021-01-10 15:17 /wordcount/output/_SUCCESS</span><br><span class="line">-rw-r--r--   1 root supergroup         61 2021-01-10 15:17 /wordcount/output/part-r-00000</span><br><span class="line">$ hadoop fs -cat /wordcount/output/part-r-00000</span><br><span class="line">good    2</span><br><span class="line">hadoop, 1</span><br><span class="line">hello   3</span><br><span class="line">meet    1</span><br><span class="line">nice    1</span><br><span class="line">to      2</span><br><span class="line">welcome 1</span><br><span class="line">you.    1</span><br></pre></td></tr></table></figure></section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#hadoop" >
+    <span class="tag-code">hadoop</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2020/12/28/spark-deploy/">
+        <span class="nav-arrow">← </span>
+        
+          部署Spark
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/03/04/spdk-install/">
+        
+          SPDK安装指南
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="toc-nav-text">前期准备</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83"><span class="toc-nav-text">系统环境</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BA%94%E7%94%A8%E9%9C%80%E6%B1%82"><span class="toc-nav-text">应用需求</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BF%AE%E6%94%B9hosts"><span class="toc-nav-text">修改hosts</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%AE%89%E8%A3%85Java"><span class="toc-nav-text">安装Java</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%AE%89%E8%A3%85Hadoop"><span class="toc-nav-text">安装Hadoop</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%87%86%E5%A4%87Hadoop%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-nav-text">准备Hadoop安装包</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-nav-text">修改配置文件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%89%E8%A3%85Hadoop-1"><span class="toc-nav-text">安装Hadoop</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E8%BF%90%E8%A1%8CHadoop%E7%A8%8B%E5%BA%8F"><span class="toc-nav-text">运行Hadoop程序</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0Hadoop%E9%9B%86%E7%BE%A4"><span class="toc-nav-text">上传文件到Hadoop集群</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9C%86%E5%91%A8%E7%8E%87"><span class="toc-nav-text">计算圆周率</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8D%95%E8%AF%8D%E8%AE%A1%E6%95%B0"><span class="toc-nav-text">单词计数</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/01/11/hadoop-deploy/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

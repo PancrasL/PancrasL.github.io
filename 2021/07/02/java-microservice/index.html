@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      微服务 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>微服务</h2>
+  <p class="post-date">2021-07-02</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/07/02/java-microservice/bg.jpeg" alt="img" style="zoom:33%;">
+
+<a id="more"></a>
+
+<h1 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h1><h2 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h2><p>CAP 也就是 Consistency（一致性）、Availability（可用性）、Partition Tolerance（分区容错性） 这三个单词首字母组合。</p>
+<ul>
+<li><strong>一致性（Consistence）</strong> : 所有节点访问同一份最新的数据副本</li>
+<li><strong>可用性（Availability）</strong>: 非故障的节点在合理的时间内返回合理的响应（不是错误或者超时的响应）。</li>
+<li><strong>分区容错性（Partition tolerance）</strong> : 分布式系统出现网络分区的时候，仍然能够对外提供服务。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/CAP%E7%90%86%E8%AE%BA">https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/CAP%E7%90%86%E8%AE%BA</a></p>
+<h2 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h2><p>BASE 是 Basically Available（基本可用） 、Soft-state（软状态） 和 Eventually Consistent（最终一致性） 三个短语的缩写。BASE 理论是对 CAP 中一致性和可用性权衡的结果，其来源于对大规模互联网系统分布式实践的总结，是基于 CAP 定理逐步演化而来的，它大大降低了我们对系统的要求。</p>
+<h2 id="Paxos算法和Raft算法"><a href="#Paxos算法和Raft算法" class="headerlink" title="Paxos算法和Raft算法"></a>Paxos算法和Raft算法</h2><p><strong>Paxos 算法</strong>诞生于 1990 年，这是一种解决分布式系统一致性的经典算法 。但是，由于 Paxos 算法非常难以理解和实现，不断有人尝试简化这一算法。到了2013 年才诞生了一个比 Paxos 算法更易理解和实现的分布式一致性算法—<strong>Raft 算法</strong>。</p>
+<h2 id="搜索引擎"><a href="#搜索引擎" class="headerlink" title="搜索引擎"></a>搜索引擎</h2><p>用于提高搜索效率，功能和浏览器搜索引擎类似。比较常见的搜索引擎是 Elasticsearch和 Solr。</p>
+<h2 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h2><p>RPC 让调用远程服务调用像调用本地方法那样简单。</p>
+<h2 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h2><p>网关主要用于请求转发、安全认证、协议转换、容灾。</p>
+<h2 id="分布式id"><a href="#分布式id" class="headerlink" title="分布式id"></a>分布式id</h2><p>在复杂分布式系统中，往往需要对大量的数据和消息进行唯一标识。比如数据量太大之后，往往需要对进行对数据进行分库分表，分库分表后需要有一个唯一 ID 来标识一条数据或消息，数据库的自增 ID 显然不能满足需求。</p>
+<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p><strong>分布式事务就是指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于不同的分布式系统的不同节点之上。</strong></p>
+<p>简单的说，就是一次大的操作由不同的小操作组成，这些小的操作分布在不同的服务器上，且属于不同的应用，分布式事务需要保证这些小操作要么全部成功，要么全部失败。本质上来说，分布式事务就是为了保证不同数据库的数据一致性。</p>
+<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/micro-service/spring-cloud">大白话入门 Spring Cloud</a></li>
+<li><a target="_blank" rel="noopener" href="https://xiaozhuanlan.com/topic/2895047136">微服务/分布式大厂真实面试问题解答</a></li>
+</ol>
+<h1 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h1><h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">消息队列</a></h4><p>消息队列在分布式系统中主要是为了解耦和削峰。相关阅读： <a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/message-queue/message-queue">消息队列常见问题总结</a>。</p>
+<ol>
+<li><strong>RabbitMQ</strong> : <a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/message-queue/RabbitMQ%E5%85%A5%E9%97%A8%E7%9C%8B%E8%BF%99%E4%B8%80%E7%AF%87%E5%B0%B1%E5%A4%9F%E4%BA%86">RabbitMQ 入门</a></li>
+<li><strong>RocketMQ</strong> : <a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/message-queue/RocketMQ">RocketMQ 入门</a>、<a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/message-queue/RocketMQ-Questions">RocketMQ 的几个简单问题与答案</a></li>
+<li><strong>Kafka</strong> ：<a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/distributed-system/message-queue/Kafka%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93">Kafka 常见问题总结</a></li>
+</ol>
+<h4 id="读写分离-amp-分库分表"><a href="#读写分离-amp-分库分表" class="headerlink" title="读写分离&amp;分库分表"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BBamp%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8">读写分离&amp;分库分表</a></h4><p>读写分离主要是为了将数据库的读和写操作分不到不同的数据库节点上。主服务器负责写，从服务器负责读。另外，一主一从或者一主多从都可以。</p>
+<p>读写分离可以大幅提高读性能，小幅提高写的性能。因此，读写分离更适合单机并发读请求比较多的场景。</p>
+<p>分库分表是为了解决由于库、表数据量过大，而导致数据库性能持续下降的问题。</p>
+<p>常见的分库分表工具有：<code>sharding-jdbc</code>（当当）、<code>TSharding</code>（蘑菇街）、<code>MyCAT</code>（基于 Cobar）、<code>Cobar</code>（阿里巴巴）…。 </p>
+<p>相关阅读： <a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB&%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8">读写分离&amp;分库分表常见问题总结</a></p>
+<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">负载均衡</a></h4><p>负载均衡系统通常用于将任务比如用户请求处理分配到多个服务器处理以提高网站、应用或者数据库的性能和可靠性。</p>
+<p>常见的负载均衡系统包括 3 种：</p>
+<ol>
+<li><strong>DNS 负载均衡</strong> ：一般用来实现地理级别的均衡。</li>
+<li><strong>硬件负载均衡</strong> ： 通过单独的硬件设备比如 F5 来实现负载均衡功能（硬件的价格一般很贵）。</li>
+<li><strong>软件负载均衡</strong> ：通过负载均衡软件比如 Nginx 来实现负载均衡功能。</li>
+</ol>
+<h1 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h1><p>高可用描述的是一个系统在大部分时间都是可用的，可以为我们提供服务的。高可用代表系统即使在发生硬件故障或者系统升级的时候，服务仍然是可用的 。</p>
+<p>相关阅读： <strong>《<a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/high-availability/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E9%AB%98%E5%8F%AF%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%A6%81%E8%80%83%E8%99%91%E5%93%AA%E4%BA%9B%E5%9C%B0%E6%96%B9">如何设计一个高可用系统？要考虑哪些地方？</a>》</strong> 。</p>
+<h4 id="限流"><a href="#限流" class="headerlink" title="限流"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E9%99%90%E6%B5%81">限流</a></h4><p>限流是从用户访问压力的角度来考虑如何应对系统故障。</p>
+<p>限流为了对服务端的接口接受请求的频率进行限制，防止服务挂掉。比如某一接口的请求限制为 100 个每秒, 对超过限制的请求放弃处理或者放到队列中等待处理。限流可以有效应对突发请求过多。相关阅读：<a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/system-design/high-availability/limit-request">限流算法有哪些？</a></p>
+<h4 id="降级"><a href="#降级" class="headerlink" title="降级"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E9%99%8D%E7%BA%A7">降级</a></h4><p>降级是从系统功能优先级的角度考虑如何应对系统故障。</p>
+<p>服务降级指的是当服务器压力剧增的情况下，根据当前业务情况及流量对一些服务和页面有策略的降级，以此释放服务器资源以保证核心任务的正常运行。</p>
+<h4 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E7%86%94%E6%96%AD">熔断</a></h4><p>熔断和降级是两个比较容易混淆的概念，两者的含义并不相同。</p>
+<p>降级的目的在于应对系统自身的故障，而熔断的目的在于应对当前系统依赖的外部系统或者第三方系统的故障。</p>
+<h4 id="排队"><a href="#排队" class="headerlink" title="排队"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E6%8E%92%E9%98%9F">排队</a></h4><p>另类的一种限流，类比于现实世界的排队。玩过英雄联盟的小伙伴应该有体会，每次一有活动，就要经历一波排队才能进入游戏。</p>
+<h4 id="集群"><a href="#集群" class="headerlink" title="集群"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E9%9B%86%E7%BE%A4">集群</a></h4><p>相同的服务部署多份，避免单点故障。</p>
+<h4 id="超时和重试机制"><a href="#超时和重试机制" class="headerlink" title="超时和重试机制"></a><a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/?id=%E8%B6%85%E6%97%B6%E5%92%8C%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6">超时和重试机制</a></h4><p><strong>一旦用户的请求超过某个时间得不到响应就结束此次请求并抛出异常。</strong> 如果不进行超时设置可能会导致请求响应速度慢，甚至导致请求堆积进而让系统无法在处理请求。</p>
+<p>另外，重试的次数一般设为 3 次，再多次的重试没有好处，反而会加重服务器压力（部分场景使用失败重试机制会不太适合）。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#learn" >
+    <span class="tag-code">learn</span>
+  </a>
+
+  <a href="/tags#distribute" >
+    <span class="tag-code">distribute</span>
+  </a>
+
+  <a href="/tags#microservice" >
+    <span class="tag-code">microservice</span>
+  </a>
+
+  <a href="/tags#web" >
+    <span class="tag-code">web</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/06/23/maven/">
+        <span class="nav-arrow">← </span>
+        
+          maven
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/07/07/docker/">
+        
+          Docker 快速入门
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F"><span class="toc-nav-text">分布式</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#CAP%E7%90%86%E8%AE%BA"><span class="toc-nav-text">CAP理论</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#BASE%E7%90%86%E8%AE%BA"><span class="toc-nav-text">BASE理论</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Paxos%E7%AE%97%E6%B3%95%E5%92%8CRaft%E7%AE%97%E6%B3%95"><span class="toc-nav-text">Paxos算法和Raft算法</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E"><span class="toc-nav-text">搜索引擎</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#RPC"><span class="toc-nav-text">RPC</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#API%E7%BD%91%E5%85%B3"><span class="toc-nav-text">API网关</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8Fid"><span class="toc-nav-text">分布式id</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-nav-text">分布式事务</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-nav-text">微服务</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="toc-nav-text">高并发</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-nav-text">消息队列</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB-amp-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-nav-text">读写分离&amp;分库分表</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-nav-text">负载均衡</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-nav-text">高可用</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E9%99%90%E6%B5%81"><span class="toc-nav-text">限流</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E9%99%8D%E7%BA%A7"><span class="toc-nav-text">降级</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E7%86%94%E6%96%AD"><span class="toc-nav-text">熔断</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E6%8E%92%E9%98%9F"><span class="toc-nav-text">排队</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E9%9B%86%E7%BE%A4"><span class="toc-nav-text">集群</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#%E8%B6%85%E6%97%B6%E5%92%8C%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="toc-nav-text">超时和重试机制</span></a></li></ol></li></ol></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/07/02/java-microservice/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

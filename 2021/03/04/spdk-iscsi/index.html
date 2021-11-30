@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用SPDK部署iSCSI | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用SPDK部署iSCSI</h2>
+  <p class="post-date">2021-03-04</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/03/04/spdk-iscsi/iSCSI structure.png" alt="image-20210305102234994" style="zoom: 67%;">
+
+<a id="more"></a>
+
+
+
+<h1 id="iSCSI"><a href="#iSCSI" class="headerlink" title="iSCSI"></a>iSCSI</h1><p>简单的说，iSCSI是一种存储设备远程映射技术，它可以将一个远程服务器上的存储设备映射到本地，并呈现为一个块设备（大白话就是磁盘）。从普通用户的角度，映射过来的磁盘与本地安装的磁盘毫无差异。iSCSI 这个架构主要将储存装置与使用的主机分为两个部分，负责连接的软件成为<strong>启动器</strong>。而提供存储服务的计算机成为服务端，其中的软件成为<strong>目标器</strong>。</p>
+<ul>
+<li>iSCSI Target：储存设备端，存放磁盘或 RAID 的设备。</li>
+<li>iSCSI Initiator：能够使用 Target 的客户端，通常是服务器。</li>
+</ul>
+<p>与iSCSI类似的是NFS技术，它们都是为了解决存储资源共享的方案，只不过工作层次不一样，前者在客户机呈现的是一个块设备，后者呈现的是一个目录树。</p>
+<p>在这篇文章中，我们将使用SPDK开发工具包的 <code>iscsi_tgt</code> 程序来部署iSCSI。</p>
+<p>本文在第二章对部署步骤和常用命令进行介绍 ，第三章将演示一个完整的部署过程。</p>
+<p>如果您想获取更详细的信息，请参考<a target="_blank" rel="noopener" href="https://spdk.io/doc/iscsi.html">官方文档</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>![image-20210305102234994](spdk-iscsi/iSCSI structure.png)</p>
+<ul>
+<li><p><strong>Network Portal</strong>: 网络端口。网络实体的一个组成部分，它有一个 TCP/IP 地址。 网络端口在 Initiator 用 IP 地址标识， 在 Target 用 IP 地址＋侦听的 TCP 端口标识。</p>
+</li>
+<li><p><strong>Session</strong>: 连接 Initiator 和 Target 的一组 TCP 连接构成一个 session(可以简单理解为 I_T nexus)。可以向 session 添加 TCP 连接，也可以把 TCP 连接从 session 删除。 也就是说一个session中是可以有多个连接的。通过一个 session 的所有连接，Initiator 只看到同一个 Target。</p>
+</li>
+<li><p><strong>Connection</strong> : 一个 TCP 连接。Initiator 和 Target 之间使用一或者多个 TCP 连接通信。</p>
+</li>
+<li><p><strong>CID(Connection ID)</strong>: 一个 session 里的每个 connection 用 CID 进行标识，该标识在 session 范围内是唯一。CID 由 Initiator 产生，在 login 请求和使用 logout 关闭 连接时传递给 Target。</p>
+</li>
+<li><p><strong>SSID（Session ID）</strong>：一个 iSCSI Initiator 与 iSCSI Target 之间的会话（Session）由会话ID（SSID）定义，该会话ID是一个由发起方部分（ISID）和目标部分（Target Portal Group Tag）组成的元组。 ISID 在会话建立时由发起者明确指定。 Target Portal Group Tag 由发起者在连接建立时选择的 TCP端口来隐式指定。 当给定 targetName 时，targetPortalGroupTag 也必须由目标在连接建立期间作为确认返回。</p>
+</li>
+<li><p><strong>Portal Groups</strong>: 网络端口组。iSCSI session 支持多连接，一些实现能把通过多个端口建立的多个连接捆绑到一个 session。 一个 iSCSI 网络实体的多个网络端口被定义为一个网络端口组，把该组和一个 session 联系起来，该 session 就可以捆绑通过该组内多个端口建立的多个连接，再使它们一起协同工作以达到捆绑的目的。每一个该组的 session 并不需要包括该组的所有网络端口。一个 iSCSI 节点可能有一或者多个网络端口组，但是每一个 iSCSI 使用的网络端口只能属于 iSCSI 节点的一个组。</p>
+</li>
+<li><p><strong>Target Portal Group Tag</strong>: 网络端口组标识。使用 16 比特的数标识一个网络端口组。在 一个 iSCSI 节点里，所有具有同样组标志的端口构成一个网络端口组。</p>
+</li>
+<li><p><strong>iSCSI Task</strong>: 一个 iSCSI 任务是指一个需要响应的 iSCSI 请求。</p>
+</li>
+<li><p><strong>I_T nexus</strong>: I_T nexus 是指一个 SCSI Initiator 的端口和一个 SCSI Target 端口之间 的关系。 对于 iSCSI， 这个关系对应一个 session， 它指 session 的 Initiator 端和 iSCSI Target 网络端口组之间的关系。I_T nexus 的标识是一对端口名称(iSCSI Initiator 名称＋i＋ISID，iSCSI Target 名称＋t＋网络端口组标识)。 PDU (Protocol Data Unit): Initiator 和 Target 之间通信时把信息分割为消息。这些 消息称为 iSCSI PDU。 SSID (Session ID): iSCSI Initiator 和 iSCSI Target 之间的 session 用 SSID 进行标识， 该标识由 Initiator 部分的 ISID 和 Target 部分的 TPGT 构成。</p>
+</li>
+<li><p><strong>ISID（The Initiator part of the Session Identifier）</strong>：发起方会话标识，由 Initiator 在 session 建立的时候明确给出，</p>
+</li>
+<li><p><strong>TSIH (Target Session Identifying Handle)</strong>: Target 分配给与特定名称 Initiator 建立的 session 的标识。 但是 0 值被保留着用于 Initiator 告知 Target 这是一个新 session。 在为一个 session 添加一个 connect 时，TSIH 已经隐含指明。</p>
+</li>
+</ul>
+<h1 id="iSCSI-Target入门指南"><a href="#iSCSI-Target入门指南" class="headerlink" title="iSCSI Target入门指南"></a>iSCSI Target入门指南</h1><p>我们将使用SPDK开发工具包的 <code>iscsi_tgt</code> 程序来部署iSCSI，该程序位于 <code>build/bin</code></p>
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>本指南首先假设您已经可以在平台上构建标准SPDK发行版。 </p>
+<p>构建完成后，二进制文件将位于 <code>build / bin</code> 中。</p>
+<p>如果要通过信号杀死应用程序，请确保使用SIGTERM，然后应用程序将在退出前释放所有共享内存资源，SIGKILL将使共享内存资源没有机会被应用程序释放，您可能需要手动释放资源。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>下图显示了本文档中描述的iSCSI结构的不同部分之间的关系.</p>
+<p>![image-20210305102234994](spdk-iscsi/iSCSI structure.png)</p>
+<h3 id="将-CPU-和-iSCSI-Target-绑定"><a href="#将-CPU-和-iSCSI-Target-绑定" class="headerlink" title="将 CPU 和 iSCSI Target 绑定"></a>将 CPU 和 iSCSI Target 绑定</h3><p>SPDK使用DPDK环境抽象层来访问硬件资源，例如大内存页和CPU内核。 DPDK EAL提供了将线程分配给特定内核的功能。 为确保SPDK iSCSI目标具有最佳性能，请将NIC和NVMe设备放在同一NUMA节点上，然后将目标配置为在与该节点关联的CPU内核上运行。 以下命令行选项用于配置SPDK iSCSI Target：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-m 0xF000000</span><br></pre></td></tr></table></figure>
+
+<p> 在此示例中，将使用CPU内核24、25、26和27。 </p>
+<h2 id="通过RPC方法配置iSCSI-Target"><a href="#通过RPC方法配置iSCSI-Target" class="headerlink" title="通过RPC方法配置iSCSI Target"></a>通过RPC方法配置iSCSI Target</h2><p>iSCSI目标是通过JSON-RPC调用配置的，SPDK在 <code>spdk/scripts/rpc.py</code> 提供了一个python脚本用来简化配置。 有关详细信息，请参见<a target="_blank" rel="noopener" href="https://spdk.io/doc/jsonrpc.html">JSON-RPC</a>。 </p>
+<p>以下列出常用的几个命令：</p>
+<h3 id="Portal-groups"><a href="#Portal-groups" class="headerlink" title="Portal groups"></a>Portal groups</h3><ul>
+<li>iscsi_create_portal_group – Add a portal group.</li>
+<li>iscsi_delete_portal_group – Delete an existing portal group.</li>
+<li>iscsi_target_node_add_pg_ig_maps – Add Initiator group to portal group mappings to an existing iSCSI Target node.</li>
+<li>iscsi_target_node_remove_pg_ig_maps – Delete Initiator group to portal group mappings from an existing iSCSI Target node.</li>
+<li>iscsi_get_portal_groups – Show information about all available portal groups.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo scripts/rpc.py iscsi_create_portal_group 1 10.0.0.1:3260</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，这里的ip地址时你的taget主机的ip地址，端口是一个未被占用的端口</p>
+</blockquote>
+<h3 id="Initiator-groups"><a href="#Initiator-groups" class="headerlink" title="Initiator groups"></a>Initiator groups</h3><ul>
+<li>iscsi_create_initiator_group – Add an Initiator group.</li>
+<li>iscsi_delete_initiator_group – Delete an existing Initiator group.</li>
+<li>iscsi_initiator_group_add_initiators – Add initiators to an existing Initiator group.</li>
+<li>iscsi_get_initiator_groups – Show information about all available Initiator groups.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo scripts/rpc.py iscsi_create_initiator_group 2 ANY 10.0.0.2/32</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，这里的ip地址是你的client主机的ip地址</p>
+</blockquote>
+<h3 id="Target-nodes"><a href="#Target-nodes" class="headerlink" title="Target nodes"></a>Target nodes</h3><ul>
+<li>iscsi_create_target_node – Add an iSCSI Target node.</li>
+<li>iscsi_delete_target_node – Delete an iSCSI Target node.</li>
+<li>iscsi_target_node_add_lun – Add a LUN to an existing iSCSI Target node.</li>
+<li>iscsi_get_target_nodes – Show information about all available iSCSI Target nodes.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo scripts/rpc.py iscsi_create_target_node target3 target3_alias MyBdev:0 1:2 64 -d</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="配置iSCSI启动器"><a href="#配置iSCSI启动器" class="headerlink" title="配置iSCSI启动器"></a>配置iSCSI启动器</h2><p>Linux启动器是open-iscsi。 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装open-iscsi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 软件包Fedora： </span></span><br><span class="line"></span><br><span class="line">$ yum install -y iscsi-initiator-utils </span><br><span class="line"></span><br><span class="line"><span class="comment"># Ubuntu： </span></span><br><span class="line"></span><br><span class="line">$ apt install -y open-iscsi </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a>发现</h3><p>假设taget主机的ip地址是 10.0.0.1</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iscsiadm -m discovery -t sendtargets -p 10.0.0.1</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="连接到Target"><a href="#连接到Target" class="headerlink" title="连接到Target"></a>连接到Target</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iscsiadm -m node --login</span><br></pre></td></tr></table></figure>
+
+<p>此时，iSCSI目标应显示为SCSI磁盘。检查dmesg以查看它们出现的情况。</p>
+<h3 id="断开与Target的连接"><a href="#断开与Target的连接" class="headerlink" title="断开与Target的连接"></a>断开与Target的连接</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iscsiadm -m node --<span class="built_in">logout</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="删除Target节点缓存"><a href="#删除Target节点缓存" class="headerlink" title="删除Target节点缓存"></a>删除Target节点缓存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iscsiadm -m node -o delete</span><br></pre></td></tr></table></figure>
+
+<p>这将导致启动器忘记所有先前发现的iSCSI目标节点。</p>
+<h3 id="查找iSCSI-LUN的-dev-sdX节点"><a href="#查找iSCSI-LUN的-dev-sdX节点" class="headerlink" title="查找iSCSI LUN的/ dev / sdX节点"></a>查找iSCSI LUN的/ dev / sdX节点</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iscsiadm -m session -P 3 | grep <span class="string">&quot;Attached scsi disk&quot;</span> | awk <span class="string">&#x27;&#123;print $4&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这将显示所有已登录iSCSI会话中每个SCSI LUN的/ dev节点名称。</p>
+<h1 id="示例-配置简单的iSCSI-Target"><a href="#示例-配置简单的iSCSI-Target" class="headerlink" title="示例: 配置简单的iSCSI Target"></a>示例: 配置简单的iSCSI Target</h1><blockquote>
+<p> 本示例演示挂载nvme磁盘，如果没有磁盘的话可以参考<a target="_blank" rel="noopener" href="https://spdk.io/doc/iscsi.html#">官方教程</a>挂载内存模拟的块设备。</p>
+</blockquote>
+<p>假设我们在Target端拥有一块nvme磁盘，位于192.168.0.22，现在想通过配置iSCSI让192.168.0.21主机访问到该磁盘。</p>
+<h2 id="前期准备-1"><a href="#前期准备-1" class="headerlink" title="前期准备"></a>前期准备</h2><p>通过VMware在Target端挂载一块5GB的NVMe硬盘，并将控制权移交给SPDK</p>
+<p>![nvme ssd](spdk-iscsi/nvme ssd.png)</p>
+<ul>
+<li>在Target端查看挂载情况</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls /dev | grep nvme</span><br><span class="line">nvme0</span><br><span class="line">nvme0n1</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动SPDK，指示操作系统放弃控制设备，让SPDK控制设备</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> spdk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行脚本转让设备控制权给SPDK</span></span><br><span class="line">$ sudo /scripts/setup.sh</span><br><span class="line">0000:03:00.0 (15ad 07f0): nvme -&gt; uio_pci_generic</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看设备状态</span></span><br><span class="line">$ sudo scripts/setup.sh status</span><br><span class="line">Hugepages</span><br><span class="line">node     hugesize     free /  total</span><br><span class="line">node0   1048576kB        0 /      0</span><br><span class="line">node0      2048kB     1024 /   1024</span><br><span class="line"></span><br><span class="line">Type     BDF             Vendor Device NUMA    Driver           Device     Block devices</span><br><span class="line">NVMe     0000:03:00.0    15ad   07f0   0       uio_pci_generic  -          -</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时设备将从/dev目录下消失</span></span><br><span class="line">$ ls /dev | grep nvme</span><br><span class="line"><span class="comment"># 无输出信息</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="配置iSCSI-Target"><a href="#配置iSCSI-Target" class="headerlink" title="配置iSCSI Target"></a>配置iSCSI Target</h2><ul>
+<li>启动 <code>iscsi_tgt</code> 应用</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ./build/bin/iscsi_tgt</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>创建ID为1的新的端口组，地址为 192.168.0.21:3111 </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ./scripts/rpc.py iscsi_create_portal_group 1 192.168.0.22:3111</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>创建一个ID为2的启动器组以接受来自0.0.0.0/0的任何连接：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ./scripts/rpc.py iscsi_create_initiator_group 2 ANY 0.0.0.0/0</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>在SPDK中基于NVMe设备创建块设备(bdev)</li>
+</ul>
+<blockquote>
+<p>也可以基于其他设备创建bdev，详见 <a target="_blank" rel="noopener" href="https://spdk.io/doc/bdev.html">https://spdk.io/doc/bdev.html</a> </p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取NVMe设备的地址</span></span><br><span class="line">$ sudo ./scripts/setup.sh status</span><br><span class="line">Hugepages</span><br><span class="line">node     hugesize     free /  total</span><br><span class="line">node0   1048576kB        0 /      0</span><br><span class="line">node0      2048kB      655 /   1024</span><br><span class="line"></span><br><span class="line">Type     BDF             Vendor Device NUMA    Driver           Device     Block devices</span><br><span class="line">NVMe     0000:03:00.0    15ad   07f0   0       uio_pci_generic  -          -</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接本地PCIe驱动器，在系统中创建物理设备的NVMe bdev</span></span><br><span class="line">$ sudo ./scripts/rpc.py bdev_nvme_attach_controller -b NVMe1 -t PCIe -a 0000:03:00.0</span><br><span class="line">NVMe1n1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看块设备</span></span><br><span class="line">$ sudo ./scripts/rpc.py bdev_get_bdevs</span><br><span class="line">...</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;NVMe1n1&quot;</span>,</span><br><span class="line">    <span class="string">&quot;aliases&quot;</span>: [],</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>使用先前创建的bdev构建一个目标，如LUN0（NVMe1n1），名称为“myNVMeDisk1”，别名为“My NVMe Disk1”，使用portal group 1和Initiator group 2。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo ./scripts/rpc.py iscsi_create_target_node myNVMeDisk1 <span class="string">&quot;My NVMe Disk1&quot;</span> <span class="string">&quot;NVMe1n1:0&quot;</span> 1:2 64 -d</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="配置-Initiator"><a href="#配置-Initiator" class="headerlink" title="配置 Initiator"></a>配置 Initiator</h2><ul>
+<li>发现 Target</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo iscsiadm -m discovery -t sendtargets -p 192.168.0.22:3111</span><br><span class="line">192.168.0.22:3111,1 iqn.2016-06.io.spdk:myNVMeDisk1</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>连接Target</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo iscsiadm -m node –T iqn.2016-06.io.spdk:myNVMeDisk1 --login</span><br></pre></td></tr></table></figure>
+
+<p>此时，iSCSI Target应该显示为SCSI磁盘。 </p>
+<ul>
+<li>使用 dmesg 命令以查看它们的状态。 在此示例中，它可能如下所示： </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ dmesg</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">[ 3032.069633] Loading iSCSI transport class v2.0-870.</span><br><span class="line">[ 3032.096151] iscsi: registered transport (tcp)</span><br><span class="line">[ 3096.810163] scsi host33: iSCSI initiator over TCP&#x2F;IP</span><br><span class="line">[ 3096.819259] scsi 33:0:0:0: Direct-Access     INTEL    NVMe disk        0001 PQ: 0 ANSI: 5</span><br><span class="line">[ 3096.820165] sd 33:0:0:0: Attached scsi generic sg3 type 0</span><br><span class="line">[ 3096.822238] sd 33:0:0:0: [sdb] 10485760 512-byte logical blocks: (5.37 GB&#x2F;5.00 GiB)</span><br><span class="line">[ 3096.822470] sd 33:0:0:0: [sdb] Write Protect is off</span><br><span class="line">[ 3096.822472] sd 33:0:0:0: [sdb] Mode Sense: 83 00 00 08</span><br><span class="line">[ 3096.822814] sd 33:0:0:0: [sdb] Write cache: disabled, read cache: disabled, doesn&#39;t support DPO or FUA</span><br><span class="line">[ 3096.823122] sd 33:0:0:0: [sdb] Optimal transfer size 4194304 bytes</span><br><span class="line">[ 3096.829189] sd 33:0:0:0: [sdb] Attached SCSI disk</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>还可以使用简单的bash命令在所有记录的iSCSI会话中为每个iSCSI LUN查找 /dev/sdX 节点： </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo iscsiadm -m session -P 3 | grep <span class="string">&quot;Attached scsi disk&quot;</span> | awk <span class="string">&#x27;&#123;print $4&#125;&#x27;</span></span><br><span class="line">sdb</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>Reference<br>[1]: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/60986068">https://zhuanlan.zhihu.com/p/60986068</a><br>[2]: <a target="_blank" rel="noopener" href="https://spdk.io/doc/iscsi.html">https://spdk.io/doc/iscsi.html</a></p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#spdk" >
+    <span class="tag-code">spdk</span>
+  </a>
+
+  <a href="/tags#iscsi" >
+    <span class="tag-code">iscsi</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/03/04/spdk-install/">
+        <span class="nav-arrow">← </span>
+        
+          SPDK安装指南
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/03/08/spdk-nvme/">
+        
+          使用SPDK部署NVMe over TCP
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#iSCSI"><span class="toc-nav-text">iSCSI</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-nav-text">基本概念</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#iSCSI-Target%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97"><span class="toc-nav-text">iSCSI Target入门指南</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="toc-nav-text">前期准备</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">介绍</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%B0%86-CPU-%E5%92%8C-iSCSI-Target-%E7%BB%91%E5%AE%9A"><span class="toc-nav-text">将 CPU 和 iSCSI Target 绑定</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%80%9A%E8%BF%87RPC%E6%96%B9%E6%B3%95%E9%85%8D%E7%BD%AEiSCSI-Target"><span class="toc-nav-text">通过RPC方法配置iSCSI Target</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Portal-groups"><span class="toc-nav-text">Portal groups</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Initiator-groups"><span class="toc-nav-text">Initiator groups</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Target-nodes"><span class="toc-nav-text">Target nodes</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%85%8D%E7%BD%AEiSCSI%E5%90%AF%E5%8A%A8%E5%99%A8"><span class="toc-nav-text">配置iSCSI启动器</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%8F%91%E7%8E%B0"><span class="toc-nav-text">发现</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%B0Target"><span class="toc-nav-text">连接到Target</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%96%AD%E5%BC%80%E4%B8%8ETarget%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-nav-text">断开与Target的连接</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%88%A0%E9%99%A4Target%E8%8A%82%E7%82%B9%E7%BC%93%E5%AD%98"><span class="toc-nav-text">删除Target节点缓存</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%9F%A5%E6%89%BEiSCSI-LUN%E7%9A%84-dev-sdX%E8%8A%82%E7%82%B9"><span class="toc-nav-text">查找iSCSI LUN的&#x2F; dev &#x2F; sdX节点</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E7%A4%BA%E4%BE%8B-%E9%85%8D%E7%BD%AE%E7%AE%80%E5%8D%95%E7%9A%84iSCSI-Target"><span class="toc-nav-text">示例: 配置简单的iSCSI Target</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87-1"><span class="toc-nav-text">前期准备</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%85%8D%E7%BD%AEiSCSI-Target"><span class="toc-nav-text">配置iSCSI Target</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%85%8D%E7%BD%AE-Initiator"><span class="toc-nav-text">配置 Initiator</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/03/04/spdk-iscsi/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

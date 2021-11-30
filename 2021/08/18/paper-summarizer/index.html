@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      paper-summarizer | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>paper-summarizer</h2>
+  <p class="post-date">2021-08-18</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>现代数据中心固态硬盘（SSD）集成了多个通用的嵌入式内核来管理灰度转换层、垃圾收集、磨损平衡等，以提高SSD的性能和可靠性。随着这些内核的性能稳步提高，有机会重新利用这些内核对存储的数据进行应用驱动的计算，目的是减少主机处理器和SSD之间的通信。减少主机-SSD的带宽需求可以减少I/O时间，而I/O时间是许多在大型数据集上运行的应用程序的瓶颈。然而，嵌入式内核的性能仍然比主机处理器低很多，因为一般来说，出于成本效益的考虑，在SSD中使用的嵌入式内核都很弱小。因此，在与近固态硬盘处理相关的计算开销和减少与主机系统的通信开销之间存在一个权衡。</p>
+<p>在这项工作中，我们设计了一套应用程序编程接口（API），可以被主机应用程序用来将数据密集型任务加载到SSD处理器上。我们描述了如何通过简单修改主机和SSD处理器之间现有的非易失性内存快递（NVMe）命令接口来实现这些API。然后，我们利用两个重要领域的应用，即数据分析和数据整合，对近存储计算的计算与通信权衡进行量化。通过使用一个全功能的SSD评估平台，我们通过改变SSD处理器的带宽和计算能力，对我们提出的方法进行了设计空间探索。我们评估了在主机和SSD处理器之间分配工作的静态和动态方法，并表明我们的设计与只在主机处理器上处理相比，可以提高20%的性能，与只在SSD处理器上处理相比，可以提高6倍。</p>
+<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h1><p>处理大量的数据是许多应用领域的支柱，如数据分析和数据整合。在这种情况下，将数据从存储空间传输到计算节点的成本开始主导整个应用程序的性能。应用程序可以花费超过一半的执行时间，将数据从存储空间带到CPU[38]。在磁性磁盘存储系统中，介质访问时间，如寻道和旋转延迟，主导着数据访问时间。然而，随着固态非易失性存储技术的迅速采用，性能瓶颈从介质访问时间转移到操作系统开销和互连带宽。因此，在固态存储的背景下，必须重新考虑普遍存在的计算模型，该模型假定存储介质访问延迟是不可避免的成本。特别是，计算模型必须适应主导存储访问的带宽和操作系统开销的现实情况。</p>
+<p>由于用于数据中心的现代固态硬盘（SSD）集成了大型DRAM缓冲区以及多个通常未被充分利用的通用嵌入式内核，将计算移至数据存储附近变得可行。以前的工作证明了使用近数据处理模型将数据分析、SQL查询、操作系统功能、图形遍历、图像处理和MapReduce操作[4, 5, 8, 15, 16, 30, 32, 34, 36, 41]加载到数据存储设备的潜力。这些先前的工作中，很多都是假设在存储附近有一个商品通用处理器。然而，即使是高端数据中心的固态硬盘也配备了懦弱的嵌入式内核。除了成本和功耗方面的限制，只包含懦弱的嵌入式内核的一个原因是，它们已经提供了足够的计算能力来处理目前大多数的SSD操作，如协议管理、I/O调度、闪存转换和磨损平衡。例如，最近支持NVMe协议和高带宽PCIe互连的SSD控制器可能部分地只利用三个低端ARM Cortex R5内核来支持固件操作[23, 31]。即使在最坏的情况下，这些内核的利用率也高达30%。因此，虽然在利用嵌入式内核方面存在松懈，但将大型计算内核卸载到这些软弱的内核上是不现实的。</p>
+<p>有了软弱无力的嵌入式内核，必须仔细管理计算和存储的选择。有时，将计算转移到嵌入式内核是有利的，可以通过减轻沉重的流量和带宽需求来减少主机和存储的通信延迟。另一方面，与主机处理器上的计算相比，使用软弱无力的嵌入式内核的存储计算需要更多的处理时间。因此，在懦弱的内核所带来的计算开销和向主机系统传输数据的通信延迟的减少之间存在着一种权衡#。在本文中，我们提出了Summarizer，一种近存储计算范式，只要对加载计算有好处，就会适时地使用弱小的近存储计算能力。Summarizer自动平衡通信延迟和近存储处理器的计算限制。</p>
+<p>本文有以下贡献：</p>
+<p>(1) 这项工作提出了 Summarizer——一种架构和计算模型，它允许应用程序利用 wimpy SSD 处理器“在将数据传输到主机之前对存储在 SSD 中的数据进行过滤和汇总。Summa rizer 减少了数据量 移至主机处理器，还允许主机处理器根据“过滤/汇总结果”进行计算，从而提高整体系统性能。</p>
+<p>(2) 在定制构建的 !ash 存储系统上实现原型 Summarizer 系统，该系统类似于现有的 SSD 架构，但还支持存储处理器和主机之间的“negrain计算o$oading”。我们增强了标准 NVMe 接口命令以 在不改变NVMe兼容性的情况下实现Summarizer的功能。使用这个原型，我们展示了主机和板上嵌入式存储处理器之间协同计算的好处。</p>
+<p>(3) 我们评估了通信中涉及的权衡与存储附近的计算。 考虑到内部 SSD 带宽和主机与 SSD 带宽的几个比率、主机计算能力和 SSD 计算能力的比率，我们进行了设计空间探索以说明权衡。</p>
+<p>(4) Summarizer动态地监控SSD处理器的工作量，并在主机处理器和SSD处理器之间选择适当的工作分配策略。Summarizer的分工方法量化了主机处理器和SSD处理器协同使用的潜力，以获得更好的性能。</p>
+<p>本文的其余部分组织如下。第2节描述了现代数据中心固态硬盘的架构，PCIe固态硬盘的NVMe的性能，并激励了近固态硬盘计算。第3节介绍了Summarizer的架构和实现。第4节描述了本文中使用的应用程序。第5节描述了我们的方法和实施细节。第6节介绍了实验设置和我们的结果。第7节提供了一个相关工作的总结，以便将这个项目放在背景中，第8节是本文的结论。</p>
+<h1 id="2-背景和动机"><a href="#2-背景和动机" class="headerlink" title="2. 背景和动机"></a>2. 背景和动机</h1><p>Summarizer依赖于现代固态硬盘中嵌入的处理能力，以及主机用来与固态硬盘对接的NVMe（非易失性内存快递）命令。本节简要介绍了SSD架构、现代SSD附近的处理潜力，以及主机用来与SSD通信的NVMe协议。</p>
+<h2 id="2-1-现代数据中心SSD的架构"><a href="#2-1-现代数据中心SSD的架构" class="headerlink" title="2.1 现代数据中心SSD的架构"></a>2.1 现代数据中心SSD的架构</h2><p>图1描述了通过PCI Express（PCIe）总线支持NVMe协议的现代SSD的硬件架构。大多数固态硬盘使用NAND！灰内存包作为主要的非易失性存储元素。每个固态硬盘可能包含几十个！灰烬芯片，被组织成多个通道。每个灰烬芯片可以被平行访问，所有共享一个通道的芯片可以在该通道上被复用。此外，多个通道可以被并行访问。芯片和通道级别的并行性为SSD提供了巨大的内部带宽。典型的高端数据中心固态硬盘可以通过多通道拓扑结构的！灰烬内存包和每个包的芯片堆叠制造来提供大规模的内部并行性[6]。例如，今天的商用NVMe固态硬盘可以支持32个通道的MLC NAND !ash内存包[26]，并实现高达4.5 GB/s的总内部带宽[25]。最近的3D NAND !ash技术的进步实现了每包更高的数据带宽，因此最近的SSD系统能够提供更高的内部带宽[24]。固态硬盘设计者没有增加内部带宽，而是使用更少的3D NAND封装来维持多代类似的内部带宽水平。在SSD平台上，将内部带宽提高到目前的水平并不是很有利，因为由于PCIe通道的带宽限制，即使是高端的NVMe SSD的外部带宽目前也饱和于4GB/s以下。</p>
+<p>总而言之，我们注意到，尽管增加固态硬盘的内部带宽可以通过配备多个灰度内存通道和先进的制造工艺来实现，但扩展主机CPU和固态硬盘之间的外部带宽需要处理器提供额外的PCIe通道。事实上，最近数据中心从SATA固态硬盘转向NVMe固态硬盘，是由于固态硬盘的内部并行性远远超过了SATA支持的最大带宽，尽管NVMe接口比SATA昂贵得多[27]。</p>
+<p>为了有效地管理通道并行性和内部带宽，现代的SSD集成了 ndwidth，现代的SSD集成了嵌入式多核处理器作为SSD控制器。这些处理器处理I/O请求调度，通过灰度转换层（FTL）进行数据映射，磨损均衡和垃圾回收。控制器通过通道连接到灰烬内存芯片，并发出灰烬内存命令，在每个通道中并行地执行I/O操作。固态硬盘还提供了一个DRAM控制器，与DRAM连接，作为灰烬数据的临时存储，也用来存储控制器的数据结构。除了嵌入式内核外，每个固态硬盘还可能包含几个硬件加速器，以提供有效的纠错代码（ECC）处理或数据加密。</p>
+<p>NVMe固态硬盘通过一个标准的PCIe插槽或M.2插槽连接到主机系统的PCIe互连上。PCIe/NVMe接口从主机CPU获取I/O命令，如读和写操作，并在系统互连和SSD之间执行直接内存访问（DMA）操作。例如，主机CPU可以指定从SSD读取数据后，必须将数据放入的内存地址。然后，NVMe接口实现了从SSD控制器到主机内存的DMA传输。当前一代的NVMe固态硬盘支持几十个主机请求排在固态硬盘控制器的命令队列中。控制器可以安排这些请求，以便最大限度地利用可用的芯片和通道级别的并行性。</p>
+<p>闪存的写入行为与磁存储技术明显不同。闪存中的每个页面在被写入一次后就变得不可改变。在包含该页的块被完全擦除之前，该页不能再次被更新。一个区块可以包含64到512个页面。每个区块在其生命周期内只能被擦除有限的次数，而且区块擦除操作比页面读写慢得多。为了解决这些限制并提供更长的使用寿命，固态硬盘在固态硬盘控制器中实施了闪存转换层（FTL）。SSD使用通用的嵌入式处理器来运行FTL操作的固件。基本上，FTL固件将主机应用要求的逻辑块地址（LBA）映射到闪存芯片的物理页地址（PPA）。这个LBA到PPA的映射表被缓存在SSD系统的DRAM中，以加快访问速度。为了保证整个闪存单元有更长的使用寿命，磨损平衡算法也被应用于映射表的管理过程。此外，FTL固件定期执行垃圾收集（GC），以回收无效页面的块的空间。有无效页的块中回收空间</p>
+<h2 id="2-2-SSD内计算的潜力"><a href="#2-2-SSD内计算的潜力" class="headerlink" title="2.2 SSD内计算的潜力"></a>2.2 SSD内计算的潜力</h2><p>虽然固态硬盘提供了多个嵌入式处理器，以提高固态硬盘控制器功能的性能，如FTL管理和垃圾收集，但控制器中的许多计算能力仍然没有得到充分利用。这些未被充分利用的嵌入式内核提供了从应用中加载计算的机会。特别是，当我们展望未来时，即使是嵌入式内核的处理能力也会继续增长，尽管在主机处理器和每个SSD内的嵌入式内核的计算能力上可能会有很大差距。本节将分析使用这些嵌入式处理器来加速应用的潜力。</p>
+<p>请注意，即使嵌入式内核未被充分利用，配置多个内核的主要理由仍然是性能。固件可以对代码进行分区，以实现并发执行不同的操作，如解析命令、查找地址、锁定正在访问的地址，以及与灰烬存储器芯片的接口。固件代码还使用几个内核在后台执行垃圾收集和损耗平衡。在我们的实验室评估中，在一个数据中心级别的SSD中同时执行4096个操作，这些SSD处理器的平均利用率总是低于30%，并且总是至少有一个处理器处于空闲状态。即使在执行垃圾收集或损耗均衡时，利用率不足的情况也是如此。虽然在FTL操作中存在大量的并发，但每个并发操作本身是相对简单的。因此，虽然多个内核对利用并发性是有用的，但在任何给定的操作中，每个内核的利用率仍然很低。这种低利用率揭示了在这些数据中心规模的SSD中使用现有硬件进行计算的潜力。例如，我们可以在 “灰烬 “数据访问管道中增加一个阶段，以执行低计算强度的操作，而不影响SSD控制器的性能。只要增加的阶段比当前的关键操作短，固态硬盘就不会因为吞吐量的下降而受到影响。</p>
+<p>在闪存数据访问管道的各个步骤中，我们发现，最耗时的步骤是访问闪存介质。即使是最快的闪存操作–读操作，高性能的单级单元闪存芯片仍然需要超过20微秒的时间来完成操作[25]。对于多级闪存单元来说，这个延迟甚至更长。假设闪存接口可以同时访问b个闪存通道，并且访问的数据均匀地分布在所有通道上，如果每个读操作需要t秒完成，那么允许计算阶段完成而不损害吞吐量的 “松弛 “是bt。当使用多核处理器时，这种松弛会增长得更多。如果每个闪存页包含p字节的数据，每个嵌入式处理器每秒可以处理n条指令，我们可以在不影响吞吐量的情况下获得对le数据的每字节操作，当我们腾出一个核心用于存储内计算时，吞吐量将为bt⇥n。然而，如果固态硬盘配备了更多的内核，或者并行操作的数量没有达到峰值性能，我们可能会期待比这个一阶估计大得多的松弛。例如，如果我们可以腾出m个内核用于计算，并完美地将计算并行化，我们可以在不影响吞吐量的情况下对每个字节进行的操作可以接近 对于三星SSD的MEX SSD控制器（如t⇥bn⇥⇥pm .</p>
+<p>对于三星SSD（如EVO系列）通常使用的MEX SSD控制器，每个处理器核心每秒可以执行4⇥108条指令。如果我们在具有32个库和8KB灰页的SSD中使用这种处理器，我们 “发现每字节的操作必须限制在每字节只执行1条指令，或者每4字节的字有4个操作。</p>
+<h2 id="2-3-NVMe"><a href="#2-3-NVMe" class="headerlink" title="2.3 NVMe"></a>2.3 NVMe</h2><p>NVM Express（NVMe）是一种连接到PCIe总线或M.2接口的SSD协议[2]。NVMe避免了以磁盘为中心的SATA和SCSI接口的传统，利用PCIe提供可扩展的带宽。例如，数据中心NVMe固态硬盘使用的4通道第三代PCIe支持高达3.9GB/秒的全双工数据传输，而SATA通常只能达到600MB/秒。NVMe还支持比SATA或SCSI更多的并发IO请求，它维护一个软件命令队列，每个处理器核心可容纳多达64K个条目，其命令集包括具有失序完成的分散收集数据传输操作，进一步提高性能。</p>
+<p>NVMe具有高度的可扩展性，能够并行地满足多个I/O请求。这使得NVMe成为现代数据处理的良好候选者，在这种情况下，应用程序需要从二级存储中提取大量的数据，并将其送入高度并行的计算设备，如GPU。</p>
+<p>NVMe支持一套精简而强大的命令，可以启动和完成I/O操作。每条命令的长度为64字节，包含的信息包括命令标识、逻辑块地址和请求数据的长度。一个NVMe命令还可以包含一个物理区域页（PRP）条目列表，它可以在SSD和其他设备之间进行分散的数据传输。PRP条目可以指定主机内存中的一对基本地址和o#set，对应于设备可以不按顺序执行的多个子传输的列表。</p>
+<h1 id="3-SUMMARIZER"><a href="#3-SUMMARIZER" class="headerlink" title="3. SUMMARIZER"></a>3. SUMMARIZER</h1><p>正如上一节所详述的，固态硬盘控制器内有足够的计算能力，可以在存储附近进行适度的计算。随着固态硬盘集成了更强大的计算资源，近存储计算的复杂性也可以扩展。在这一节中，我们描述了Summarizer，这是我们提出的近存储计算范式，可以自动扩展近存储计算能力，而不需要为每一个新一代的SSD重写应用软件。我们首先描述了系统架构，然后介绍了我们为近存储计算范式提供的扩展NVMe命令支持。</p>
+<h2 id="3-1-SSD控制器架构"><a href="#3-1-SSD控制器架构" class="headerlink" title="3.1 SSD控制器架构"></a>3.1 SSD控制器架构</h2><p>图2说明了NVMe SSD控制器的整体架构，还强调了为启用Summarizer而引入的额外组件（将在下一小节详细描述）。主机应用程序通过主机端驱动程序和运行在SSD嵌入式处理器上的SSD控制器固件与NVMe设备互动。主机驱动程序和NVMe SSD设备上的控制器固件通过PCIe总线通信。由NVMe主机驱动程序发出的NVMe命令被注册在主机DRAM空间内的提交队列（SQ）中，与请求的命令相对应的门铃信号被发送到SSD控制器，以通知主机的新命令请求。</p>
+<p>SSD控制器的主要功能是I/O控制和闪存转换层（FTL）处理。SSD控制器通过从SQ的头部读取注册的请求来接收来自主机的请求命令。只要SQ中存在注册请求，SSD控制器就可以获取主机请求命令。在获取NVMe命令后，它被解码成单个或多个页级块I/O命令。每个页级请求都有一个逻辑块地址（LBA），它被FTL处理转化为物理页号（PPN）。灰烬内存控制器通过页级命令访问灰烬内存芯片。</p>
+<p>对于NVMe读取命令，要求的页面数据通过一系列的物理页面读取从闪存芯片中获取，获取的数据被储存在SSD设备的DRAM中。<br>然后，页面数据通过直接内存访问（DMA）机制被传输到主机内存。在NVMe命令处理完成后，SSD控制器通过在主机内存的完成队列（CQ）中注册NVMe命令及其返回代码来通知之前提交的命令完成。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819164648786.png" alt="image-20210819164648786"></p>
+<h2 id="3-2-Summarizer的结构和操作"><a href="#3-2-Summarizer的结构和操作" class="headerlink" title="3.2 Summarizer的结构和操作"></a>3.2 Summarizer的结构和操作</h2><p>在这一节中，我们描述了对上述SSD控制器架构进行必要的硬件和软件修改，以启用Summarizer。总结器可以通过对NVMe命令解释器的一些小修改和添加到SSD控制器的软件模块来实现。我们设想大部分的总结器功能将在SSD控制器和闪存控制器之间的接口中实现。总结器有三个核心组件。(1)一个任务队列结构，(2)一个任务控制器模块和(3)用户功能栈，如图2所示。任务队列（TQ）是一个循环队列，它存储了一个指向适当的用户函数的指针，当主机要求对一个给定的I/O请求进行in-SSD处理时，必须调用该函数。任务控制器决定是否对获取的页面数据进行SSD内处理。如果控制器决定执行存储内计算，目标函数将从用户函数堆栈中执行。在某些情况下，即使主机要求进行这样的处理，任务控制器也可能不执行SSD内处理。我们探讨了控制器如何做出这样的决定的两个不同的选项，这两个选项将在后面描述。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819165041854.png" alt="image-20210819165041854"></p>
+<p>支持总结器的固态硬盘允许主机将用户指定的特定功能与每个数据访问请求在固态硬盘控制器上执行。为了实现这样的关联，我们使用新的NVMe命令来指定初始化、计算和归零操作。表1中列出了触发这三个步骤的扩展NVMe命令。在列表中，TSK后面的n代表任务TSK的标识符。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819165206295.png" alt="image-20210819165206295"></p>
+<p>INIT_TSKn。当主机NVMe驱动发出INIT_TSKn命令时，SSD控制器调用TSKn的初始化功能。这个命令本质上是通知Summarizer的任务控制器，主机打算在存储附近执行一个用户制定的任务n。在初始化步骤中，任务的局部变量或任何可能被该任务使用的临时数据被初始化。</p>
+<p>READ_PROC_TSKn。READ_PROC_TSKn命令类似于传统的NVMe READ命令，只是该命令携带了关于所需任务的信息，一旦从闪存中读取页面，就可以在SSD控制器上执行。请注意，现有的NVMe READ命令有多个保留字节，不用于任何处理。我们使用这些未使用的字节来指定</p>
+<p>READ_PROC_TSKn命令中的任务ID。与传统的NVMe READ命令一样，SSD控制器向闪存控制器发出读取请求以获取页面数据。此外，固态硬盘控制器还认识到，主机正在请求对该数据请求进行固态硬盘内的处理，处理任务在NVMe命令本身的任务标识字段（TSKn）中被指定。这一信息被标记在请求中。为此，请求队列条目携带两个额外的elds，一个1位的SSD内计算ag，和任务id eld。这些elds是由SSD控制器在执行READ_PROC_TSKn命令时设置的。此外，SSD控制器将请求添加到汇总器的任务队列中。闪存控制器通过访问适当的通道和芯片ID来处理读取请求。获取的数据首先被存入SSD的DRAM中，完成信号被发送到响应队列中，就像在任何常规SSD中一样。在Summarizer中，闪存控制器也将两个额外的固态硬盘内的计算域转移到响应队列中。</p>
+<p>响应队列数据通常由SSD控制器通过DMA送回主机。然而，对于Summarizer，SSD控制器会检查SSD内计算的ag位。如果该位被设置，那么就表明主机要求对这个页面进行SSD内计算。在这种情况下，任务控制器决定是否对获取的页面数据进行SSD内的处理。如果控制器决定进行SSD内处理，那么在TQ条目中注册的用户函数指针所指向的计算任务被调用。所获取的页面数据被用作计算内核的输入。计算内核产生的中间输出数据更新了由初始化步骤启动的变量或临时数据集。然后，特殊状态代码被返回给主机，以表明对相应的页面数据进行了SSD内计算，而不是将整个页面数据传输到主机的主存储器。Summarizer中的任务控制器可以在静态或动态模式下执行。在静态模式下，只要设置了in-SSD计算ag，那么无论嵌入式处理器的处理延迟如何，该计算都会在获取的数据上完成。在静态模式下，由于TQ已经满了，所以当ISD内计算请求不可能实现时，返回过程就会简单地停滞。当Summarizer在动态模式下运行时，如果SSD控制器中的SSD内计算由于缺乏计算资源而被延迟，即使主机发出了READ_PROC_TASKn，缓冲的页面数据也被传输到主机。这种情况发生在嵌入式处理器的服务速率（执行时间）比SSD内计算请求的传入速率慢的时候。如果在获取的页面数据上积极地应用近似的数据处理，这种拥堵在非常懦弱的SSD核心的存在下经常发生。</p>
+<p>READ_FILT_TSKn。READ_FILT_TSKn的操作与READ_PROC_TSKn的操作类似，只是进行了ltering，并将ltered数据传输给主机。一个ltering请求也是一个计算任务，但在本文中，如果主机处理器只将部分计算任务传输给SSD处理器，并保留部分计算任务在主机上执行，我们就将该请求视为一个ltering任务。例如，一个ltering任务可以在一个页面内对特定的数据字段使用简单的比较操作来删除一些在主机上不需要的数据。在初始化步骤中，通过INIT_TSKn命令预先设定了ltering条件。在NVMe命令中，被清除的数据大小被记录在保留的8字节区域中，并在清除执行完成后被登记在CQ中。</p>
+<p>FINAL_TSKn。主机可以使用FINAL_TSKn命令收集任务n的计算内核的输出结果。当该命令发出后，存储在SSD的DRAM中的结果被传输到主机内存。传输数据的大小也被记录在NVMe响应命令的保留的8字节中。</p>
+<h2 id="3-3-组成Summarizer的应用"><a href="#3-3-组成Summarizer的应用" class="headerlink" title="3.3 组成Summarizer的应用"></a>3.3 组成Summarizer的应用</h2><p>如第3.1节所述，Summarizer在将处理过的数据返回给主机之前，利用页级闪存的读取操作来执行用户制定的功能。因此，在数据布局和计算方面有一些必须遵循的基本限制。例如，汇总器的输入数据应该在页面粒度（4 KB - 16 KB）上对齐。如果数据在页面边界上重叠，就需要一个更复杂的Summarizer数据管理策略。在这项工作中，我们反而向程序员提供了数据布局和计算API，以满足基于页面粒度的计算限制。特别是，我们提供了以下Summarizer方法，作为包装器，允许传统的用户程序使用提议的Summarizer NVMe命令。</p>
+<p>STORE。为了利用Summarizer，有必要在一个页面大小的内存空间中对齐数据集。为了支持页级对齐，Summarizer API的STORE基元首先在4 KB或16 KB数据空间中分配用户数据集，然后直接向主机NVMe驱动程序发出存储块I/O命令。如果有效数据少于一页，那么该页元数据就会存储有效的数据大小。</p>
+<p>READ：应用程序员可以使用READ API来指定要计算的数据集和要在数据集上应用的预期计算（即SSD函数）。由于数据集在页粒度上是对齐的，READ API将被翻译成页粒度的READ _PROC_TSKn或READ_FILT_TSKn NVMe命令。如果SSD不支持Summarizer功能，READ命令将映射到默认的NVMe读取命令，从而保持与所有SSD的兼容性。注意，我们假设READ命令被程序员明确地映射到READ_PROC_TSKn或READ_FILT_TSKn。</p>
+<p>COMPUTE：回顾一下，SSD控制器可以选择执行用户功能或将整个页面数据返回给主机。因此，动态任务控制器方法需要在主机端代码上花费更多的精力，根据从SSD控制器收到的响应，确定一个页面是否需要在主机上处理。因此，应用程序员使用COMPUTE函数作为包装器来处理调用READ函数的不同返回值。COMPUTE封装器简单地将所有的主机函数调用封装在一个条件语句下，在启动主机端执行页面之前，检查来自SSD控制器的返回代码。</p>
+<p>GATHER：由于计算分布在主机CPU和SSD设备上，有必要收集SSD设备上执行的内核计算的输出。因此，应用程序中的GATHER包装函数发出了nalization NVMe命令，以收集来自SSD设备的处理输出。然后，收集的输出与程序员从CPU计算的输出合并。</p>
+<p>程序员可以使用C和C++等指令性编程语言编写存储内的Summarizer程序。使用总结器的API，很容易将只在主机系统上执行的程序扩展到也在SSD附近的处理器上执行功能。对于我们在后面第4节中描述的应用程序，每个应用程序平均花了3 10个人小时（注意，一旦完成第一个应用程序的转换，工作量就会减少）。由于Summarizer继承了命令式编程模型，Summarizer利用现有的ARM编程工具链来生成在SSD控制器上运行的机器代码。</p>
+<h1 id="4-案例研究"><a href="#4-案例研究" class="headerlink" title="4. 案例研究"></a>4. 案例研究</h1><p>Summarizer可以为广泛的应用提供益处。为了评估所提出的模型，我们提出了几个适合Summarizer执行的案例研究，从数据库到数据集成领域，并展示了Summarizer如何帮助避免多余的数据传输和提高应用性能。</p>
+<p>决策支持系统（DSS）是一类数据分析，用户在数据库上进行复杂的查询，以了解其业务状况。DSS查询通常是探索性的，并倾向于早期反馈以帮助识别有趣的区域。许多DSS查询执行大量的数据库ltering，并且只使用数据库记录的一个子集来执行复杂的计算。在这些应用中，每字节的数据传输的计算量是相当低的。使用Summarizer来实现数据ltering或甚至在SSD附近执行整个查询，有助于减少对主机的数据带宽需求。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819165701511.png" alt="image-20210819165701511"></p>
+<h2 id="4-1-数据分析"><a href="#4-1-数据分析" class="headerlink" title="4.1 数据分析"></a>4.1 数据分析</h2><p>我们运行TPC-H基准来测试数据分析的性能。TPC-H是一个著名的数据仓库基准测试。它由一套面向业务的临时查询组成。我们选择了TPC-H查询1、6和14，这些查询需要一些操作，如where条件、连接、group by和order by。这些操作在许多其他的TPC-H查询中也会进行。TPC-H查询1、6和14分别显示在算法1、2和3中。在我们的实验中，我们在TPC-H数据库上评估了这些查询，其规模系数为0.1（⇠100MB）。请注意，这个比例系数只是我们的原型板（在下一节中描述）由于容量有限而产生的限制，而不是Summarizer的限制。</p>
+<h2 id="4-2-数据整合"><a href="#4-2-数据整合" class="headerlink" title="4.2 数据整合"></a>4.2 数据整合</h2><p>数据整合是将不同来源和/或不同格式的数据结合起来的问题。这个问题对于维护不同类型数据库的大型企业来说至关重要，对于拥有各自数据源的政府机构之间更好的合作来说至关重要，对于管理互联网上各种网页的搜索引擎来说也是如此。<br>相似性连接是数据整合过程中的一个重要步骤。虽然SQL提供了支持（如join）来结合来自不同来源的互补数据，但如果由于拼写错误或其他结构问题，潜在匹配的属性值不完全相等，则会失败。相似性连接是一种有效的方法，通过比较属性值的相似性来克服这一限制，而不是完全匹配相应的值。<br>相似性连接问题可以表示为：给定一个记录集合，一个相似性函数，一个查询记录q，找出所有的记录对，sim()，一个相似性阈值&lt; q,x &gt;，并且它们的相似性值至少高于给定的阈值tde，即ned为：sim(q,Ox()q,xt) 。我们采用重叠相似度，它可以是min|q(|qx|,|x|)。我们使用DBLP数据集，它是DBLP网站上书目记录的一个快照。它由近90万条记录组成。每条记录由作者名单和出版物的标题组成。该数据集经过预处理，使用空白和标点符号对每条记录进行标记。每条记录中的标记都根据其在整个数据集中的频率进行排序。然后根据记录的长度（标记的数量）对其进行排序。我们实现的基于prex ltering的相似性连接算法显示在算法4、5中。首先，我们使用prex ltering原则[42]将每个与q相似的记录x从数据集中剔除。prex ltering原则如下。让一个记录x的p-prex是(x.)的前p个标记。Ifthat pass the pre|x| dO(tq.,|xx|)e+ 1t), then the (xofxltering stage are verishare at least one token. 只有记录|q| dt.|q|e+ed检查它们是否满足1)-prex of q和重叠相似度阈值。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819165953841.png" alt="image-20210819165953841"></p>
+<h1 id="5-方案和实现细节"><a href="#5-方案和实现细节" class="headerlink" title="5. 方案和实现细节"></a>5. 方案和实现细节</h1><p>总结器本质上是以减少到主机的带宽来换取接近存储的计算。我们评估了四种不同的策略来研究这种权衡。</p>
+<p>(1) 第一种策略是我们的基线，整个计算是在主机处理器上完成的，就像今天的情况一样。在这个基线中，主机处理器将从SSD中接收所有计算所需的数据。(2) 在另一个极端，人们可以考虑在靠近SSD的懦弱的处理器上进行所有的计算，这只涉及到与主机处理器的查询相关的输出值和输入值的交流。所有计算所需的数据都在SSD内获取和处理。(3) 由于靠近SSD的内核的处理能力相对较低，协同使用主机和wimpy SSD处理器可能更好。为了评估这一策略，我们使用了两种不同的方法。一种方法是对工作负载进行自定义手工编码。对于手工编码方法，我们分析了应用程序，并根据处理器的优势将计算映射到处理器上。直观地说，那些有助于减少与主机处理器的大量数据通信的计算应被映射到靠近SSD的处理器上。程序中具有高计算强度的部分应被映射到主机处理器上。虽然任何功能的计算强度可以根据简单的指标如总指令数自动量化，但在本文中，我们将DSS查询和数据集成代码手工分类为数据密集型或计算密集型的功能。(4) 我们评估的最后一种方法是一种自动方法，动态地选择哪些页面在嵌入式核心上计算，哪些页面在主机上处理。在分配计算任务时，自动方法对整个工作负载是不可知的。对于这种模式，当向SSD设备发出块请求时，主机CPU将所有页面设置为SSD内计算。一旦页面数据被从NAND闪存中获取，SSD控制器就会检查TQ中的空槽。回顾一下，TQ是Summarizer架构中的一个队列，一个页面在这里被注册，以考虑在SSD附近进行处理。如果有空槽，页面就会被登记在TQ中，页面数据就会在SSD中计算。否则，所有的页面数据将被转移到主机CPU而不进行处理。</p>
+<p>显然，在主机或SSD控制器上执行整个工作负载是很简单的。这里唯一的挑战是将工作负载编译到两个不同的ISA上运行：在我们的实施中，主机处理器是基于X86的，而SSD控制器的核心是基于ARM的。然而，在两个处理器上协同执行需要分配工作负载。对于手工编码的版本，我们对每个工作负载使用了以下的分工，如下面的列表所示。请注意，这个手编版本有几个变体可以实现（事实上我们也评估了其中的一些变体），但是正如我们在后面的结果部分所显示的那样，手编优化虽然比基线要好，但总体上要比动态工作负载分配方法更出色。动态方法在实践中更容易采用。程序员不必担心工作负载分配，系统会根据动态系统状态自动决定在哪里执行代码。</p>
+<ul>
+<li>TPC-H查询1,6：对于静态工作负载分配，我们在SSD附近的处理器实现where条件，然后只传输需要做group by和aggregation操作的记录项。</li>
+<li>TPC-H查询14：我们实现了哈希连接算法，在行项和零件表之间进行等价连接操作。 在这个算法中，首先是建立阶段，在这个阶段，使用零件表建立一个哈希表，表的键被用于散列，进一步处理所需的项目作为哈希表的值。在下一个迭代中，即探测阶段，我们遍历行项表并检查关键项是否存在于哈希表中。对于两个处理器的处理策略，我们检查SSD附近的处理器的情况，只传输需要散列的记录项，然后进行聚合。</li>
+</ul>
+<h1 id="6-评测"><a href="#6-评测" class="headerlink" title="6. 评测"></a>6. 评测</h1><h2 id="6-1-评估平台"><a href="#6-1-评估平台" class="headerlink" title="6.1 评估平台"></a>6.1 评估平台</h2><p>我们使用一个工业级的基于闪存的SSD参考平台评估了Summarizer的性能。图4显示了SSD开发板的结构。该板配备了一个多核ARM处理器，执行固态硬盘控制器固件程序（包括FTL管理、磨损平整、垃圾收集、NVMe命令解析和与主机的通信），以及一个FPGA，其中闪存纠错逻辑和NAND闪存控制器逻辑被实现。</p>
+<p>ARM处理器通过PCIeGen.3⇥4总线与主机处理器进行通信。另外，ARM处理器和FPGA上的NANDash访问指令控制器逻辑通过SSD开发板上的PCIe总线传输NAND和数据。FPGA上的NAND闪存控制器访问两个NAND闪存DIMM，每个DIMM配备4个NAND闪存芯片。原型板设计忠实地执行了商业SSD的所有功能。与商业固态硬盘设备不同，我们开发板上的原型NAND闪存接口具有较低的内部数据带宽，因为NAND闪存DIMM的NAND闪存堆较少，通道较少。此外，由于纠错逻辑实现的限制，FPGA上的NAND闪存控制器以较低的时钟频率运行。这些限制纯粹是由于在设计我们的电路板时的成本考虑。因此，在我们的电路板上观察到的内部SSD带宽明显低于商业SSD。为了适应较低的内部带宽限制，主机-SSD的带宽也被设定为相应地较低。在商用三星固态硬盘中，外部带宽通常比内部峰值带宽低2-4⇥。因此，与内部FPGA-ARM核心带宽相比，主机-SSD带宽在我们的电路板上被设置为低2⇥。</p>
+<p>我们的板子和商业固态硬盘之间的另一个实施差异是，我们的板子配备了比商业固态硬盘上通常看到的更强大的嵌入式内核。与商业NVMe SSD控制器的报告时钟频率（400或500 MHz）相比，我们开发平台上的ARM处理器以更快的峰值时钟频率（1.6 GHz）运行。因此，主机-嵌入式性能比有利于更多的嵌入式核心计算。为了模仿商业固态硬盘，我们节制了ARM核心频率。在下一小节中，我们将描述我们如何选择节流频率。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819170642682.png" alt="image-20210819170642682"></p>
+<h2 id="6-2-基于工作量测量的校准"><a href="#6-2-基于工作量测量的校准" class="headerlink" title="6.2 基于工作量测量的校准"></a>6.2 基于工作量测量的校准</h2><p>在这项研究中，我们在英特尔NVMe SSD平台上测试了第4节介绍的几个数据库应用。首先，我们测量了应用程序的I/O时间与计算时间的比例，以节流主机CPU以及SSD的嵌入式核心性能，以满足SSD开发平台上测量的I/O和计算时间比例。表2显示了在真正的NVMe SSD平台上测得的计算时间与I/O时间的比率，该平台配备了英特尔i5-6500（4个核心，运行频率为3.2 GHz），配有8GB DRAM和英特尔NVMe SSD。英特尔NVMe固态硬盘是一款750系列固态硬盘，采用PCI-Express 3.0和20纳米多级单元技术。然后，我们在我们的平台上运行相同的工作负载，以创建一个相等的处理和I/O比率。基于这个比率，我们将ARM内核的频率设定为200MHz。请注意，频率的一些降低也是由于我们平台上的内部带宽较小造成的。</p>
+<p><img src="/2021/08/18/paper-summarizer/image-20210819170747252.png" alt="image-20210819170747252"></p>
+<h2 id="6-3-Summarizer性能"><a href="#6-3-Summarizer性能" class="headerlink" title="6.3 Summarizer性能"></a>6.3 Summarizer性能</h2><p>如方法论部分所述，我们考虑在主机处理器和SSD附近的嵌入式处理器之间进行页级粒度的工作负载划分。图5显示了SSD内处理程度的性能变化。X轴表示用Summarizer在SSD内处理的页面数量与在主机处理器上处理的页面数量的比率。Y轴是归一化为基线的执行时间，即所有数据都在主机CPU上处理。在这项研究中，我们调整了在主机应用中被标记为SSD内计算的页面的比例，并比较了性能变化。因此，X轴上的零意味着所有的数据都由主机CPU处理，即这是一个基线。如果比率为1，这意味着所有的数据都是在SSD中计算的，而主机CPU只收到最终的结果。X轴上显示的0和1之间的具体数字对应于第3节中描述的Summarizer的静态模式操作。标有DYN的条形图表示使用Summarizer的动态模式得到的结果。在动态模式下，所有来自主机CPU的页面获取请求都是使用READ_PROC_TSKn命令发出的。总结器动态地决定所请求页面的SSD内计算。HD意味着手工编码的任务，用于SSD内的计算。简单的任务（例如，数据库的eld ltering功能）在SSD上执行，以减少数据的跟踪。READ_FILT_TSKn NVMe命令被利用来执行HD模式下的ltering操作。我们测试了手工编码版本在Summarizer静态模式下的性能。也就是说，无论嵌入式处理器的可用资源如何，ltering任务都在SSD中执行。每个执行时间条被分成两部分：在主机端花费的时间（在条中标记为主机时间），以及在SSD端花费的时间（标记为SSD时间）。当使用基线（X轴标签为0）时，花费在SSD侧的时间纯粹是用来读取NAND闪存页面并将其传输到主机上。但是对于其他的条形图来说，花费在SSD方面的时间包括读取和处理SSD上的一部分页面的时间。显然，只在SSD上进行处理（X轴标记为1）会导致明显的性能下降，因为数据计算在软弱的SSD控制器核心上需要更长的时间。手工编码的版本（标记为HD）对所有或大部分页面提供了比静态页级SSD计算更好的性能，但一般来说，手工编码是一种静态的方法，不能适应变化的系统状态。由于固态硬盘上的小核过载，即使过滤任务不需要大量的计算资源，我们的结果显示静态固态硬盘加载方法是无效的，因为I/O请求率超过了小核的服务率。图5的结果也表明，将所有计算放在主机处理器或固态硬盘处理器上并不能提供最佳性能。因此，每个应用程序都有一个甜蜜点，在这个甜蜜点上，SSD和主机之间的协作计算可以提供最好的性能。但这个甜蜜点因工作负载而异，甚至可能因输入数据而异。在动态模式下，Summarizer通过观察SSD中的嵌入式处理器的可用性，动态地决定用户应用功能的执行位置。这种动态方法可以减少程序员在决定SSD内计算的划分时的负担，以达到更好的性能，同时利用SSD内的计算资源。</p>
+<p>对于查询6、1和14，使用DYN的TPC-H查询处理性能分别提高了16.4%、10.3%和20.3%。平均而言，我们目前的总结器原型可以将TPC-H的性能提高15.7%。对于相似性连接，性能提高了6.9%。我们观察到的改进百分比与我们需要在每页数据上执行的计算量直接相关。对于TPC-H查询6和14，由于大多数记录都被where条件所限制，我们在每一页上所做的工作量较少，改进也较多。对于TPC-H查询1，大多数记录都通过了where条件，与TPC-H查询6和14相比，每一页的工作量都更大。此外，我们观察到，在相似性连接中，每一页的工作量甚至更高，随之而来的改进也更低。需要注意的是，图中几乎所有的条形图都使用了主机和SSD处理器之间的协作计算（除了0和1）。然而，由DYN实现的性能改进并不仅仅是由于有额外的软弱的CPU资源。正如图中所示，大部分收益来自于减少的I/O处理时间，而不是在SSD上增加一个软弱的内核。我们还必须强调，在该图中看到的性能改进在一定程度上受到评估平台的限制，该平台的内部带宽比商业SSD严重受限。因此，我们认为，这些结果只是展示了Summarizer的潜力，而不是绝对的性能提升。</p>
+<h2 id="6-4-设计空间探索：内部-外部带宽比"><a href="#6-4-设计空间探索：内部-外部带宽比" class="headerlink" title="6.4 设计空间探索：内部/外部带宽比"></a>6.4 设计空间探索：内部/外部带宽比</h2><p><img src="/2021/08/18/paper-summarizer/image-20210819170850102.png" alt="image-20210819170850102"></p>
+<p>图6显示了性能变化与SSD控制器和NAND闪存芯片之间的内部数据带宽以及主机处理器和SSD之间的PCIe外部带宽比例的关系。如前所述，即使SSD的内部带宽更容易增加，目前的SSD设计者没有动力增加内部带宽，因为外部带宽决定了系统的性能。Summarizer为内部和外部带宽的增长脱钩提供了一个令人信服的理由。如结果所示，如果内部带宽高于外部带宽，SSD内的计算会更有利。</p>
+<h2 id="6-5-设计空间探索：SSD内的计算能力"><a href="#6-5-设计空间探索：SSD内的计算能力" class="headerlink" title="6.5 设计空间探索：SSD内的计算能力"></a>6.5 设计空间探索：SSD内的计算能力</h2><p>由于Summarizer利用了SSD控制器处理器未被充分利用的计算能力，预计SSD内计算的性能将随着SSD内更强大的嵌入式处理器而得到改善。为了探索强大的嵌入式处理器对SSD内计算的性能影响，我们通过改变嵌入式处理器的计算能力来测量整个系统的性能变化。如上一节所述，我们节制了嵌入式内核的时钟频率，以模仿商业固态硬盘的运行。我们利用节流能力将嵌入式内核的频率提高到1.6GHz，以获得8⇥的计算能力，或者增加内核的数量来进行SSD内的计算（2个内核运行在1.6GHz，以获得16⇥的计算能力）。虽然频次指标不是衡量性能的唯一标准，但我们在本研究中把它作为一个指标。</p>
+<p>图7显示了当Summarizer在动态模式下运行时，性能变化与SSD控制器的改进计算能力的关系。我们的实验结果表明，当嵌入式控制器内核的性能提高16⇥时，TPC-H查询1的整体性能可提高120%，而SSD内计算的平均性能可提高94.5%。由于Summarizer使用懦弱的内核来实现上述结果，Summarizer为在未来的SSD平台中加入更强大的嵌入式内核提供了一个令人信服的理由。</p>
+<h2 id="6-6-成本效益"><a href="#6-6-成本效益" class="headerlink" title="6.6 成本效益"></a>6.6 成本效益</h2><p>xxx</p>
+<h1 id="7-相关工作"><a href="#7-相关工作" class="headerlink" title="7. 相关工作"></a>7. 相关工作</h1><p>几十年前，包括ActiveDisks、IDISKS、SearchProcessor和RAP等项目[1, 3, 17, 19, 20, 33]已经探索了将计算推到磁存储设备上的想法。然而，由于磁片延迟时间长，输入/输出尺寸相对较小，成本效益有限。</p>
+<p>随着数据集规模的增长，数据移动成为执行应用程序时越来越重要的开销[11, 21, 43]。随着非易失性存储器技术的改进，使数据存储设备内部的带宽更加丰富，最近的研究项目，包括Summarizer，开始重新审视将计算推到存储附近的想法。</p>
+<p>与Summarizer类似，Active Flash[4, 35, 36]、SmartSSD[8, 16]、Active Disks Meets Flash[7]和Biscuit[12]也试图利用现代SSD中的嵌入式内核来减少冗余的数据移动，以释放主机CPU和主内存。例如，Active Flash[35]提出了一个分析模型来评估SSD内计算的潜力。但是没有介绍实施和操作细节。Summarizer提出了对SSD加载框架的应用开发的详细描述。SmartSSD[8]专注于如何利用SSD内计算来改善特定的数据库操作，比如聚合。Biscuit[12]指出，该方法基于基于ow的编程模型。因此，在Biscuit上运行的应用程序类似于带有数据管道的任务图，以实现任务间通信。Summarizer提出了一套通用的NVMe命令和编程模型，可以在不同的应用领域中使用，以展示SSD内计算的全部潜力。Summarizer提出了一种自动方法，以确定何时为用命令式语言编写的应用程序加载计算，而不对代码结构进行任何限制。</p>
+<p>Summarizer的雇员是基于ARM的通用内核，在SSD控制器中很受欢迎。因此，系统设计可以通过更新固件来实现Summarizer需要的大多数架构支持。另一方面，Active Disks Meets Flash[7]、Ibex[41]或BlueDBM[15]利用可重合的硬件或专门的处理器架构来实现同样的目标，限制了应用的灵活性，但增加了设备的成本。</p>
+<p>为了向应用展示SSD的隐藏处理能力，Summarizer、Biscuit[12]、Morpheus[39]、SmartSSD[8]和KAML[14]都为应用扩展了标准的NVMe或SATA协议来描述所需的计算。与KAML或SmartSSD不同的是，Summarizer的NVMe命令集为数据库相关的工作负载专门扩展了协议，在使用SSD处理器方面提供了更大的灵活性。</p>
+<p>在编程模型方面，Summarizer利用ARM平台中成熟的开发工具来编写和生成在存储设备上运行的代码，而不需要应用设计者处理非常低级的硬件细节或对现有代码进行明显的修改。Biscuit的数据流启发的编程模型[12]或Morpheus[39]中有限的API支持更适合于特定的应用场景。</p>
+<p>Summarizer利用了基于闪存的固态硬盘内现有的处理器，这些处理器原本是用于FTL，但大部分时间也是闲置的，因此将额外的硬件成本降到最低。内存处理器[11]、计算RAM[9, 18, 22, 29, 37]、Moneta[5]和Willow[34]需要在相应的数据存储单元中增加处理器，降低了拟议设计的成本效益。</p>
+<h1 id="8-结论"><a href="#8-结论" class="headerlink" title="8. 结论"></a>8. 结论</h1><p>大数据分析因存储设备上访问数据的有限带宽和长时延而受到阻碍。随着固态硬盘的出现，有新的机会使用固态硬盘中的嵌入式处理器来实现近存储处理。然而，这些处理器的计算能力有限，因此在近存储处理所节省的带宽和计算延迟之间存在权衡。在本文中，我们提出了Summarizer这个近存储处理架构，它为应用程序员提供了一套API，将数据密集型计算加载到SSD处理器。SSD处理器解释这些API调用，并动态地确定一个特定的计算是否可以在近存储处执行。我们在一个功能齐全的SSD评估平台上实施了Summarizer，并评估了几个数据分析应用程序的性能。即使在一个严重受限的SSD平台上，我们也表明，与在主机处理器上执行所有计算的基线相比，Summarizer对TPC-H查询的性能提高了20%。当在固态硬盘中使用更强大的内核时，我们表明这种性能可以得到明显的提升，从而为更高的近固态硬盘计算能力提供了一个令人信服的论据。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#paper" >
+    <span class="tag-code">paper</span>
+  </a>
+
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/08/12/java-all-in-one/">
+        <span class="nav-arrow">← </span>
+        
+          Java知识点全面梳理(完善中)
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/09/15/local-transaction/">
+        
+          聊一聊本地事务
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E6%91%98%E8%A6%81"><span class="toc-nav-text">摘要</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-nav-text">1. 简介</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-%E8%83%8C%E6%99%AF%E5%92%8C%E5%8A%A8%E6%9C%BA"><span class="toc-nav-text">2. 背景和动机</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-1-%E7%8E%B0%E4%BB%A3%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83SSD%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="toc-nav-text">2.1 现代数据中心SSD的架构</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-2-SSD%E5%86%85%E8%AE%A1%E7%AE%97%E7%9A%84%E6%BD%9C%E5%8A%9B"><span class="toc-nav-text">2.2 SSD内计算的潜力</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-NVMe"><span class="toc-nav-text">2.3 NVMe</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-SUMMARIZER"><span class="toc-nav-text">3. SUMMARIZER</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-1-SSD%E6%8E%A7%E5%88%B6%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="toc-nav-text">3.1 SSD控制器架构</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-2-Summarizer%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E6%93%8D%E4%BD%9C"><span class="toc-nav-text">3.2 Summarizer的结构和操作</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-3-%E7%BB%84%E6%88%90Summarizer%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-nav-text">3.3 组成Summarizer的应用</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4-%E6%A1%88%E4%BE%8B%E7%A0%94%E7%A9%B6"><span class="toc-nav-text">4. 案例研究</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-1-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-nav-text">4.1 数据分析</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-2-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88"><span class="toc-nav-text">4.2 数据整合</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#5-%E6%96%B9%E6%A1%88%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-nav-text">5. 方案和实现细节</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#6-%E8%AF%84%E6%B5%8B"><span class="toc-nav-text">6. 评测</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-1-%E8%AF%84%E4%BC%B0%E5%B9%B3%E5%8F%B0"><span class="toc-nav-text">6.1 评估平台</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-2-%E5%9F%BA%E4%BA%8E%E5%B7%A5%E4%BD%9C%E9%87%8F%E6%B5%8B%E9%87%8F%E7%9A%84%E6%A0%A1%E5%87%86"><span class="toc-nav-text">6.2 基于工作量测量的校准</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-3-Summarizer%E6%80%A7%E8%83%BD"><span class="toc-nav-text">6.3 Summarizer性能</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-4-%E8%AE%BE%E8%AE%A1%E7%A9%BA%E9%97%B4%E6%8E%A2%E7%B4%A2%EF%BC%9A%E5%86%85%E9%83%A8-%E5%A4%96%E9%83%A8%E5%B8%A6%E5%AE%BD%E6%AF%94"><span class="toc-nav-text">6.4 设计空间探索：内部&#x2F;外部带宽比</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-5-%E8%AE%BE%E8%AE%A1%E7%A9%BA%E9%97%B4%E6%8E%A2%E7%B4%A2%EF%BC%9ASSD%E5%86%85%E7%9A%84%E8%AE%A1%E7%AE%97%E8%83%BD%E5%8A%9B"><span class="toc-nav-text">6.5 设计空间探索：SSD内的计算能力</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-6-%E6%88%90%E6%9C%AC%E6%95%88%E7%9B%8A"><span class="toc-nav-text">6.6 成本效益</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#7-%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="toc-nav-text">7. 相关工作</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#8-%E7%BB%93%E8%AE%BA"><span class="toc-nav-text">8. 结论</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/08/18/paper-summarizer/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

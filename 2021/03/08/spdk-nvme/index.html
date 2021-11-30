@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用SPDK部署NVMe over TCP | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用SPDK部署NVMe over TCP</h2>
+  <p class="post-date">2021-03-08</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/03/08/spdk-nvme/nvme-bg.jpg" alt="See the source image" style="zoom: 25%;">
+
+<a id="more"></a>
+
+
+
+<h1 id="1-NVMe-oF-Target入门指南"><a href="#1-NVMe-oF-Target入门指南" class="headerlink" title="1. NVMe-oF Target入门指南"></a>1. NVMe-oF Target入门指南</h1><p>SPDK NVMe over Fabrics Target是一个用户空间应用程序，通过以太网，Infiniband或光纤通道等结构呈现块设备,SPDK目前支持RDMA和TCP传输。</p>
+<p>本文将在已经编译好SPDK的基础上演示如何使用SPDK搭建NVMe over TCP，前提是您已经将一块NVMe硬盘挂载到linux系统中。</p>
+<p>如果您想获取有关SPDK更详细的信息，请参考 <a target="_blank" rel="noopener" href="https://spdk.io/doc/iscsi.html">官方文档</a>。</p>
+<p>演示过程的Host主机的ip地址是192.168.0.21，Target主机的ip地址是192.168.0.22</p>
+<h2 id="1-1-Target端配置"><a href="#1-1-Target端配置" class="headerlink" title="1.1 Target端配置"></a>1.1 Target端配置</h2><blockquote>
+<p> 假设您已经成功编译SPDK</p>
+</blockquote>
+<ul>
+<li>初始化SPDK</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入spdk目录</span></span><br><span class="line">$ <span class="built_in">cd</span> spdk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行脚本转让设备控制权给SPDK</span></span><br><span class="line">$ sudo scripts/setup.sh</span><br><span class="line">0000:03:00.0 (15ad 07f0): nvme -&gt; uio_pci_generic</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看设备状态</span></span><br><span class="line">$ sudo scripts/setup.sh status</span><br><span class="line">Hugepages</span><br><span class="line">node     hugesize     free /  total</span><br><span class="line">node0   1048576kB        0 /      0</span><br><span class="line">node0      2048kB     1024 /   1024</span><br><span class="line"></span><br><span class="line">Type     BDF             Vendor Device NUMA    Driver           Device     Block devices</span><br><span class="line">NVMe     0000:03:00.0    15ad   07f0   0       uio_pci_generic  -          -</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>启动 <code>nvmf-tgf</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo build/bin/nvmf_tgt</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>创建TCP传输</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo scripts/rpc.py nvmf_create_transport -t TCP -u 16384 -m 8 -c 8192</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>创建 NVMe 块设备</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo scripts/rpc.py bdev_nvme_attach_controller -b NVMe1 -t PCIe -a 0000:03:00.0</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>将NVMe块设备分配给子系统</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建子系统</span></span><br><span class="line">$ sudo scripts/rpc.py nvmf_create_subsystem nqn.2016-06.io.spdk:cnode1 -a -s SPDK00000000000001 -d SPDK_Controller1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将NVMe块设备分配给刚刚创建的子系统</span></span><br><span class="line">$ sudo scripts/rpc.py nvmf_subsystem_add_ns nqn.2016-06.io.spdk:cnode1 NVMe1n1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为子系统添加TCP监听器</span></span><br><span class="line">$ sudo scripts/rpc.py nvmf_subsystem_add_listener nqn.2016-06.io.spdk:cnode1 -t TCP -a 192.168.0.22 -s 4420</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-2-Host端配置"><a href="#1-2-Host端配置" class="headerlink" title="1.2 Host端配置"></a>1.2 Host端配置</h2><ul>
+<li>安装 nvme-cli </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt install nvme-cli</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>加载驱动程序</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo modprobe nvme-tcp</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>发现 Target </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ sudo nvme discover -t tcp -a 192.168.0.22 -s 4420</span><br><span class="line">Discovery Log Number of Records 1, Generation counter 5</span><br><span class="line">=====Discovery Log Entry 0======</span><br><span class="line">trtype:  tcp</span><br><span class="line">adrfam:  ipv4</span><br><span class="line">subtype: nvme subsystem</span><br><span class="line">treq:    not required</span><br><span class="line">portid:  0</span><br><span class="line">trsvcid: 4420</span><br><span class="line">subnqn:  nqn.2016-06.io.spdk:cnode1</span><br><span class="line">traddr:  192.168.0.22</span><br><span class="line">sectype: none</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>连接Target</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">$ sudo nvme connect -t tcp -n <span class="string">&quot;nqn.2016-06.io.spdk:cnode1&quot;</span> -a 192.168.0.22 -s 4420</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看设备方法1</span></span><br><span class="line">$ sudo fdisk -l</span><br><span class="line">...</span><br><span class="line">Disk /dev/nvme0n1: 5 GiB, 5368709120 bytes, 10485760 sectors</span><br><span class="line">Disk model: SPDK_Controller1</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disklabel <span class="built_in">type</span>: dos</span><br><span class="line">Disk identifier: 0x441af706</span><br><span class="line"></span><br><span class="line">Device         Boot Start      End  Sectors Size Id Type</span><br><span class="line">/dev/nvme0n1p1       2048 10485759 10483712   5G 83 Linux</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看设备方法2</span></span><br><span class="line">$ lsblk</span><br><span class="line">NAME                      MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT</span><br><span class="line">fd0                         2:0    1    4K  0 disk </span><br><span class="line">loop0                       7:0    0 55.5M  1 loop /snap/core18/2074</span><br><span class="line">loop2                       7:2    0 67.6M  1 loop /snap/lxd/20326</span><br><span class="line">loop3                       7:3    0 32.3M  1 loop /snap/snapd/11107</span><br><span class="line">loop4                       7:4    0 32.3M  1 loop /snap/snapd/12398</span><br><span class="line">loop5                       7:5    0 55.5M  1 loop /snap/core18/1988</span><br><span class="line">loop6                       7:6    0 70.3M  1 loop /snap/lxd/21029</span><br><span class="line">sda                         8:0    0   20G  0 disk </span><br><span class="line">├─sda1                      8:1    0    1M  0 part </span><br><span class="line">├─sda2                      8:2    0    1G  0 part /boot</span><br><span class="line">└─sda3                      8:3    0   19G  0 part </span><br><span class="line">  └─ubuntu--vg-ubuntu--lv 253:0    0   19G  0 lvm  /</span><br><span class="line">sr0                        11:0    1 1024M  0 rom  </span><br><span class="line">sr1                        11:1    1  1.1G  0 rom  </span><br><span class="line">nvme0n1                   259:1    0   20G  0 disk</span><br></pre></td></tr></table></figure>
+
+<p>此时可将块设备nvme0n1p1进行挂载访问</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将/dev/nvme0n1挂载到/root/data/下</span></span><br><span class="line">$ mount -t ext4 -o rw /dev/nvme0n1 /root/data/</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>取消连接Target</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ nvme disconnect -n <span class="string">&quot;nqn.2016-06.io.spdk:cnode1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$ nvme disconnect-all</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>Reference<br>[1]: <a target="_blank" rel="noopener" href="https://spdk.io/doc/nvmf.html">https://spdk.io/doc/nvmf.html</a><br>[2]: <a target="_blank" rel="noopener" href="https://www.cnblogs.com/JamesLi/p/11399054.html">https://www.cnblogs.com/JamesLi/p/11399054.html</a></p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#spdk" >
+    <span class="tag-code">spdk</span>
+  </a>
+
+  <a href="/tags#nvme" >
+    <span class="tag-code">nvme</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/03/04/spdk-iscsi/">
+        <span class="nav-arrow">← </span>
+        
+          使用SPDK部署iSCSI
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/03/24/A-Community-Cache-with-Complete-Information/">
+        
+          A Community Cache with Complete Information 论文阅读笔记
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-NVMe-oF-Target%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97"><span class="toc-nav-text">1. NVMe-oF Target入门指南</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-1-Target%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">1.1 Target端配置</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-2-Host%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="toc-nav-text">1.2 Host端配置</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/03/08/spdk-nvme/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

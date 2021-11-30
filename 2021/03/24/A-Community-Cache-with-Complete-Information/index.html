@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      A Community Cache with Complete Information 论文阅读笔记 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>A Community Cache with Complete Information 论文阅读笔记</h2>
+  <p class="post-date">2021-03-24</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/image-20210528160349306.png" alt="image-20210528160349306"></p>
+<a id="more"></a>
+
+<h1 id="A-Community-Cache-with-Complete-Information"><a href="#A-Community-Cache-with-Complete-Information" class="headerlink" title="A Community Cache with Complete Information"></a>A Community Cache with Complete Information</h1><h2 id="1-背景介绍"><a href="#1-背景介绍" class="headerlink" title="1. 背景介绍"></a>1. 背景介绍</h2><h3 id="1-P2：存算分离"><a href="#1-P2：存算分离" class="headerlink" title="(1)  P2：存算分离"></a>(1)  P2：存算分离</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p2.png" alt="image-20210406114806954"></p>
+<p>P2：在现代的数据中心中，存储资源通常以资源池的形式呈现给计算集群，由计算集群共享存储资源，存储集群和计算集群使用互联网络相连。</p>
+<hr>
+<h3 id="2-P3：大数据分析应用的I-O瓶颈"><a href="#2-P3：大数据分析应用的I-O瓶颈" class="headerlink" title="(2) P3：大数据分析应用的I/O瓶颈"></a>(2) P3：大数据分析应用的I/O瓶颈</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p3.png" alt="image-20210406114845569"></p>
+<p>P3：以大数据分析应用场景为例，部署在计算集群中的大数据分析框架通过互联网络从数据池中获取待分析的数据，这些数据通常是TB或者PB级，此时，频繁的I/O操作会占用大量的网络带宽，从而使I/O成为大数据分析过程的瓶颈。</p>
+<hr>
+<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2. 相关工作"></a>2. 相关工作</h2><h3 id="1-P4：Alluxio"><a href="#1-P4：Alluxio" class="headerlink" title="(1) P4：Alluxio"></a>(1) P4：Alluxio</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p4.png" alt="image-20210406114912889"></p>
+<p>P4：Alluxio的通过在计算集群中增加Cache层来减轻网络负载，从而提高I/O性能。但是Alluxio的Cache分配和网络利用较为糟糕，例如，当两个分析框架使用相同的数据对象时，Alluxio会在计算集群中缓存两个O1对象，存在冗余和数据一致性的问题。</p>
+<hr>
+<h2 id="3-方案设计"><a href="#3-方案设计" class="headerlink" title="3.方案设计"></a>3.方案设计</h2><h3 id="1-P5：Community-cache"><a href="#1-P5：Community-cache" class="headerlink" title="(1) P5：Community cache"></a>(1) P5：Community cache</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p5.png" alt="image-20210406114921426"></p>
+<p>P5：通过采用Community Cache，可以消除Alluxio的缺点。即在运行不分析平台的多个集群中共享相同的数据缓存实例，这样做不仅可以解决数据冗余的问题，还能弹性拓展计算集群。</p>
+<hr>
+<h3 id="2-P6：完整的信息"><a href="#2-P6：完整的信息" class="headerlink" title="(2) P6：完整的信息"></a>(2) P6：完整的信息</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p6.png" alt="image-20210406114940204"></p>
+<p>P6：计算集群缓存可以和集群的任务调度信息进行配合（任务的DAG数据流图），从而更好地利用缓存。</p>
+<hr>
+<h3 id="3-P7：I-O数据流、网络和存储资源的使用情况"><a href="#3-P7：I-O数据流、网络和存储资源的使用情况" class="headerlink" title="(3) P7：I/O数据流、网络和存储资源的使用情况"></a>(3) P7：I/O数据流、网络和存储资源的使用情况</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p7.png" alt="image-20210406115039487"></p>
+<p>P7：一方面，可以通过在大数据分析框架获取任务调度信息和I/O数据流，另一方面，可以通过数据池获取实时的存储资源和网络的使用情况，</p>
+<hr>
+<h3 id="4-P8：执行时间-缓存信息-带宽监测-I-O数据流-更好地缓存预测"><a href="#4-P8：执行时间-缓存信息-带宽监测-I-O数据流-更好地缓存预测" class="headerlink" title="(4) P8：执行时间+缓存信息+带宽监测+I/O数据流 = 更好地缓存预测"></a>(4) P8：执行时间+缓存信息+带宽监测+I/O数据流 = 更好地缓存预测</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p8.png" alt="image-20210406115108489"></p>
+<p>P8：利用执行时间+缓存信息+带宽监测+I/O数据流四方面的数据，可以实现更好地缓存预测。</p>
+<hr>
+<h2 id="4-方案说明"><a href="#4-方案说明" class="headerlink" title="4. 方案说明"></a>4. 方案说明</h2><h3 id="1-P9：CMR-最小化运行时间"><a href="#1-P9：CMR-最小化运行时间" class="headerlink" title="(1) P9：CMR-最小化运行时间"></a>(1) P9：CMR-最小化运行时间</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p9.png" alt="image-20210406115117190"></p>
+<p>P9：下面以一个应用分析实例进行说明。用户编写的查询操作被分解为了数据流图，这一过程在应用实际执行之前就可以获得，此时，我们就得到了各个执行单元的I/O依赖关系.</p>
+<hr>
+<h3 id="2-P10：共享缓存"><a href="#2-P10：共享缓存" class="headerlink" title="(2) P10：共享缓存"></a>(2) P10：共享缓存</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p10.png" alt="image-20210406115124529"></p>
+<p>P10：Dataflow DAG、Inputs &amp; ranges、Scheduling schema数据都可以从但数据分析框架中获取，Community Cache就可以利用这些信息更好地管理缓存，从而提升系统性能。</p>
+<hr>
+<h3 id="3-P11：时空图"><a href="#3-P11：时空图" class="headerlink" title="(3) P11：时空图"></a>(3) P11：时空图</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p11.png" alt="image-20210406115132295"></p>
+<p>P11：通过各单元执行时间的预测信息，我们可以汇出时空图，如右图所示。通过这张图我们很容易看出关键路径：S3 -&gt; S5 -&gt; S6 -&gt; S7</p>
+<hr>
+<h3 id="4-P12：优化关键路径"><a href="#4-P12：优化关键路径" class="headerlink" title="(4) P12：优化关键路径"></a>(4) P12：优化关键路径</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p12.png" alt="image-20210406115140562"></p>
+<p>P12：CMR首先对关键路径上的执行单元进行优化，例如提升数据预取、数据缓存等操作的优先级，可以缩短这一关键路径</p>
+<hr>
+<h3 id="5-P13：多次优化关键路径"><a href="#5-P13：多次优化关键路径" class="headerlink" title="(5) P13：多次优化关键路径"></a>(5) P13：多次优化关键路径</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p13.png" alt="image-20210406115147790"></p>
+<p>P13：优化完毕后，会产生新的关键路径，于CP不同，CMR会通过多次优化，使系统达到最优性能。</p>
+<p>CP利用stage运行时预测来缓存数据，以减少DAGs中stage的关键路径。CMR依赖于Kariz对部分文件缓存的支持，从DAG的每个阶段预取部分数据，以提高单个关键路径之外的性能。</p>
+<hr>
+<h3 id="6-P14：优化前后时空图对比"><a href="#6-P14：优化前后时空图对比" class="headerlink" title="(6) P14：优化前后时空图对比"></a>(6) P14：优化前后时空图对比</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p14.png" alt="image-20210406115154780"></p>
+<p>P14：这张图描述了优化前和优化后的数据流图。</p>
+<hr>
+<h2 id="5-方案实现"><a href="#5-方案实现" class="headerlink" title="5. 方案实现"></a>5. 方案实现</h2><h3 id="1-P15：优化思路"><a href="#1-P15：优化思路" class="headerlink" title="(1) P15：优化思路"></a>(1) P15：优化思路</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p15.png" alt="image-20210406115203132"></p>
+<p>P15：对DAG的预取和缓存进行优先级排序，使它们之间的数据共享最大化，以最小化后端存储负载并最大限度地减少运行时</p>
+<hr>
+<h3 id="2-P16：总体架构"><a href="#2-P16：总体架构" class="headerlink" title="(2) P16：总体架构"></a>(2) P16：总体架构</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p16.png" alt="image-20210406115211925"></p>
+<p>P16：</p>
+<ul>
+<li>使用分析框架获取DAG</li>
+<li>通过拓展D3N实现community cache</li>
+<li>分析datalake带宽</li>
+<li>分析任务执行情况</li>
+<li>CMR算法：多次优化关键路径</li>
+</ul>
+<h2 id="6-测试"><a href="#6-测试" class="headerlink" title="6. 测试"></a>6. 测试</h2><h3 id="1-P17："><a href="#1-P17：" class="headerlink" title="(1) P17："></a>(1) P17：</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p17.png" alt="image-20210406150839747"></p>
+<p>P17：在Pig大数据分析框架下，使用 TPC-H benchmark进行测试，数据的规模是64GB，集群规模是16个节点，1.4TB内存和128个cpu核心，由测试结果可知，采用CMR算法相较于无cache的情形性能提升了2倍，相较于其他cache算法性能提升了1.3倍</p>
+<h3 id="2-P18："><a href="#2-P18：" class="headerlink" title="(2) P18："></a>(2) P18：</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p18.png" alt="image-20210406150951348"></p>
+<p>P18：在Spark大数据分析框架下，使用 TPC-H benchmark进行测试，数据的规模是64GB，集群规模是16个节点，1.4TB内存和128个cpu核心，由测试结果可知，采用CMR算法相较于无cache的情形性能提升了3倍，相较于其他cache算法性能提升了2倍</p>
+<h3 id="3-P19："><a href="#3-P19：" class="headerlink" title="(3) P19："></a>(3) P19：</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p19.png" alt="image-20210406150954931"></p>
+<p>CMR-M：CacheforMinimizing Runtime of multiple DAGs，在选择要缓存和预取的数据时，还考虑了存储带宽和跨多个查询的数据共享。当同一个分析框架存在多个 DAGs 时， CMR-M相较于其他算法能表现出更优地性能，尤其是当数据共享的比例越高，性能优势越明显。</p>
+<h3 id="4-P20："><a href="#4-P20：" class="headerlink" title="(4) P20："></a>(4) P20：</h3><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p20.png" alt="image-20210406151012360"></p>
+<p>和以Alluxio代表的cluster cache相比，community cache达到更有的性能，接近1.5倍。</p>
+<h2 id="7-结论"><a href="#7-结论" class="headerlink" title="7. 结论"></a>7. 结论</h2><p><img src="/2021/03/24/A-Community-Cache-with-Complete-Information/p21.png" alt="image-20210406151032787"></p>
+<p>通过以上论述，我们可以得出以下结论：</p>
+<ul>
+<li>community cache允许数据在运行不同分析框架的计算集群中共享</li>
+<li>community cache可以获取更加全面的信息，从而更好地进行缓存</li>
+</ul>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#cache" >
+    <span class="tag-code">cache</span>
+  </a>
+
+  <a href="/tags#paper" >
+    <span class="tag-code">paper</span>
+  </a>
+
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/03/08/spdk-nvme/">
+        <span class="nav-arrow">← </span>
+        
+          使用SPDK部署NVMe over TCP
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/03/25/java-algorithm-templates/">
+        
+          常见算法的 Java 实现
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#A-Community-Cache-with-Complete-Information"><span class="toc-nav-text">A Community Cache with Complete Information</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">1. 背景介绍</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-P2%EF%BC%9A%E5%AD%98%E7%AE%97%E5%88%86%E7%A6%BB"><span class="toc-nav-text">(1)  P2：存算分离</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-P3%EF%BC%9A%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%BA%94%E7%94%A8%E7%9A%84I-O%E7%93%B6%E9%A2%88"><span class="toc-nav-text">(2) P3：大数据分析应用的I&#x2F;O瓶颈</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="toc-nav-text">2. 相关工作</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-P4%EF%BC%9AAlluxio"><span class="toc-nav-text">(1) P4：Alluxio</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1"><span class="toc-nav-text">3.方案设计</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-P5%EF%BC%9ACommunity-cache"><span class="toc-nav-text">(1) P5：Community cache</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-P6%EF%BC%9A%E5%AE%8C%E6%95%B4%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-nav-text">(2) P6：完整的信息</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-P7%EF%BC%9AI-O%E6%95%B0%E6%8D%AE%E6%B5%81%E3%80%81%E7%BD%91%E7%BB%9C%E5%92%8C%E5%AD%98%E5%82%A8%E8%B5%84%E6%BA%90%E7%9A%84%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5"><span class="toc-nav-text">(3) P7：I&#x2F;O数据流、网络和存储资源的使用情况</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-P8%EF%BC%9A%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4-%E7%BC%93%E5%AD%98%E4%BF%A1%E6%81%AF-%E5%B8%A6%E5%AE%BD%E7%9B%91%E6%B5%8B-I-O%E6%95%B0%E6%8D%AE%E6%B5%81-%E6%9B%B4%E5%A5%BD%E5%9C%B0%E7%BC%93%E5%AD%98%E9%A2%84%E6%B5%8B"><span class="toc-nav-text">(4) P8：执行时间+缓存信息+带宽监测+I&#x2F;O数据流 &#x3D; 更好地缓存预测</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-%E6%96%B9%E6%A1%88%E8%AF%B4%E6%98%8E"><span class="toc-nav-text">4. 方案说明</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-P9%EF%BC%9ACMR-%E6%9C%80%E5%B0%8F%E5%8C%96%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="toc-nav-text">(1) P9：CMR-最小化运行时间</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-P10%EF%BC%9A%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98"><span class="toc-nav-text">(2) P10：共享缓存</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-P11%EF%BC%9A%E6%97%B6%E7%A9%BA%E5%9B%BE"><span class="toc-nav-text">(3) P11：时空图</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-P12%EF%BC%9A%E4%BC%98%E5%8C%96%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84"><span class="toc-nav-text">(4) P12：优化关键路径</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-P13%EF%BC%9A%E5%A4%9A%E6%AC%A1%E4%BC%98%E5%8C%96%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84"><span class="toc-nav-text">(5) P13：多次优化关键路径</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#6-P14%EF%BC%9A%E4%BC%98%E5%8C%96%E5%89%8D%E5%90%8E%E6%97%B6%E7%A9%BA%E5%9B%BE%E5%AF%B9%E6%AF%94"><span class="toc-nav-text">(6) P14：优化前后时空图对比</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5-%E6%96%B9%E6%A1%88%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">5. 方案实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-P15%EF%BC%9A%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF"><span class="toc-nav-text">(1) P15：优化思路</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-P16%EF%BC%9A%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-nav-text">(2) P16：总体架构</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">6. 测试</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#1-P17%EF%BC%9A"><span class="toc-nav-text">(1) P17：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-P18%EF%BC%9A"><span class="toc-nav-text">(2) P18：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-P19%EF%BC%9A"><span class="toc-nav-text">(3) P19：</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-P20%EF%BC%9A"><span class="toc-nav-text">(4) P20：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7-%E7%BB%93%E8%AE%BA"><span class="toc-nav-text">7. 结论</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/03/24/A-Community-Cache-with-Complete-Information/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

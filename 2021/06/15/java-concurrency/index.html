@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      关于Java并发的总结和思考 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>关于Java并发的总结和思考</h2>
+  <p class="post-date">2021-06-15</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/06/15/java-concurrency/bg.jpg" alt="img" style="zoom: 67%;">
+
+<a id="more"></a>
+
+<h1 id="1-进程、线程和协程的基本概念"><a href="#1-进程、线程和协程的基本概念" class="headerlink" title="1. 进程、线程和协程的基本概念"></a>1. 进程、线程和协程的基本概念</h1><h2 id="1-1-什么是进程"><a href="#1-1-什么是进程" class="headerlink" title="1.1 什么是进程"></a>1.1 什么是进程</h2><p>进程（Process）是计算机中的程序关于某数据集合上的一次运行活动，是系统进行资源分配的基本单位。</p>
+<h2 id="1-2-什么是线程"><a href="#1-2-什么是线程" class="headerlink" title="1.2 什么是线程"></a>1.2 什么是线程</h2><p>线程是程序的一条执行路径，是现代操作系统调度的基本单位。</p>
+<p>在Java中，同类的多个线程共享进程的<strong>堆</strong>和<strong>方法区</strong>资源，但每个线程有自己的<strong>程序计数器</strong>、<strong>虚拟机栈</strong>和<strong>本地方法栈</strong>。</p>
+<p><img src="/2021/06/15/java-concurrency/82539cb6fc7b45bd94c4a6e3ad858bf2.png" alt="img"></p>
+<h2 id="1-3-什么是协程"><a href="#1-3-什么是协程" class="headerlink" title="1.3 什么是协程"></a>1.3 什么是协程</h2><p><strong>协程，英文Coroutines，是一种比线程更加轻量级的存在。</strong>正如一个进程可以拥有多个线程一样，一个线程也可以拥有多个协程。</p>
+<p>协程不是被操作系统内核所管理，而完全是由程序所控制（也就是在用户态执行）。</p>
+<img src="/2021/06/15/java-concurrency/6765e36cc4604fba897976638af03524.jpeg" alt="img" style="zoom: 67%;">
+
+<h1 id="2-进程和线程"><a href="#2-进程和线程" class="headerlink" title="2. 进程和线程"></a>2. 进程和线程</h1><h2 id="2-1-进程和线程的关系"><a href="#2-1-进程和线程的关系" class="headerlink" title="2.1 进程和线程的关系"></a>2.1 进程和线程的关系</h2><p>进程是系统运行程序和<strong>资源分配</strong>的基本单位，线程是<strong>系统调度</strong>的基本单位。</p>
+<ul>
+<li><p>进程是指一个具有一定独立功能的程序关于某个数据集合的一次运行活动</p>
+</li>
+<li><p>区别：</p>
+<ul>
+<li>程序是指令的有序集合，是一个静态概念</li>
+<li>进程是一个能独立运行的单位，能与其他进程并行地活动</li>
+<li>线程是竞争计算机系统有限资源的基本单位，也是进行处理机调度的基本单位。</li>
+</ul>
+</li>
+</ul>
+<img src="/2021/06/15/java-concurrency/image-20210721170532276.png" alt="image-20210721170532276" style="zoom: 50%;">
+
+<h2 id="2-2-程序计数器为什么是私有的？"><a href="#2-2-程序计数器为什么是私有的？" class="headerlink" title="2.2 程序计数器为什么是私有的？"></a>2.2 程序计数器为什么是私有的？</h2><p>每个线程拥有不同的执行路径，因此需要程序计数器来记录当前执行到的位置，保证线程切换后能恢复到正确的执行位置。</p>
+<h2 id="2-3-虚拟机栈和本地方法栈为什么是私有的？"><a href="#2-3-虚拟机栈和本地方法栈为什么是私有的？" class="headerlink" title="2.3 虚拟机栈和本地方法栈为什么是私有的？"></a>2.3 虚拟机栈和本地方法栈为什么是私有的？</h2><p>每个线程的方法拥有自己独立的栈帧，以保证线程中的局部变量不被别的线程访问到。</p>
+<h2 id="2-4-堆和方法区"><a href="#2-4-堆和方法区" class="headerlink" title="2.4 堆和方法区"></a>2.4 堆和方法区</h2><p>堆和方法区为进程所有，由线程共享。</p>
+<p>堆主要用于存放新创建的对象；方法区主要用去存放编译后的代码等信息（例如已被加载的类信息、常量、静态变量）</p>
+<h2 id="2-5-线程的生命周期和状态"><a href="#2-5-线程的生命周期和状态" class="headerlink" title="2.5 线程的生命周期和状态"></a>2.5 线程的生命周期和状态</h2><p><img src="/2021/06/15/java-concurrency/82539cb6fc7b45bd94c4a6e3ad858bf2.png" alt="img"></p>
+<h2 id="2-6-线程的上下文切换"><a href="#2-6-线程的上下文切换" class="headerlink" title="2.6 线程的上下文切换"></a>2.6 线程的上下文切换</h2><p>当前任务在执⾏完 CPU 时间⽚切换到另⼀个任务之前会先保存⾃⼰的状态，以便下次 再切换回这个任务时，可以再加载这个任务的状态。任务从保存到再加载的过程就是⼀次上下⽂切换</p>
+<h1 id="3-并发和并行"><a href="#3-并发和并行" class="headerlink" title="3. 并发和并行"></a>3. 并发和并行</h1><h2 id="3-1-并发和并行的区别"><a href="#3-1-并发和并行的区别" class="headerlink" title="3.1 并发和并行的区别"></a>3.1 并发和并行的区别</h2><ul>
+<li>并发：同一时间段内，多个任务都执行了（例如时间片法）</li>
+<li>并行：同一时刻，执行多个任务（例如多核）</li>
+</ul>
+<h1 id="4-多线程"><a href="#4-多线程" class="headerlink" title="4. 多线程"></a>4. 多线程</h1><h2 id="4-1-为什么使用多线程？"><a href="#4-1-为什么使用多线程？" class="headerlink" title="4.1 为什么使用多线程？"></a>4.1 为什么使用多线程？</h2><ul>
+<li>从计算机底层来说： 计算机有多任务调度的需求，最早是基于进程实现的多任务调度，但是进程切换成本较高，由此诞生了更加轻量的线程，满足多任务调度需求。</li>
+<li>从互联网发展趋势来说： 现在的系统动不动就要求百万级甚至千万级的并发量，而多线程并发编程正是开发高并发系统的基础，利用好多线程机制可以大大提高系统整体的并发能力以及性能。</li>
+</ul>
+<h2 id="4-2-使用多线程带来的问题"><a href="#4-2-使用多线程带来的问题" class="headerlink" title="4.2 使用多线程带来的问题"></a>4.2 使用多线程带来的问题</h2><ul>
+<li>内存泄漏</li>
+<li>一致性问题（线程同步）</li>
+<li>死锁</li>
+</ul>
+<h2 id="4-3-Java和线程"><a href="#4-3-Java和线程" class="headerlink" title="4.3 Java和线程"></a>4.3 Java和线程</h2><h3 id="4-3-1-内核线程实现"><a href="#4-3-1-内核线程实现" class="headerlink" title="4.3.1 内核线程实现"></a>4.3.1 内核线程实现</h3><p>使用内核线程实现的方式也被称为1：1实现。内核线程（Kernel-Level Thread，KLT）就是直接由操作系统内核（Kernel，下称内核）支持的线程，这种线程由内核来完成线程切换，内核通过操纵调度器（Scheduler）对线程进行调度，并负责将线程的任务映射到各个处理器上。每个内核线程可以视为内核的一个分身，这样操作系统就有能力同时处理多件事情，支持多线程的内核就称为多线程内核 （Multi-Threads Kernel）。</p>
+<p>内核线程（Kernel-Level Thread，KLT）</p>
+<p>轻量级进程（Light Weight Process，LWP）</p>
+<p>一个进程（P）拥有多个线程（LWP），每一个LWP被映射为KLT，由线程调度器调度到物理CPU上执行。</p>
+<img src="/2021/06/15/java-concurrency/image-20210720195629494.png" alt="image-20210720195629494" style="zoom:67%;">
+
+<h3 id="4-3-2-用户线程实现"><a href="#4-3-2-用户线程实现" class="headerlink" title="4.3.2 用户线程实现"></a>4.3.2 用户线程实现</h3><p>即协程</p>
+<h1 id="5-上下文切换"><a href="#5-上下文切换" class="headerlink" title="5. 上下文切换"></a>5. 上下文切换</h1><p>当线程发生中断，或者用完当前时间片，就会触发上下文切换，操作系统会将CPU的使用权分配给其他线程。</p>
+<p>保护现场、恢复现场。</p>
+<h1 id="6-死锁"><a href="#6-死锁" class="headerlink" title="6. 死锁"></a>6. 死锁</h1><p>定义：在两个或多个并发进程中，如果每个进程持有某种资源而又都等待着别的进程释放它们现在保持着的资源，在未改变这种状态之前都不能向前推进，称这一组进程产生了死锁</p>
+<h2 id="6-1-产生死锁的必要条件"><a href="#6-1-产生死锁的必要条件" class="headerlink" title="6.1 产生死锁的必要条件"></a>6.1 产生死锁的必要条件</h2><ol>
+<li>互斥条件：在一段时间内某资源仅为一个进程所占有。</li>
+<li>不可剥夺条件：该资源只能由获得该资源的进程自己来释放。</li>
+<li>占有并等待条件：进程在等待新资源的同时，继续占用已分配到的资源。</li>
+<li>循环等待条件：存在一种进程的循环链，链中的每一个进程已获得的资源同时被链中下一个进程所请求。</li>
+</ol>
+<h2 id="6-2-死锁的处理"><a href="#6-2-死锁的处理" class="headerlink" title="6.2 死锁的处理"></a>6.2 死锁的处理</h2><ul>
+<li>预防死锁：通过设置某些限制条件，去破坏死锁四个必要条件中的一个或多个</li>
+<li>避免死锁：在资源动态分配过程中，用某种方法防止系统进入不安全状态，从而避免死锁的产生</li>
+<li>检测死锁：允许系统在运行过程中发生死锁，但可检测死锁的发生，并采取适当措施加以清除</li>
+<li>解除死锁：当检测出死锁后，采取措施将进程从死锁状态中解脱出来</li>
+</ul>
+<h4 id="6-2-1-预防死锁"><a href="#6-2-1-预防死锁" class="headerlink" title="6.2.1 预防死锁"></a>6.2.1 预防死锁</h4><ul>
+<li><p>破坏互斥条件：采用虚拟分配技术排除非共享设备死锁的可能性。</p>
+</li>
+<li><p>破坏不可剥夺条件：</p>
+<ul>
+<li>允许资源抢占</li>
+</ul>
+</li>
+<li><p>破坏占有并等待：</p>
+<ul>
+<li>一次性资源分配方案</li>
+<li>每个进程申请资源前，释放它所占有的资源</li>
+</ul>
+</li>
+<li><p>破坏循环等待条：静态资源分配、有序资源分配、修复死锁、重启系统。</p>
+</li>
+</ul>
+<h4 id="6-2-2-避免死锁"><a href="#6-2-2-避免死锁" class="headerlink" title="6.2.2 避免死锁"></a>6.2.2 避免死锁</h4><p><strong>方法：</strong></p>
+<ul>
+<li><p>有序资源分配法：资源按某种规则系统中的所有资源统一编号（例如打印机为1、磁带机为2、磁盘为3、等等），必须以上升的次序申请资源。</p>
+</li>
+<li><p>银行家算法：系统给当前进程分配资源时，先检查是否安全，如果安全，允许分配资源，否则让进程进入等待状态。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wljliujuan/article/details/79651932/">https://blog.csdn.net/wljliujuan/article/details/79651932/</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>技术：</strong></p>
+<ul>
+<li>加锁顺序：线程按照一定的顺序加锁，要求事先知道所有可能会用到的锁，并对这些锁做适当的排序，但总有些时候是无法预知的。</li>
+<li>加锁时限：线程尝试获取锁的时候加上一定的时限，超过时限则放弃对该锁的请求，并释放自己占有的锁。如果有非常多的线程同一时间去竞争同一批资源，就算有超时和回退机制，还是可能会导致这些线程重复地尝试但却始终得不到锁。</li>
+<li>死锁检测：死锁检测是一个更好的死锁预防机制，它主要是针对那些不可能实现按序加锁并且锁超时也不可行的场景。</li>
+</ul>
+<h4 id="6-2-3-检测死锁"><a href="#6-2-3-检测死锁" class="headerlink" title="6.2.3 检测死锁"></a>6.2.3 检测死锁</h4><h4 id="6-2-4-解除死锁"><a href="#6-2-4-解除死锁" class="headerlink" title="6.2.4 解除死锁"></a>6.2.4 解除死锁</h4><ul>
+<li>资源剥夺法。挂起某些死锁进程，并抢占它的资源，将这些资源分配给其他的死锁进程。但应防止被挂起的进程长时间得不到资源，而处于资源匮乏的状态。</li>
+<li>撤销进程法。强制撤销部分、甚至全部死锁进程并剥夺这些进程的资源。撤销的原则可以按进程优先级和撤销进程代价的高低进行。</li>
+<li>进程回退法。让一（多）个进程回退到足以回避死锁的地步，进程回退时自愿释放资源而不是被剥夺。要求系统保持进程的历史信息，设置还原点。</li>
+</ul>
+<h1 id="7-Java线程方法"><a href="#7-Java线程方法" class="headerlink" title="7. Java线程方法"></a>7. Java线程方法</h1><h2 id="7-1-sleep-和-wait"><a href="#7-1-sleep-和-wait" class="headerlink" title="7.1 sleep() 和 wait()"></a>7.1 sleep() 和 wait()</h2><ul>
+<li>两者最主要的区别在于：**<code>sleep()</code> 方法没有释放锁，而 <code>wait()</code> 方法释放了锁** 。</li>
+<li>两者都可以暂停线程的执行。</li>
+<li><code>wait()</code> 通常被用于线程间交互/通信，<code>sleep() </code>通常被用于暂停执行。</li>
+<li><code>wait()</code> 方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的 <code>notify() </code>或者 <code>notifyAll()</code> 方法。<code>sleep() </code>方法执行完成后，线程会自动苏醒。或者可以使用 <code>wait(long timeout)</code> 超时后线程会自动苏醒。</li>
+</ul>
+<h2 id="7-2-start-和-run"><a href="#7-2-start-和-run" class="headerlink" title="7.2 start() 和 run()"></a>7.2 start() 和 run()</h2><p>new 一个 Thread，线程进入了新建状态。调用 <code>start()</code>方法，会启动一个线程并使线程进入了就绪状态，当分配到时间片后就可以开始运行了。 <code>start()</code> 会执行线程的相应准备工作，然后自动执行 <code>run()</code> 方法的内容，这是真正的多线程工作。 但是，直接执行 <code>run()</code> 方法，会把 <code>run()</code> 方法当成一个 main 线程下的普通方法去执行，并不会在某个线程中执行它，所以这并不是多线程工作。</p>
+<p><strong>总结： 调用 <code>start()</code> 方法方可启动线程并使线程进入就绪状态，直接执行 <code>run()</code> 方法的话不会以多线程的方式执行。</strong></p>
+<blockquote>
+<p>Reference<br>[1]: <a target="_blank" rel="noopener" href="https://snailclimb.gitee.io/javaguide/#/docs/java/multi-thread/2020%E6%9C%80%E6%96%B0Java%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93">https://snailclimb.gitee.io/javaguide/#/docs/java/multi-thread/2020%E6%9C%80%E6%96%B0Java%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93</a><br>[2]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/wljliujuan/article/details/79614019">https://blog.csdn.net/wljliujuan/article/details/79614019</a></p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#java" >
+    <span class="tag-code">java</span>
+  </a>
+
+  <a href="/tags#concurrency" >
+    <span class="tag-code">concurrency</span>
+  </a>
+
+  <a href="/tags#learn" >
+    <span class="tag-code">learn</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/06/09/log4j/">
+        <span class="nav-arrow">← </span>
+        
+          log4j.properties配置详解
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/06/16/netty/">
+        
+          Netty - 高性能网络应用框架
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-%E8%BF%9B%E7%A8%8B%E3%80%81%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%8D%8F%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-nav-text">1. 进程、线程和协程的基本概念</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E8%BF%9B%E7%A8%8B"><span class="toc-nav-text">1.1 什么是进程</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-2-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B"><span class="toc-nav-text">1.2 什么是线程</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-3-%E4%BB%80%E4%B9%88%E6%98%AF%E5%8D%8F%E7%A8%8B"><span class="toc-nav-text">1.3 什么是协程</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B"><span class="toc-nav-text">2. 进程和线程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-1-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-nav-text">2.1 进程和线程的关系</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-2-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%81%E6%9C%89%E7%9A%84%EF%BC%9F"><span class="toc-nav-text">2.2 程序计数器为什么是私有的？</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%92%8C%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E7%A7%81%E6%9C%89%E7%9A%84%EF%BC%9F"><span class="toc-nav-text">2.3 虚拟机栈和本地方法栈为什么是私有的？</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-4-%E5%A0%86%E5%92%8C%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="toc-nav-text">2.4 堆和方法区</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-5-%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%92%8C%E7%8A%B6%E6%80%81"><span class="toc-nav-text">2.5 线程的生命周期和状态</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-6-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-nav-text">2.6 线程的上下文切换</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-%E5%B9%B6%E5%8F%91%E5%92%8C%E5%B9%B6%E8%A1%8C"><span class="toc-nav-text">3. 并发和并行</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-1-%E5%B9%B6%E5%8F%91%E5%92%8C%E5%B9%B6%E8%A1%8C%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-nav-text">3.1 并发和并行的区别</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="toc-nav-text">4. 多线程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%EF%BC%9F"><span class="toc-nav-text">4.1 为什么使用多线程？</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-2-%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-nav-text">4.2 使用多线程带来的问题</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-3-Java%E5%92%8C%E7%BA%BF%E7%A8%8B"><span class="toc-nav-text">4.3 Java和线程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-3-1-%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">4.3.1 内核线程实现</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-3-2-%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">4.3.2 用户线程实现</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#5-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-nav-text">5. 上下文切换</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#6-%E6%AD%BB%E9%94%81"><span class="toc-nav-text">6. 死锁</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-1-%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81%E7%9A%84%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6"><span class="toc-nav-text">6.1 产生死锁的必要条件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#6-2-%E6%AD%BB%E9%94%81%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-nav-text">6.2 死锁的处理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#6-2-1-%E9%A2%84%E9%98%B2%E6%AD%BB%E9%94%81"><span class="toc-nav-text">6.2.1 预防死锁</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#6-2-2-%E9%81%BF%E5%85%8D%E6%AD%BB%E9%94%81"><span class="toc-nav-text">6.2.2 避免死锁</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#6-2-3-%E6%A3%80%E6%B5%8B%E6%AD%BB%E9%94%81"><span class="toc-nav-text">6.2.3 检测死锁</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#6-2-4-%E8%A7%A3%E9%99%A4%E6%AD%BB%E9%94%81"><span class="toc-nav-text">6.2.4 解除死锁</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#7-Java%E7%BA%BF%E7%A8%8B%E6%96%B9%E6%B3%95"><span class="toc-nav-text">7. Java线程方法</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7-1-sleep-%E5%92%8C-wait"><span class="toc-nav-text">7.1 sleep() 和 wait()</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#7-2-start-%E5%92%8C-run"><span class="toc-nav-text">7.2 start() 和 run()</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/06/15/java-concurrency/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

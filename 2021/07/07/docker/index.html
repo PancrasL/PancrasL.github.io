@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Docker 快速入门 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Docker 快速入门</h2>
+  <p class="post-date">2021-07-07</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><img src="/2021/07/07/docker/static.oschina.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg" alt="img"></p>
+<a id="more"></a>
+
+<h1 id="QuickStart"><a href="#QuickStart" class="headerlink" title="QuickStart"></a>QuickStart</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动mysql5.7，并将D盘的mysql57/data/文件夹挂载到容器中作为mysql的数据保存位置</span></span><br><span class="line">$ docker run --name=mysql57 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /D/mysql57/data:/var/lib/mysql -d mysql:5.7</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动redis</span></span><br><span class="line">$ docker run -d --name=redis6 -p 6379:6379 redis:6.2.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动zookeeper</span></span><br><span class="line">$ docker run -d --name=zookeeper -p 2181:2181 zookeeper:3.6.3</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="1-Docker的优点"><a href="#1-Docker的优点" class="headerlink" title="1. Docker的优点"></a>1. Docker的优点</h1><p><strong>更快的交付应用程序</strong></p>
+<p>应用程序和环境一起发布，使得开发、测试和运维之间避免了许多因环境导致的问题。</p>
+<p>减少了许多环境搭建工作，软件开发更加迅速。</p>
+<p>快速部署：Build，ship and Run Any App，Anywhere</p>
+<p><strong>部署和拓展更加容易</strong></p>
+<p>docker容器几乎可以在所有环境中运行，包括台式机、物理服务器、虚拟机、数据中心。</p>
+<p>docker容器具备可移植性，能很方便地从本地的测试环境部署到云中。</p>
+<p>docker容器仅具有秒级地启动时间，可以在需要时快速启动更多容器，在不再需要时关闭它们。</p>
+<p><strong>运行更多的负载</strong></p>
+<p>相对于虚拟机，docker更加轻量，同一台物理设备上可以运行更多的负载。</p>
+<p><strong>资源隔离</strong></p>
+<p>容器技术解决了不同应用之间的潜在依赖冲突问题。</p>
+<h1 id="2-Docker命令"><a href="#2-Docker命令" class="headerlink" title="2. Docker命令"></a>2. Docker命令</h1><ul>
+<li>构建镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t provider:latest .</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>搜索镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker search xxx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>运行容器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name=<span class="built_in">test</span> -it provider:latest -p 7998:7998</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>删除所有容器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker rm $(docker ps -aq)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动容器交互界面</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run -t -i ID /bin/bash</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>docker  run</th>
+<th>运行容器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–name  NAME</td>
+<td>为创建的容器命名</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>保证容器的stdin是开启的</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>为容器分配一个伪tty终端</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>将宿主机的目录作为卷，挂在到容器里，-v  src:dest，本地目录必须是绝对路径，且挂载的是目录</td>
+</tr>
+<tr>
+<td>–network</td>
+<td>指定新容器将会在哪个网络中运行</td>
+</tr>
+<tr>
+<td>-rm</td>
+<td>容器运行完毕后即删除</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>指定容器的主机名</td>
+</tr>
+<tr>
+<td>ubuntu:xxx</td>
+<td>创建容器的镜像</td>
+</tr>
+<tr>
+<td>/bin/bash</td>
+<td>创建容器后执行的命令</td>
+</tr>
+</tbody></table>
+<h1 id="3-Dockerfile"><a href="#3-Dockerfile" class="headerlink" title="3. Dockerfile"></a>3. Dockerfile</h1><h2 id="3-1-RUN"><a href="#3-1-RUN" class="headerlink" title="3.1 RUN"></a>3.1 RUN</h2><p><strong>作用：</strong>在构建容器时运行的命令，常用于安装依赖，构造容器运行环境</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> [<span class="string">&quot;可执行文件&quot;</span>, <span class="string">&quot;参数1&quot;</span>, <span class="string">&quot;参数2&quot;</span>]</span></span><br><span class="line"><span class="comment"># 等价于 RUN apt install python3-pip</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> [<span class="string">&quot;apt&quot;</span>, <span class="string">&quot;install&quot;</span>, <span class="string">&quot;python3-pip&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-2-CMD"><a href="#3-2-CMD" class="headerlink" title="3.2 CMD"></a>3.2 CMD</h2><p><strong>作用：</strong>类似于 RUN 指令，会被 <code>docker run</code> 附带的命令行参数覆盖</p>
+<ul>
+<li>CMD 在<code>docker run</code> 时运行。</li>
+<li>RUN 是在 <code>docker build</code> 时运行。</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="bash"> &lt;shell 命令&gt; <span class="comment"># CMD echo $PWD</span></span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;&lt;可执行文件或命令&gt;&quot;</span>,<span class="string">&quot;&lt;param1&gt;&quot;</span>,<span class="string">&quot;&lt;param2&gt;&quot;</span>,...] <span class="comment"># CMD python3 test.py</span></span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;&lt;param1&gt;&quot;</span>,<span class="string">&quot;&lt;param2&gt;&quot;</span>,...]  <span class="comment"># 该写法是为 ENTRYPOINT 指令指定的程序提供默认参数</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-3-ENTRYPOINT"><a href="#3-3-ENTRYPOINT" class="headerlink" title="3.3 ENTRYPOINT"></a>3.3 ENTRYPOINT</h2><p><strong>作用：</strong>类似于 CMD 指令，但不会被 <code>docker run</code> 的命令行参数指定的指令所覆盖。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ENTRYPOINT [&quot;&lt;executeable&gt;&quot;,&quot;&lt;param1&gt;&quot;,&quot;&lt;param2&gt;&quot;,...]</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> nginx</span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">&quot;nginx&quot;</span>, <span class="string">&quot;-c&quot;</span>] <span class="comment"># 定参</span></span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;/etc/nginx/nginx.conf&quot;</span>] <span class="comment"># 变参 </span></span></span><br></pre></td></tr></table></figure>
+
+<p>1、不传参运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run nginx:<span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>容器内会将CMD拼接在ENTRYPOINT后面，默认运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nginx -c /etc/nginx/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>2、传参运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run nginx:<span class="built_in">test</span> -c /home/user/new.conf</span><br></pre></td></tr></table></figure>
+
+<p>容器内会使用传入的参数替换掉CMD，运行一下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nginx -c /home/user/new.conf</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-4-COPY"><a href="#3-4-COPY" class="headerlink" title="3.4 COPY"></a>3.4 COPY</h2><p><strong>作用：</strong>复制指令，从上下文目录中复制文件或者目录到容器里指定路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">COPY &lt;源路径1&gt;...  &lt;目标路径&gt;</span><br><span class="line">COPY [&quot;&lt;源路径1&gt;&quot;,...  &quot;&lt;目标路径&gt;&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>**&lt;源路径&gt;**：源文件或者源目录，这里可以是通配符表达式，其通配符规则要满足 Go 的 filepath.Match 规则。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">COPY hom* &#x2F;mydir&#x2F;</span><br><span class="line">COPY hom?.txt &#x2F;mydir&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>**&lt;目标路径&gt;**：容器内的绝对路径表示，该路径不用事先建好，路径不存在的话，会自动创建。</p>
+<h2 id="3-5-ADD"><a href="#3-5-ADD" class="headerlink" title="3.5 ADD"></a>3.5 ADD</h2><p>ADD 指令和 COPY 的使用格式一致（同样需求下，官方推荐使用 COPY）。功能也类似，不同之处如下：</p>
+<ul>
+<li>ADD 的优点：在执行 &lt;源文件&gt; 为 tar 压缩文件的话，压缩格式为 gzip, bzip2 以及 xz 的情况下，会自动复制并解压到 &lt;目标路径&gt;。</li>
+<li>ADD 的缺点：在不解压的前提下，无法复制 tar 压缩文件。会令镜像构建缓存失效，从而可能会令镜像构建变得比较缓慢。具体是否使用，可以根据是否需要自动解压来决定。</li>
+</ul>
+<h2 id="3-6-ENV"><a href="#3-6-ENV" class="headerlink" title="3.6 ENV"></a>3.6 ENV</h2><p>设置环境变量，在后续的指令中，可以通过 <code>$&lt;key&gt;</code> 使用这个环境变量。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 格式1</span></span><br><span class="line"><span class="keyword">ENV</span> &lt;key&gt; &lt;value&gt;</span><br><span class="line"><span class="comment"># 格式2</span></span><br><span class="line"><span class="keyword">ENV</span> &lt;key1&gt;=&lt;value1&gt; &lt;key2&gt;=&lt;value2&gt;...</span><br></pre></td></tr></table></figure>
+
+<p>以下示例设置 <code>NODE_VERSION = 7.2.0</code> ， 在后续的指令中可以通过 <code>$NODE_VERSION</code> 引用：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> NODE_VERSION <span class="number">7.2</span>.<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> curl -SLO <span class="string">&quot;https://nodejs.org/dist/v<span class="variable">$NODE_VERSION</span>/node-v<span class="variable">$NODE_VERSION</span>-linux-x64.tar.xz&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-7-ARG"><a href="#3-7-ARG" class="headerlink" title="3.7 ARG"></a>3.7 ARG</h2><p><strong>作用：</strong>构建参数，与 ENV 作用一至。不过作用域不一样。ARG 设置的环境变量仅对 Dockerfile 内有效，也就是说只有 docker build 的过程中有效，构建好的镜像内不存在此环境变量。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ARG</span> &lt;参数名&gt;[=&lt;默认值&gt;]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-8-WORKDIR"><a href="#3-8-WORKDIR" class="headerlink" title="3.8 WORKDIR"></a>3.8 WORKDIR</h2><p><strong>作用：</strong>指定工作目录。用 WORKDIR 指定的工作目录，会在构建镜像的每一层中都存在。（WORKDIR 指定的工作目录，必须是提前创建好的）。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> &lt;工作目录路径&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-9-VOLUME"><a href="#3-9-VOLUME" class="headerlink" title="3.9 VOLUME"></a>3.9 VOLUME</h2><p><strong>作用：</strong>定义匿名数据卷。在启动容器时忘记挂载数据卷，会自动挂载到匿名卷。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">VOLUME</span><span class="bash"> [<span class="string">&quot;&lt;路径1&gt;&quot;</span>, <span class="string">&quot;&lt;路径2&gt;&quot;</span>...]</span></span><br><span class="line"><span class="keyword">VOLUME</span><span class="bash"> &lt;路径&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在启动容器 docker run 的时候，我们可以通过 -v 参数修改挂载点。</p>
+<h2 id="3-10-EXPOSE"><a href="#3-10-EXPOSE" class="headerlink" title="3.10 EXPOSE"></a>3.10 EXPOSE</h2><p><strong>作用：</strong>声明端口。</p>
+<ul>
+<li>帮助镜像使用者理解这个镜像服务的守护端口，以方便配置映射。</li>
+<li>在运行时使用随机端口映射时，也就是 docker run -P 时，会自动随机映射 EXPOSE 的端口。</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPOSE</span> &lt;端口<span class="number">1</span>&gt; [&lt;端口<span class="number">2</span>&gt;...]</span><br></pre></td></tr></table></figure>
+
+<h3 id><a href="#" class="headerlink" title></a></h3><h2 id="3-11-USER"><a href="#3-11-USER" class="headerlink" title="3.11 USER"></a>3.11 USER</h2><p><strong>作用：</strong>用于指定执行后续命令的用户和用户组，这边只是切换后续命令执行的用户（用户和用户组必须提前已经存在）。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">USER</span> &lt;用户名&gt;[:&lt;用户组&gt;]</span><br></pre></td></tr></table></figure>
+
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#docker" >
+    <span class="tag-code">docker</span>
+  </a>
+
+  <a href="/tags#network" >
+    <span class="tag-code">network</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/07/02/java-microservice/">
+        <span class="nav-arrow">← </span>
+        
+          微服务
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/07/08/paper-computational-storage-where-are-we-today/">
+        
+          《Computational Storage-Where Are We Today?》 阅读笔记
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#QuickStart"><span class="toc-nav-text">QuickStart</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-Docker%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-nav-text">1. Docker的优点</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-Docker%E5%91%BD%E4%BB%A4"><span class="toc-nav-text">2. Docker命令</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-Dockerfile"><span class="toc-nav-text">3. Dockerfile</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-1-RUN"><span class="toc-nav-text">3.1 RUN</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-2-CMD"><span class="toc-nav-text">3.2 CMD</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-3-ENTRYPOINT"><span class="toc-nav-text">3.3 ENTRYPOINT</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-4-COPY"><span class="toc-nav-text">3.4 COPY</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-5-ADD"><span class="toc-nav-text">3.5 ADD</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-6-ENV"><span class="toc-nav-text">3.6 ENV</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-7-ARG"><span class="toc-nav-text">3.7 ARG</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-8-WORKDIR"><span class="toc-nav-text">3.8 WORKDIR</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-9-VOLUME"><span class="toc-nav-text">3.9 VOLUME</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-10-EXPOSE"><span class="toc-nav-text">3.10 EXPOSE</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link"><span class="toc-nav-text"></span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-11-USER"><span class="toc-nav-text">3.11 USER</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/07/07/docker/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

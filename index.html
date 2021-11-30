@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link active">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link mobile-active">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <main class="app-body">
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/11/24/io-model/">聊一聊IO通信模型</a>
+      </h2>
+      <p class="article-date">2021年11月24日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#io" >
+    <span class="tag-code">io</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/11/24/io-model/www.mdtic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg" alt="img" style="zoom: 67%;">
+        
+      </div>
+      <a class="more" href="/2021/11/24/io-model/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/11/16/effective-java/">effective-java</a>
+      </h2>
+      <p class="article-date">2021年11月16日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/11/16/effective-java/R-C.be36f85217ee2705cbb1d688c0b07523" alt="查看源图像" style="zoom:33%;">
+        
+      </div>
+      <a class="more" href="/2021/11/16/effective-java/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/10/27/nfs/">网络文件系统搭建</a>
+      </h2>
+      <p class="article-date">2021年10月27日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/10/27/nfs/Network-File-Systems.jpg" alt="查看源图像" style="zoom: 25%;">
+        
+      </div>
+      <a class="more" href="/2021/10/27/nfs/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/09/15/local-transaction/">聊一聊本地事务</a>
+      </h2>
+      <p class="article-date">2021年9月15日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#database" >
+    <span class="tag-code">database</span>
+  </a>
+
+  <a href="/tags#transcation" >
+    <span class="tag-code">transcation</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/09/15/local-transaction/diagram-product-feature-acid-transactions-acronym.svg" alt="Diagram Product Feature Acid Transactions Acronym">
+        
+      </div>
+      <a class="more" href="/2021/09/15/local-transaction/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/08/18/paper-summarizer/">paper-summarizer</a>
+      </h2>
+      <p class="article-date">2021年8月18日</p>
+      
+        
+  <a href="/tags#paper" >
+    <span class="tag-code">paper</span>
+  </a>
+
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          摘要现代数据中心固态硬盘（SSD）集成了多个通用的嵌入式内核来管理灰度转换层、垃圾收集、磨损平衡等，以提高SSD的性能和可靠性。随着这些内核的性能稳步提高，有机会重新利用这些内核对存储的数据进行应用驱动的计算，目的是减少主机处理器和SSD之间的通信。减少主机-SSD的带宽需求可以减少I/O时 ...
+        
+      </div>
+      <a class="more" href="/2021/08/18/paper-summarizer/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/08/12/java-all-in-one/">Java知识点全面梳理(完善中)</a>
+      </h2>
+      <p class="article-date">2021年8月12日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/08/12/java-all-in-one/v2-d3a93b1e693540fc3e0c09cf17ceaa12_r.jpg" alt="查看源图像" style="zoom:33%;">
+        
+      </div>
+      <a class="more" href="/2021/08/12/java-all-in-one/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/07/28/java-spi/">Java SPI 机制</a>
+      </h2>
+      <p class="article-date">2021年7月28日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#java" >
+    <span class="tag-code">java</span>
+  </a>
+
+  <a href="/tags#spi" >
+    <span class="tag-code">spi</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          SPI机制简介SPI，全称Service Provider Interface。
+在面向对象的系统设计过程中，推荐各模块之间基于接口编程，同一种接口可能拥有多个的实现类，如果需要替换一种实现，就需要修改代码。为了实现在模块装配的时候能不在程序里动态指明，就需要一种服务发现机制，Java SP ...
+        
+      </div>
+      <a class="more" href="/2021/07/28/java-spi/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/07/19/golang/">Go 语言教程(完善中)</a>
+      </h2>
+      <p class="article-date">2021年7月19日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#golang" >
+    <span class="tag-code">golang</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/07/19/golang/bg.jpeg" alt="img" style="zoom: 25%;">
+        
+      </div>
+      <a class="more" href="/2021/07/19/golang/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/07/16/seata/">Seata——分布式事务中间件</a>
+      </h2>
+      <p class="article-date">2021年7月16日</p>
+      
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#java" >
+    <span class="tag-code">java</span>
+  </a>
+
+  <a href="/tags#seata" >
+    <span class="tag-code">seata</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/07/16/seata/bg.jpeg" alt="img" style="zoom:50%;">
+        
+      </div>
+      <a class="more" href="/2021/07/16/seata/">Read more</a>
+    </article>
+  
+    <article class="article-card">
+      <h2 class="article-head">
+        <a href="/2021/07/08/paper-computational-storage-where-are-we-today/">《Computational Storage-Where Are We Today?》 阅读笔记</a>
+      </h2>
+      <p class="article-date">2021年7月8日</p>
+      
+        
+  <a href="/tags#paper" >
+    <span class="tag-code">paper</span>
+  </a>
+
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+      
+      <div class="article-summary">
+        
+          <img src="/2021/07/08/paper-computational-storage-where-are-we-today/image-20210711130257276.png" alt="image-20210711130257276" style="zoom: 50%;">
+        
+      </div>
+      <a class="more" href="/2021/07/08/paper-computational-storage-where-are-we-today/">Read more</a>
+    </article>
+  
+
+  
+    <div class="guide-pager">
+  
+    <a class="unvisible" href="/"><span class="page-arrow">←</span> Prev</a>
+  
+  
+    <a href="/page/2/">Next<span class="page-arrow"> →</span></a>
+  
+</div>
+  
+</main>
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      k6测试工具的使用 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>k6测试工具的使用</h2>
+  <p class="post-date">2021-05-28</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/05/28/k6-tool-usage/k6.png" alt="image-20210528154113942" style="zoom: 67%;">
+
+<a id="more"></a>
+
+
+
+<h1 id="1-What-is-K6"><a href="#1-What-is-K6" class="headerlink" title="1. What is K6?"></a>1. What is K6?</h1><ul>
+<li>什么是K6？</li>
+</ul>
+<p>K6是由LoadImpact公司提供的开源工具，该工具已经被微软、亚马逊等公司用于<strong>负载测试</strong>。</p>
+<ul>
+<li>K6 能用来做什么？</li>
+</ul>
+<p>K6提供了丰富的脚本API用于描述测试负载，比如可以设置虚拟用户数量来测试不同并发情况下Web应用的性能，还可以设置测试的请求头来定义K6发出的请求。</p>
+<p>K6用虚拟用户（Virtual User，VU）模拟真实用户，并通过改变并发的虚拟用户数量来改变系统的负载情况。虚拟用户的本质是线程，每个虚拟用户都在一个完全独立的JavaScript虚拟机中执行测试脚本。</p>
+<ul>
+<li><p>如何使用？</p>
+<ul>
+<li><strong>安装</strong></li>
+<li><strong>编写</strong></li>
+<li><strong>运行</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="2-Installation"><a href="#2-Installation" class="headerlink" title="2. Installation"></a>2. Installation</h1><p>下面介绍 <code>Ubuntu</code> 环境下的<a target="_blank" rel="noopener" href="https://k6.io/docs/getting-started/installation/">安装过程</a></p>
+<blockquote>
+<p>有些镜像并没有捆绑ca-certificates和gnupg2软件包。如果你正在使用这样的镜像，首先需要用下面的命令安装这些软件包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;$ sudo apt-get update &amp;&amp; sudo apt-get install ca-certificates gnupg2 -y</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;deb https://dl.k6.io/deb stable main&quot;</span> | sudo tee /etc/apt/sources.list.d/k6.list</span><br><span class="line"></span><br><span class="line">$ sudo apt-get update</span><br><span class="line"></span><br><span class="line">$ sudo apt-get install k6</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="3-Running-K6"><a href="#3-Running-K6" class="headerlink" title="3. Running K6"></a>3. Running K6</h1><ul>
+<li>编写k6脚本</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> http <span class="keyword">from</span> <span class="string">&quot;k6/http&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; check, sleep &#125; <span class="keyword">from</span> <span class="string">&quot;k6&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试场景</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> options = &#123;</span><br><span class="line">    duration: <span class="string">&#x27;30s&#x27;</span>,</span><br><span class="line">    vus: <span class="number">5</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> index = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">var</span> urls = <span class="keyword">new</span> <span class="built_in">Array</span>()</span><br><span class="line"></span><br><span class="line">    urls[<span class="number">0</span>] =<span class="string">&quot;http://141.164.39.46:8080/v1/AUTH_753ac424b8104a489b6e69b63b53f7f7/test/1000kbh&quot;</span></span><br><span class="line">    urls[<span class="number">1</span>] =<span class="string">&quot;http://141.164.39.46:8080/v1/AUTH_753ac424b8104a489b6e69b63b53f7f7/test/1000kbc&quot;</span></span><br><span class="line">    urls[<span class="number">2</span>] =<span class="string">&quot;http://141.164.39.46:8080/v1/AUTH_753ac424b8104a489b6e69b63b53f7f7/test/1000kbg&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> ndp_url = <span class="keyword">new</span> <span class="built_in">Array</span>()</span><br><span class="line">    ndp_url[<span class="number">0</span>]=<span class="string">&quot;http://141.164.57.128:7979&quot;</span></span><br><span class="line">    ndp_url[<span class="number">1</span>]=<span class="string">&quot;http://158.247.207.170:7979&quot;</span></span><br><span class="line">    ndp_url[<span class="number">2</span>]=<span class="string">&quot;http://158.247.220.151:7979&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加头部信息</span></span><br><span class="line">    <span class="keyword">var</span> params = &#123;</span><br><span class="line">        headers: &#123;</span><br><span class="line">            <span class="string">&quot;X-Auth-Token&quot;</span>: <span class="string">&quot;gAAAAABgr4RQp5xptJ81ivP-oL0Cyr8P3_ePyixGjOK3sSAgVr4CaXupZJi7SRYwFKJZXSG3ZcCyGKM8Q7RhqPEZBHCvxA3OBAyu1Dl7nbiyfaSBMYYjUIosc7jpOl5FTtdPhPRL6ocR8eQ3MYbhCNWRg3xUn7VMF7fehdDxZzxS_DjrWQTWobU&quot;</span>,</span><br><span class="line">            <span class="string">&quot;x-webhook&quot;</span>: ndp_url[index]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> res = http.get(urls[index], params);</span><br><span class="line">    check(res, &#123;</span><br><span class="line">        <span class="string">&quot;status was 200&quot;</span>: <span class="function">(<span class="params">r</span>) =&gt;</span> r.status == <span class="number">200</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>运行测试脚本</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ k6 run test.js</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="4-Result-Output"><a href="#4-Result-Output" class="headerlink" title="4. Result Output"></a>4. Result Output</h1><p>k6 可以控制结果的输出位置和格式，以CSV格式举例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ k6 run --out csv=my_test_result.csv script.js</span><br></pre></td></tr></table></figure>
+
+<p>更多的输出信息可以查看K6的官方文档：<a target="_blank" rel="noopener" href="https://k6.io/docs/results-visualization/">Results visualization (k6.io)</a></p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#network" >
+    <span class="tag-code">network</span>
+  </a>
+
+  <a href="/tags#k6" >
+    <span class="tag-code">k6</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/04/21/java-guide/">
+        <span class="nav-arrow">← </span>
+        
+          Java 基础知识
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/05/28/java-programing-habits/">
+        
+          Java 编程习惯和技巧
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-What-is-K6"><span class="toc-nav-text">1. What is K6?</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-Installation"><span class="toc-nav-text">2. Installation</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-Running-K6"><span class="toc-nav-text">3. Running K6</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4-Result-Output"><span class="toc-nav-text">4. Result Output</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/05/28/k6-tool-usage/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>

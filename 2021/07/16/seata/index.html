@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="PancrasL&#39;s blog">
+  <meta name="keyword" content="blog">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      Seata——分布式事务中间件 | PancrasL的博客
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 5.1.1"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>PancrasL的博客</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>Seata——分布式事务中间件</h2>
+  <p class="post-date">2021-07-16</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><img src="/2021/07/16/seata/bg.jpeg" alt="img" style="zoom:50%;">
+
+<a id="more"></a>
+
+<h1 id="1-Seata简介"><a href="#1-Seata简介" class="headerlink" title="1. Seata简介"></a>1. Seata简介</h1><p>Seata(Simple Extensible Autonomous Transaction Architecture) 是 阿里巴巴开源的分布式事务中间件，以高效并且对业务 0 侵入的方式，解决微服务场景下面临的分布式事务问题。</p>
+<p>Seata支持AT、TCC、SAGA 和 XA 事务模式。</p>
+<p>事务模式对比</p>
+<table>
+<thead>
+<tr>
+<th>分布式事务模式</th>
+<th>介绍</th>
+<th>技术栈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>AT 模式</strong></td>
+<td>无侵入的分布式事务解决方案，适用于不希望对业务进行改造的场景，几乎0学习成本（sql都由框架托管统一执行，会存在<strong>脏写</strong>问题）</td>
+<td>seata、shardingsphere</td>
+</tr>
+<tr>
+<td><strong>TCC 模式</strong></td>
+<td>高性能分布式事务解决方案，适用于核心系统等对性能有很高要求的场景（第一阶段会产生行锁，事务执行太久会<strong>锁行很久</strong>）</td>
+<td>seata、service-comb</td>
+</tr>
+<tr>
+<td><strong>Saga 模式</strong></td>
+<td>长事务解决方案，适用于业务流程长且需要保证事务最终一致性的业务系统（第一阶段就操作DB，会存在<strong>脏读</strong>问题）</td>
+<td>seata、shardingsphere、service-comb</td>
+</tr>
+<tr>
+<td><strong>XA模式</strong></td>
+<td>分布式强一致性的解决方案，但<strong>性能低</strong>而使用较少。</td>
+<td>seata、shardingsphere</td>
+</tr>
+</tbody></table>
+<h2 id="1-1-核心组件"><a href="#1-1-核心组件" class="headerlink" title="1.1 核心组件"></a>1.1 核心组件</h2><ul>
+<li><strong>TC (Transaction Coordinator) - 事务协调者</strong></li>
+</ul>
+<p>维护全局和分支事务的状态，驱动全局事务提交或回滚。</p>
+<ul>
+<li><strong>TM (Transaction Manager) - 事务管理器</strong></li>
+</ul>
+<p>定义全局事务的范围：开始全局事务、提交或回滚全局事务。</p>
+<ul>
+<li><strong>RM (Resource Manager) - 资源管理器</strong></li>
+</ul>
+<p>管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。</p>
+<img src="/2021/07/16/seata/image-20210716124159995.png" alt="image-20210716124159995" style="zoom: 67%;">
+
+
+
+<h2 id="1-2-全局事务和分支事务"><a href="#1-2-全局事务和分支事务" class="headerlink" title="1.2 全局事务和分支事务"></a>1.2 全局事务和分支事务</h2><img src="/2021/07/16/seata/image-20210716124213606.png" alt="image-20210716124213606" style="zoom:80%;">
+
+<h1 id="2-Seata事务过程解析"><a href="#2-Seata事务过程解析" class="headerlink" title="2. Seata事务过程解析"></a>2. Seata事务过程解析</h1><h2 id="2-1-全局事务扫描器"><a href="#2-1-全局事务扫描器" class="headerlink" title="2.1 全局事务扫描器"></a>2.1 全局事务扫描器</h2><p>通过再配置文件中配置<code>GlobalTransactionScanner</code>，这个实例在项目启动时会扫描所有实例，具体实现见【spring】模块。并将标注了@GlobalTransactional注解的方法织入GlobalTransactionalInterceptor的invoke方法逻辑。同时应用启动时，会初始化TM（TmRpcClient）和RM（RmRpcClient）的实例，这个时候，服务已经和TC事务控制中心勾搭上了。在往下看就涉及到TM模块的事务模板类TransactionalTemplate。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">&quot;com.alibaba.fescar.spring.annotation.GlobalTransactionScanner&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">&quot;dubbo-demo-app&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">&quot;my\_test\_tx_group&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2-【TM】模块启动全局事务"><a href="#2-2-【TM】模块启动全局事务" class="headerlink" title="2.2 【TM】模块启动全局事务"></a>2.2 【TM】模块启动全局事务</h2><p>DefaultGlobalTransaction ：全局事务具体的开启，提交、回滚动作</p>
+<p>DefaultTransactionManager ：负责使用TmRpcClient向TC控制中心发送指令，如开启全局事务（GlobalBeginRequest）、提交（GlobalCommitRequest）、回滚（GlobalRollbackRequest）、查询状态（GlobalStatusRequest）等。</p>
+<p>以上是TM模块核心内容点，TM模块完成全局事务开启后，接下来就开始看看全局事务iD，xid是如何传递、RM组件是如何介入的</p>
+<h2 id="2-3-【dubbo】全局事务xid的传递"><a href="#2-3-【dubbo】全局事务xid的传递" class="headerlink" title="2.3 【dubbo】全局事务xid的传递"></a>2.3 【dubbo】全局事务xid的传递</h2><p>首先是xid的传递，目前已经实现了dubbo框架实现的微服务架构下的传递，其他的像spring cloud和motan等的想要实现也很容易，通过一般RPC通讯框架都有的filter机制，将xid从全局事务的发起节点传递到服务协从节点，从节点接收到后绑定到当前线程上线文环境中，用于在分支事务执行sql时判断是否加入全局事务。</p>
+<h2 id="2-4-【RM】模块本地资源管理的介入"><a href="#2-4-【RM】模块本地资源管理的介入" class="headerlink" title="2.4 【RM】模块本地资源管理的介入"></a>2.4 【RM】模块本地资源管理的介入</h2><h1 id="3-各事务模式介绍"><a href="#3-各事务模式介绍" class="headerlink" title="3. 各事务模式介绍"></a>3. 各事务模式介绍</h1><h2 id="3-1-AT模式（Automatic-Transaction）"><a href="#3-1-AT模式（Automatic-Transaction）" class="headerlink" title="3.1 AT模式（Automatic Transaction）"></a>3.1 AT模式（Automatic Transaction）</h2><p><img src="/2021/07/16/seata/image-20210716124237493.png" alt="image-20210716124237493"></p>
+<h2 id="3-2-SAGA模式"><a href="#3-2-SAGA模式" class="headerlink" title="3.2 SAGA模式"></a>3.2 SAGA模式</h2><p><img src="/2021/07/16/seata/image-20210716124304758.png" alt="image-20210716124304758"></p>
+<h2 id="3-3-XA模式"><a href="#3-3-XA模式" class="headerlink" title="3.3 XA模式"></a>3.3 XA模式</h2><p>两阶段提交理论的一个广泛工业应用是XA协议。目前几乎所有收费的商业数据库都支持XA协议。<strong>XA协议已在业界成熟运行数十年，但目前它在互联网海量流量的应用场景中，吞吐量这个瓶颈变得十分致命，因此很少被用到。</strong></p>
+<img src="/2021/07/16/seata/TB1hSpccIVl614jSZKPXXaGjpXa-1330-924.png" alt="img" style="zoom: 67%;">
+
+<h2 id="3-4-TCC模式-Try、Confirm、Cancel"><a href="#3-4-TCC模式-Try、Confirm、Cancel" class="headerlink" title="3.4 TCC模式(Try、Confirm、Cancel)"></a>3.4 TCC模式(Try、Confirm、Cancel)</h2><img src="/2021/07/16/seata/image-20210716133155144.png" alt="image-20210716133155144" style="zoom:67%;">
+
+<img src="/2021/07/16/seata/image-20210716124251062.png" alt="image-20210716124251062" style="zoom:67%;">
+
+<p>TCC事务其实主要包含两个阶段：Try阶段、Confirm/Cancel阶段。TCC 模式需要用户根据自己的业务场景实现 Try、Confirm 和 Cancel 三个操作，事务发起方在一阶段执行 Try 方式，在二阶段提交执行 Confirm 方法，二阶段回滚执行 Cancel 方法。</p>
+<p>TCC的核心思想是try阶段检查并预留资源，确保在confirm阶段有资源可用，这样可以最大程度的确保confirm阶段能够执行成功，避免死锁问题。</p>
+<p>（1）try：尝试执行业务</p>
+<p>完成所有业务检查(一致性)</p>
+<p>预留必须业务资源(准隔离性)</p>
+<p>（2）confirm：确认执行业务</p>
+<p>真正执行业务</p>
+<p>不作任何业务检查</p>
+<p>只使用Try阶段预留的业务资源</p>
+<p>Confirm操作必须保证幂等性 </p>
+<p>（3）cancel：取消执行业务</p>
+<p>释放Try阶段预留的业务资源</p>
+<p>Cancel操作必须保证幂等性</p>
+<p>TCC具有三大特性：允许空回滚、防悬挂控制、幂等控制。</p>
+<p><strong>允许空回滚</strong></p>
+<p>当 Try 接口因丢包出现超时，或未收到Try而收到Cancel时，事务管理器会触发Cancel 接口执行回滚，如果执行时发现没有对应的事务不存在时，需要返回回滚成功，以让事务服务管理器认为已执行回滚，避免不断重试。</p>
+<p><strong>防悬挂控制</strong></p>
+<p>悬挂：Try 由于网络拥堵而超时，事务管理器生成回滚，触发 Cancel 接口，而最终又收到了 Try 接口调用，即Cancel 比 Try 接口先执行。</p>
+<p>因允许空回滚的逻辑，事务管理器认为事务已回滚成功，则此时的 Try 接口不应该执行，否则会产生数据不一致。Cancel空回滚返回成功之前标识这条记录已回滚，Try接口先检查该事务是否被标记为回滚成功来决定是否执行。</p>
+<p><strong>幂等控制</strong></p>
+<p>幂等性：对同一个系统，使用同样的条件，一次请求和重复的多次请求对系统资源的影响是一致的。因为网络抖动或拥堵可能会超时，事务管理器会对资源进行重试操作，所以很可能一个业务操作会被重复调用，为了不因为重复调用而多次占用资源，需要在服务设计时进行幂等控制。</p>
+<h1 id="4-TCC二阶段异步提交功能实现"><a href="#4-TCC二阶段异步提交功能实现" class="headerlink" title="4. TCC二阶段异步提交功能实现"></a>4. TCC二阶段异步提交功能实现</h1><h2 id="4-1-总体思路"><a href="#4-1-总体思路" class="headerlink" title="4.1 总体思路"></a>4.1 总体思路</h2><p>修改tcc模块和server模块的相关代码，参考异步提交的实现，完成异步回滚特性，通过异步操作提升回滚性能，从而降低全局回滚的时间成本。</p>
+<p>同步全局回滚时，跳过可异步执行的分支，将它们交由handleAsyncRollbacking()来处理。特性的实现主要涉及以下内容：</p>
+<ul>
+<li><p>为分支调用过程的方法添加rollbackType参数，以及对应的日志。</p>
+</li>
+<li><p>实现handleAsyncRollbacking()的处理逻辑。</p>
+</li>
+<li><p>通过默认参数保证不同版本之间的兼容性问题。</p>
+</li>
+</ul>
+<h2 id="4-2-方案设计"><a href="#4-2-方案设计" class="headerlink" title="4.2 方案设计"></a>4.2 方案设计</h2><ul>
+<li><p>修改TCC的注解@TwoPhaseBusinessAction，添加TCCRollbackType rollbackType() default TCCRollbackType.SyncRollback</p>
+</li>
+<li><p>分支注册接口，添加参数TCCRollbackType rollbackType，且RPC交易时的序列化中，添加对该参数的序列化</p>
+</li>
+<li><p>TC端三种store模式，添加对rollbackType的持久化功能。db模式添加字段rollback_type</p>
+</li>
+<li><p>同步全局回滚时，将可异步执行的分支加入到待处理集合中</p>
+</li>
+<li><p>实现handleAsyncRollbacking()的处理逻辑：</p>
+<ul>
+<li>配置：修改server模块，使该方法由异步定时任务触发。</li>
+<li>算法逻辑：获取待异步处理的分支，枚举回滚分支，调用doGlobalRollback方法执行回滚操作。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-3-方案实现"><a href="#4-3-方案实现" class="headerlink" title="4.3 方案实现"></a>4.3 <strong>方案实现</strong></h2><p>首先，学习异步提交的代码接口设计，设计异步回滚操作的代码接口，参考其实现完成TCC异步回滚的特性。其次，编写的测试用例，保证功能的正常执行，在测试时需要注意不同版本之间的兼容性，保证高版本兼容低版本。最后，撰写方案测试和使用文档。</p>
+<blockquote>
+<p>Reference:<br>[1] <a target="_blank" rel="noopener" href="https://seata.io/zh-cn/blog/seata-analysis-simple.html">https://seata.io/zh-cn/blog/seata-analysis-simple.html</a></p>
+</blockquote>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#all" >
+    <span class="tag-code">all</span>
+  </a>
+
+  <a href="/tags#java" >
+    <span class="tag-code">java</span>
+  </a>
+
+  <a href="/tags#seata" >
+    <span class="tag-code">seata</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2021/07/08/paper-computational-storage-where-are-we-today/">
+        <span class="nav-arrow">← </span>
+        
+          《Computational Storage-Where Are We Today?》 阅读笔记
+        
+      </a>
+    
+    
+      <a class="nav-right" href="/2021/07/19/golang/">
+        
+          Go 语言教程(完善中)
+        
+        <span class="nav-arrow"> →</span>
+      </a>
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+    <!-- 二维码 END -->
+    
+      <!-- No Comment -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-Seata%E7%AE%80%E4%BB%8B"><span class="toc-nav-text">1. Seata简介</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-nav-text">1.1 核心组件</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-2-%E5%85%A8%E5%B1%80%E4%BA%8B%E5%8A%A1%E5%92%8C%E5%88%86%E6%94%AF%E4%BA%8B%E5%8A%A1"><span class="toc-nav-text">1.2 全局事务和分支事务</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-Seata%E4%BA%8B%E5%8A%A1%E8%BF%87%E7%A8%8B%E8%A7%A3%E6%9E%90"><span class="toc-nav-text">2. Seata事务过程解析</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-1-%E5%85%A8%E5%B1%80%E4%BA%8B%E5%8A%A1%E6%89%AB%E6%8F%8F%E5%99%A8"><span class="toc-nav-text">2.1 全局事务扫描器</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-2-%E3%80%90TM%E3%80%91%E6%A8%A1%E5%9D%97%E5%90%AF%E5%8A%A8%E5%85%A8%E5%B1%80%E4%BA%8B%E5%8A%A1"><span class="toc-nav-text">2.2 【TM】模块启动全局事务</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-3-%E3%80%90dubbo%E3%80%91%E5%85%A8%E5%B1%80%E4%BA%8B%E5%8A%A1xid%E7%9A%84%E4%BC%A0%E9%80%92"><span class="toc-nav-text">2.3 【dubbo】全局事务xid的传递</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-4-%E3%80%90RM%E3%80%91%E6%A8%A1%E5%9D%97%E6%9C%AC%E5%9C%B0%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E7%9A%84%E4%BB%8B%E5%85%A5"><span class="toc-nav-text">2.4 【RM】模块本地资源管理的介入</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-%E5%90%84%E4%BA%8B%E5%8A%A1%E6%A8%A1%E5%BC%8F%E4%BB%8B%E7%BB%8D"><span class="toc-nav-text">3. 各事务模式介绍</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-1-AT%E6%A8%A1%E5%BC%8F%EF%BC%88Automatic-Transaction%EF%BC%89"><span class="toc-nav-text">3.1 AT模式（Automatic Transaction）</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-2-SAGA%E6%A8%A1%E5%BC%8F"><span class="toc-nav-text">3.2 SAGA模式</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-3-XA%E6%A8%A1%E5%BC%8F"><span class="toc-nav-text">3.3 XA模式</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-4-TCC%E6%A8%A1%E5%BC%8F-Try%E3%80%81Confirm%E3%80%81Cancel"><span class="toc-nav-text">3.4 TCC模式(Try、Confirm、Cancel)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4-TCC%E4%BA%8C%E9%98%B6%E6%AE%B5%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">4. TCC二阶段异步提交功能实现</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-1-%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF"><span class="toc-nav-text">4.1 总体思路</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-2-%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1"><span class="toc-nav-text">4.2 方案设计</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-3-%E6%96%B9%E6%A1%88%E5%AE%9E%E7%8E%B0"><span class="toc-nav-text">4.3 方案实现</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'https://pancrasl.gitee.io/2021/07/16/seata/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2021 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
