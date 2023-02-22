@@ -384,7 +384,7 @@
     <content><![CDATA[<p><img src="/2021/07/07/docker/static.oschina.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg" alt="img"></p>
 <a id="more"></a>
 
-<h1 id="QuickStart"><a href="#QuickStart" class="headerlink" title="QuickStart"></a>QuickStart</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动mysql5.7，并将D盘的mysql57/data/文件夹挂载到容器中作为mysql的数据保存位置</span></span><br><span class="line">$ docker run --name=mysql57 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /D/mysql57/data:/var/lib/mysql -d mysql:5.7</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动redis</span></span><br><span class="line">$ docker run -d --name=redis6 -p 6379:6379 redis:6.2.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动zookeeper</span></span><br><span class="line">$ docker run -d --name=zookeeper -p 2181:2181 zookeeper:3.6.3</span><br></pre></td></tr></table></figure>
+<h1 id="QuickStart"><a href="#QuickStart" class="headerlink" title="QuickStart"></a>QuickStart</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动mysql5.7，并将D盘的mysql57/data/文件夹挂载到容器中作为mysql的数据保存位置</span></span><br><span class="line">$ docker run --name=mysql57 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /D/mysql57/data:/var/lib/mysql -d mysql:5.7</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动redis</span></span><br><span class="line">$ docker run -d --name=redis6 -p 6379:6379 redis:6.2.2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动zookeeper</span></span><br><span class="line">$ docker run -d --name=zookeeper -p 2181:2181 zookeeper:3.6.3</span><br><span class="line"></span><br><span class="line"><span class="comment"># minio</span></span><br><span class="line">$ docker run -p 9000:9000 --name minio -e <span class="string">&quot;MINIO_ACCESS_KEY=minioadmin&quot;</span> -e <span class="string">&quot;MINIO_SECRET_KEY=minioadmin&quot;</span> -v E:/Movie:/data minio/minio server /data --console-address <span class="string">&quot;:9001&quot;</span> </span><br><span class="line">$ minio.exe server E:/minio --console-address <span class="string">&quot;:9001&quot;</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -544,7 +544,7 @@
 </ul>
 <figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">EXPOSE</span> &lt;端口<span class="number">1</span>&gt; [&lt;端口<span class="number">2</span>&gt;...]</span><br></pre></td></tr></table></figure>
 
-<h3 id><a href="#" class="headerlink" title></a></h3><h2 id="3-11-USER"><a href="#3-11-USER" class="headerlink" title="3.11 USER"></a>3.11 USER</h2><p><strong>作用：</strong>用于指定执行后续命令的用户和用户组，这边只是切换后续命令执行的用户（用户和用户组必须提前已经存在）。</p>
+<h2 id="3-11-USER"><a href="#3-11-USER" class="headerlink" title="3.11 USER"></a>3.11 USER</h2><p><strong>作用：</strong>用于指定执行后续命令的用户和用户组，这边只是切换后续命令执行的用户（用户和用户组必须提前已经存在）。</p>
 <figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line"><span class="keyword">USER</span> &lt;用户名&gt;[:&lt;用户组&gt;]</span><br></pre></td></tr></table></figure>
 
 ]]></content>
@@ -865,7 +865,7 @@
 
 <h3 id="回退分支"><a href="#回退分支" class="headerlink" title="回退分支"></a>回退分支</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将分支branch回退到上一个commit（对远程无效）</span></span><br><span class="line">$ git reset branch^1</span><br><span class="line"><span class="comment"># 新建一个commit，用来撤销本次的commit（对远程有效）</span></span><br><span class="line">$ git revert branch</span><br></pre></td></tr></table></figure>
 
-
+<h3 id="重置gitignore"><a href="#重置gitignore" class="headerlink" title="重置gitignore"></a>重置gitignore</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git rm -r --cached .</span><br><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">&#x27;update .gitignore&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="2-2-分支拉取"><a href="#2-2-分支拉取" class="headerlink" title="2.2 分支拉取"></a>2.2 分支拉取</h2><h3 id="拉取远程仓库的分支"><a href="#拉取远程仓库的分支" class="headerlink" title="拉取远程仓库的分支"></a>拉取远程仓库的分支</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git fetch origin [my-branch]</span><br><span class="line">$ git pull orgin [my-branch]</span><br></pre></td></tr></table></figure>
 
@@ -2889,12 +2889,12 @@ $ npm install https://github.com/CodeFalling/hexo-asset-image --save
   </entry>
   <entry>
     <title>maven</title>
-    <url>/2021/06/23/maven/</url>
-    <content><![CDATA[<img src="/2021/06/23/maven/bg.jpeg" alt="img" style="zoom:50%;">
+    <url>/2022/01/06/maven/</url>
+    <content><![CDATA[<img src="/2022/01/06/maven/bg.jpeg" alt="img" style="zoom:50%;">
 
 <a id="more"></a>
 
-<h1 id="Maven的生命周期"><a href="#Maven的生命周期" class="headerlink" title="Maven的生命周期"></a>Maven的生命周期</h1><p><img src="/2021/06/23/maven/maven-package-build-phase.png" alt="img"></p>
+<h1 id="Maven的生命周期"><a href="#Maven的生命周期" class="headerlink" title="Maven的生命周期"></a>Maven的生命周期</h1><p><img src="/2022/01/06/maven/maven-package-build-phase.png" alt="img"></p>
 <table>
 <thead>
 <tr>
@@ -2943,6 +2943,11 @@ $ npm install https://github.com/CodeFalling/hexo-asset-image --save
 <li>安装单独的jar包到本地仓库</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ mvn install:install-file -Dfile=sparrow-core-1.0-SNAPSHOT-jar-with-dependencies.jar -DgroupId=github.pancras -DartifactId=sparrow-core -Dversion=1.0-SNAPSHOT -Dpackaging=jar</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将源码一同发布到本地仓库</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ mvn clean <span class="built_in">source</span>:jar install</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>将依赖也打包进jar</li>
@@ -3049,7 +3054,7 @@ $ npm install https://github.com/CodeFalling/hexo-asset-image --save
 
 
 
-]]></content>
+<h1 id="Pip3镜像加速"><a href="#Pip3镜像加速" class="headerlink" title="Pip3镜像加速"></a>Pip3镜像加速</h1>]]></content>
       <categories>
         <category>学习</category>
       </categories>
@@ -6718,6 +6723,50 @@ beanFactory.preInstantiateSingletons();
 ]]></content>
       <tags>
         <tag>all</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机环境的Ubuntu Server20.04根空间满了(使用LVM分区)，使用命令行操作对其扩充</title>
+    <url>/2021/12/31/lvm-extend/</url>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>磁盘扩充可以分为三步：</p>
+<ul>
+<li>使用虚拟机分配新的磁盘空间</li>
+<li>使用fdisk创建新的磁盘分区</li>
+<li>将新建的磁盘分区加入到lv组（LV，Logic Volume）</li>
+<li>扩充lv组</li>
+</ul>
+<h2 id="分配新的磁盘空间"><a href="#分配新的磁盘空间" class="headerlink" title="分配新的磁盘空间"></a>分配新的磁盘空间</h2><p>扩充磁盘空间时虚拟机要处于关机状态，而且要删除所有的快照.</p>
+<img src="/2021/12/31/lvm-extend/image-20211231174641376.png" alt="image-20211231174641376" style="zoom: 67%;">
+
+<h2 id="创建磁盘分区"><a href="#创建磁盘分区" class="headerlink" title="创建磁盘分区"></a>创建磁盘分区</h2><p>（1）查看磁盘分区</p>
+<p>通过lsblk命令查看磁盘空间，可以看到磁盘sda从20G增长为了40G，但是新增的空间还没有被分配，因此我们接下来要使用fdisk命令创建新的磁盘分区。</p>
+<p><img src="/2021/12/31/lvm-extend/image-20211231174904839.png" alt="image-20211231174904839"></p>
+<p>（2）创建磁盘分区</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用命令n创建一个新的分区，并将剩余磁盘空间分配给该分区，我这里是sda4</span></span><br><span class="line">sudo fdisk /dev/sda</span><br><span class="line">Welcome to fdisk (util-linux 2.34).</span><br><span class="line">Changes will remain <span class="keyword">in</span> memory only, until you decide to write them.</span><br><span class="line">Be careful before using the write <span class="built_in">command</span>.</span><br><span class="line"></span><br><span class="line">GPT PMBR size mismatch (41943039 != 83886079) will be corrected by write.</span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): n</span><br><span class="line">Partition number (4-128, default 4): 4</span><br><span class="line">First sector (41940992-83886046, default 41940992):</span><br><span class="line">Last sector, +/-sectors or +/-size&#123;K,M,G,T,P&#125; (41940992-83886046, default 83886046):</span><br><span class="line"></span><br><span class="line">Created a new partition 4 of <span class="built_in">type</span> <span class="string">&#x27;Linux filesystem&#x27;</span> and of size 20 GiB.</span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): w</span><br><span class="line">The partition table has been altered.</span><br><span class="line">Syncing disks.</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/12/31/lvm-extend/image-20211231175408914.png" alt="image-20211231175408914"></p>
+<h2 id="将新创建的磁盘加入到lv组"><a href="#将新创建的磁盘加入到lv组" class="headerlink" title="将新创建的磁盘加入到lv组"></a>将新创建的磁盘加入到lv组</h2><p>（1）把/dev/sda4添加到vg中</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># pancras @ host in ~ [9:56:18] $ sudo vgs</span></span><br><span class="line">  VG        <span class="comment">#PV #LV #SN Attr   VSize   VFree</span></span><br><span class="line">  ubuntu<span class="literal">-vg</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">0</span> wz-<span class="literal">-n</span>- &lt;<span class="number">19.00</span>g    <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># pancras @ host in ~ [9:56:20] $ sudo vgextend ubuntu-vg /dev/sda4</span></span><br><span class="line">  Physical volume <span class="string">&quot;/dev/sda4&quot;</span> successfully created.</span><br><span class="line">  Volume <span class="built_in">group</span> <span class="string">&quot;ubuntu-vg&quot;</span> successfully extended</span><br><span class="line"></span><br><span class="line"><span class="comment"># pancras @ host in ~ [9:56:38] $ sudo vgs</span></span><br><span class="line">  VG        <span class="comment">#PV #LV #SN Attr   VSize  VFree</span></span><br><span class="line">  ubuntu<span class="literal">-vg</span>   <span class="number">2</span>   <span class="number">1</span>   <span class="number">0</span> wz-<span class="literal">-n</span>- <span class="number">38.99</span>g &lt;<span class="number">20.00</span>g</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/12/31/lvm-extend/image-20211231175820636.png" alt="image-20211231175820636"></p>
+<h2 id="扩充lv组"><a href="#扩充lv组" class="headerlink" title="扩充lv组"></a>扩充lv组</h2><p>（1）将vg中空闲的空间加入lv中</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># pancras @ host in ~ [10:00:11] $ sudo lvs</span></span><br><span class="line">  LV        VG        Attr       LSize   Pool Origin <span class="keyword">Data</span>%  Meta%  <span class="built_in">Move</span> Log Cpy%Sync Convert</span><br><span class="line">  ubuntu<span class="literal">-lv</span> ubuntu<span class="literal">-vg</span> <span class="literal">-wi</span><span class="literal">-ao</span>---- &lt;<span class="number">19.00</span>g</span><br><span class="line"></span><br><span class="line"><span class="comment"># pancras @ host in ~ [10:00:13] $ sudo lvextend -l +100%free /dev/ubuntu-vg/ubuntu-lv</span></span><br><span class="line">  Size of logical volume ubuntu<span class="literal">-vg</span>/ubuntu<span class="literal">-lv</span> changed from &lt;<span class="number">19.00</span> GiB (<span class="number">4863</span> extents) to <span class="number">38.99</span> GiB (<span class="number">9982</span> exte                                   nts).</span><br><span class="line">  Logical volume ubuntu<span class="literal">-vg</span>/ubuntu<span class="literal">-lv</span> successfully resized.</span><br><span class="line"></span><br><span class="line"><span class="comment"># pancras @ host in ~ [10:00:36] $ sudo lvs</span></span><br><span class="line">  LV        VG        Attr       LSize  Pool Origin <span class="keyword">Data</span>%  Meta%  <span class="built_in">Move</span> Log Cpy%Sync Convert</span><br><span class="line">  ubuntu<span class="literal">-lv</span> ubuntu<span class="literal">-vg</span> <span class="literal">-wi</span><span class="literal">-ao</span>---- <span class="number">38.99</span>g</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/12/31/lvm-extend/image-20211231180112821.png" alt="image-20211231180112821"></p>
+<p>（2）根分区识别空闲的磁盘空间</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment"># pancras @ host in ~ [10:01:44] C:130 $ sudo resize2fs /dev/ubuntu-vg/ubuntu-lv</span></span><br><span class="line">resize2fs <span class="number">1.45</span>.<span class="number">5</span> (<span class="number">07</span><span class="literal">-Jan</span><span class="literal">-2020</span>)</span><br><span class="line">Filesystem at /dev/ubuntu<span class="literal">-vg</span>/ubuntu<span class="literal">-lv</span> is mounted on /; on<span class="literal">-line</span> resizing required</span><br><span class="line">old_desc_blocks = <span class="number">3</span>, new_desc_blocks = <span class="number">5</span></span><br><span class="line">The filesystem on /dev/ubuntu<span class="literal">-vg</span>/ubuntu<span class="literal">-lv</span> is now <span class="number">10221568</span> (<span class="number">4</span>k) blocks long.</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/12/31/lvm-extend/image-20211231180158274.png" alt="image-20211231180158274"></p>
+<blockquote>
+<p>Reference</p>
+<p><a href="https://www.cnblogs.com/zhangshengdong/p/11724833.html#autoid-1-2-1">【linux】lvm扩展根分区 - 东瑜 - 博客园 (cnblogs.com)</a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>all</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
 </search>
